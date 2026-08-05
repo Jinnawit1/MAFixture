@@ -1,0 +1,344 @@
+﻿
+@{
+    ViewBag.Title = "THT Location";
+}
+
+<h2>THT Location</h2>
+<hr />
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-date-to">Drawing Name :</label>
+                <input type="text" class="form-control" id="Product_name" />
+
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label>Soldering Process :</label>
+                <input type="text" class="form-control" id="GPVProcess">
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label>Process Side:</label>
+                <select type="text" class="form-control" id="ProcessSide">
+                    <option value="" selected>All</option>
+                    <option value="Top">Top</option>
+                    <option value="Buttom">Buttom</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-date-to">Slot Location Address:</label>
+                <input type="text" class="form-control" id="Location">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-request-by">GPV Control Number (Serial No) :</label>
+                <input type="text" class="form-control" id="Serial_No">
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-name">With Top Cover Fixture:</label>
+                <select class="form-control" id="WithTopCover">
+                    <option value="" selected>All</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-name">With Control Tooling Fixture:</label>
+                <select class="form-control" id="WithControlTooling">
+                    <option value="" selected>All</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-date-from">Grade Status / Pallet Status :</label>
+                <select class="form-control" id="Grade_Status">
+                    <option value="" selected>All</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div style="margin-left:15px;">
+        <button class="btn btn-primary" id="search-button" onclick="OnLoad()">Search</button>
+    </div>
+</div>
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-12 mb-3" style="padding: 3px 0px;">
+            <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+                @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
+                <table id="TableMAPlan" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        OnLoad();
+    });
+  
+    @*function LoadAll() {
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        console.log(response.data);
+                        $.each(response.data.Department, function (index, item) {
+                            $('#Section').append('<option value="' + item.Section + '">' + item.Section + '</option>');
+                        });
+                        $("#Section").val("THT_HM");
+
+                        OnLoad();
+                }
+            }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }*@
+
+     function OnLoad() {
+        var Product_name = $('#Product_name').val();
+        var GPVProcess = $('#GPVProcess').val();
+        var ProcessSide = $('#ProcessSide').val();
+        var Location = $('#Location').val();
+        var Serial_No = $('#Serial_No').val();
+        var WithTopCover = $('#WithTopCover').val();
+        var WithControlTooling = $('#WithControlTooling').val();
+        var Grade_Status = $('#Grade_Status').val();
+        var dataSet = [];
+        var dataFull = [];
+        var url = '@Url.Action("Load_THTLocation", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                Product_name: Product_name,
+                GPVProcess: GPVProcess,
+                ProcessSide: ProcessSide,
+                Location: Location,
+                Serial_No: Serial_No,
+                WithTopCover: WithTopCover,
+                WithControlTooling: WithControlTooling,
+                Grade_Status: Grade_Status,
+                Section : "THT_HM",
+            }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success && response.data) {
+                    var maPlan = response.data;
+                    var now = Date.now();
+
+                    $.each(maPlan, function (index, item) {
+                        item.Equipment_Picture = item.Equipment_Picture
+                            ? '<a href="' + basePath + item.Equipment_Picture + '" target="_blank">' +
+                                '<i class="fas fa-image" style="font-size: 20px; color: #007bff;"></i>' +
+                                '</a>'
+                            : "";
+                    });
+
+                    if ($.fn.dataTable.isDataTable('#TableMAPlan')) {
+                        $('#TableMAPlan').DataTable().clear().destroy();
+                    }
+
+                    $('#TableMAPlan').DataTable({
+                        order: [[0, "desc"]],
+                        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                        iDisplayLength: 100,
+                        data: maPlan,
+                        dom: 'lBfrtip',
+                        autoWidth: false,
+                        scrollX: false,
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                autoFilter: true,
+                                exportOptions: {
+                                    format: {
+                                        body: function (data, row, col, node) {
+                                            if (data && /<[^>]+>/g.test(data)) {
+                                                if (/<br\s*\/?>/i.test(data)) {
+                                                    return data.replace(/<br\s*\/?>/gi, ' ');
+                                                } else {
+                                                    var parser = new DOMParser();
+                                                    var doc = parser.parseFromString(data, 'text/html');
+                                                    return doc.body.textContent || doc.body.innerText;
+                                                }
+                                            }
+                                            return data;
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        columns: [
+                            {
+                                title: "No.",
+                                data: null,
+                                render: function (data, type, row, meta) {
+                                    return meta.row + 1;
+                                }
+                            },
+                            {
+                                title: "View",
+                                orderable: false,
+                                render: function (data, type, row) {
+                                    return '<div href="#" onclick="OnDetail(\'' + row["MA_ID"] + '\')" style="width: 100%; text-align: center; color: #1890ff; font-size: 22px;"><i style="cursor: pointer;" class="fas fa-search"></i></div>';
+                                }
+                            },
+                            { title: "Drawing Name", data: "Product_name" },
+                            { title: "Soldering Process", data: "GPVProcess" },
+                            { title: "Process Side", data: "ProcessSide", },
+                            //{ title: "Cabinet Address" , data:"Location" },
+                            {
+                                title: "Slot Location Address",
+                                data: "Location"
+                            },
+                            { title: "GPV Control Number", data: "Serial_No" },
+                            //{ title: "Pinnumber" },
+                            //{ title: "Type MC" },
+                            {
+                                title: "Reference Photo",
+                                data: "Equipment_Picture",
+                                className : "text-center",
+                       
+                            },
+                            { title: "Pallet Width", data: "Dimension" },
+                            //{ title: "Common Drawing Number", data: "Serial_No" },
+                            { title: "With Top Cover Fixture", data: "WithTopCover" },
+                            { title: "With Control Tooling Fixture", data: "WithControlTooling" },
+                             { title: "Grade Status / Pallet Status", data: "Grade_Status" },
+                            //{
+                            //    title: "Plan Daily",
+                            //    orderable: false,
+                            //    render: function (data) {
+                            //        let timestamp = new Date(data).getTime();
+                            //        return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                            //    }
+                            //},
+                            //{
+                            //    title: "Plan Weekly",
+                            //    orderable: false,
+                            //    render: function (data) {
+                            //        let timestamp = new Date(data).getTime();
+                            //        return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                            //    }
+                            //},
+                            //{
+                            //    title: "Plan Monthly",
+                            //    orderable: false,
+                            //    render: function (data) {
+                            //        let timestamp = new Date(data).getTime();
+                            //        return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                            //    }
+                            //},
+                            //{
+                            //    title: "Plan Semi_annually",
+                            //    orderable: false,
+                            //    render: function (data) {
+                            //        let timestamp = new Date(data).getTime();
+                            //        return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                            //    }
+                            //},
+                            //{
+                            //    title: "Plan Quarterly",
+                            //    orderable: false,
+                            //    render: function (data) {
+                            //        let timestamp = new Date(data).getTime();
+                            //        return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                            //    }
+                            //},
+                            //{
+                            //    title: "Plan Yearly",
+                            //    orderable: false,
+                            //    render: function (data) {
+                            //        let timestamp = new Date(data).getTime();
+                            //        return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                            //    }
+                            //},
+                            //{ title: "Last MA Date" },
+                            //{ title: "CreateBy" },
+                            //{ title: "CreateDate" },
+                        ],
+                        deferRender: true,
+                        destroy: true,
+                        rowCallback: function (row) {
+                            $(row).find('td:first').addClass('expandable');
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+
+     }
+    function OnDetail(data) {
+        document.location = '@Url.Action("MaintenanceHistory", "Global")' + '?id=' + data;
+    }
+
+</script>
+<style>
+    #TableMAPlan th:nth-child(5),
+    #TableMAPlan td:nth-child(5) {
+        min-width: 300px !important;
+        max-width: 300px !important;
+    }
+    #TableMAPlan th:nth-child(11),
+    #TableMAPlan td:nth-child(11) {
+        min-width: 150px !important;
+        max-width: 150px !important;
+    }
+    .shown {
+        background-color: #e6f7ff !important;
+    }
+
+    .shown-child {
+        background-color: #e6f7ff !important;
+    }
+
+    .action {
+        padding: 7px;
+        border-radius: 4px;
+        width: 100%;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+    }
+</style>

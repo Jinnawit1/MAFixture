@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "Customer";
+}
+
+<style>
+    .shown {
+        background-color: #e6f7ff !important;
+    }
+
+    .shown-child {
+        background-color: #e6f7ff !important;
+    }
+
+    .action {
+        padding: 7px;
+        border-radius: 4px;
+        width: 100%;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+    }
+</style>
+
+<h3>Customer</h3>
+<hr />
+
+@*<div class="col-custom">
+    <div class="row">
+        <div class="col-md-2 col-12 mb-3" style="padding: 0px 0px;">
+            <button onclick="OnAdd()" class="btn btn-filled">Add new customer</button>
+        </div>
+    </div>
+</div>*@
+<div class="col-custom">
+    <div class="row">
+        <div class="col-12 mb-3" style="padding: 3px 0px;">
+            <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+                @*<table id="TableCustomer" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
+                <table id="TableCustomer" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        OnLoad()
+    });
+
+    function OnLoad() {
+        var dataSet = [];
+        var dataFull = [];
+
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        var customer = response.data.Customer;
+                        $(customer).each(function (index, item) {
+                            console.log(item);
+                            var newItem = [];
+                            newItem.push(index + 1);
+                            //newItem.push(item.ID);
+                            newItem.push(item || '');
+                            //newItem.push(item.PrefixBOM || '');
+                            //newItem.push(item.Createby || '');
+                            //newItem.push(formatDate(item.Createdate, "2"));
+
+                            dataSet.push(newItem);
+                            dataFull.push(item);
+                        });
+
+                        // Destroy the existing DataTable if it exists
+                        if ($.fn.dataTable.isDataTable('#TableCustomer')) {
+                            $('#TableCustomer').DataTable().clear().destroy();
+                        }
+
+                        $('#TableCustomer').DataTable({
+                            order: [[0, "desc"]],
+                            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                            iDisplayLength: 100,
+                            data: dataSet, // This is the array of data that contains your standard packing items
+                            dom: 'lBfrtip',
+                            fixedHeader: true,
+                            autoWidth: true,
+                            buttons: [],
+                            scrollX: false,
+                            buttons: [
+                                {
+                                    extend: 'excel',
+                                    autoFilter: true,
+                                    exportOptions: {
+                                        format: {
+                                            body: function (data, row, col, node) {
+                                                if (data && /<[^>]+>/g.test(data)) {
+                                                    if (data && /<br\s*\/?>/i.test(data)) {
+                                                        data = data.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with a space
+                                                        return data;
+                                                    } else {
+                                                        let htmlString = data;
+                                                        let parser = new DOMParser();
+                                                        let doc = parser.parseFromString(htmlString, 'text/html');
+                                                        let item = doc.body.textContent || doc.body.innerText;
+                                                        return item;
+                                                    }
+                                                }
+                                                else return data;
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            columns: [
+                                { title: "No." },
+                                //{
+                                //    title: "Action",
+                                //    orderable: false,
+                                //    render: function (data, type, row) {
+                                //        return '<div style="width: 100%; display: flex; justify-content: space-around; column-gap: 3px;">' +
+                                //            '<button onclick="OnEdit(\'' + data + '\')" class="btn btn-filled">Edit</button>' +
+                                //            '<button onclick="OnDelete(\'' + data + '\')" class="btn btn-transparent">Delete</button>' +
+                                //            '</div>'
+                                //    },
+                                //},
+                                { title: "Customer Name" },
+                                //{ title: "Customer Codename" },
+                                //{ title: "Create By" },
+                                //{ title: "Create Date" },
+                            ],
+                            deferRender: true,
+                            destroy: true
+                        });
+                    }
+                } else {
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnAdd(data) {
+        document.location = '@Url.Action("ManageCustomer", "Global")';
+    }
+
+    function OnEdit(data) {
+        document.location = '@Url.Action("ManageCustomer", "Global")' + '?id=' + data;
+    }
+
+    function OnDelete(data) {
+        var url = '@Url.Action("Delete_Customer_By_ID", "Global")';
+        var dataJson = JSON.stringify({ ID: data })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    showAlert('success', response.word, function () { });
+                    OnLoad();
+                } else {
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+</script>

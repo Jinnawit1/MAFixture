@@ -1,0 +1,410 @@
+﻿
+@{
+    ViewBag.Title = "Report_Analysis";
+}
+
+<h2>Report Analysis</h2>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label>Years</label>
+                <select id="Year" class="form-control"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="chart-container">
+    <h3 class="text-center">Equipment/Machine</h3>
+    <div style="height:300px;">
+        <canvas id="myBarChart"></canvas>
+    </div>
+</div>
+<div class="chart-container">
+    <h3 class="text-center">Tools</h3>
+    <div style="height:300px;">
+        <canvas id="myBarChart1"></canvas>
+    </div>
+</div>
+<div id="department"></div>
+<script>
+    $(document).ready(function () {
+        Load_Dateinfo();
+    });
+    $("#Year").change(function() {
+        OnLoad();
+    });
+    function Load_Dateinfo() {
+        var url = '@Url.Action("Load_Dateinfo", "Global")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    console.log(response.success);
+                    console.log("Year:", response.Year);
+
+                    var yearSelect = $("#Year");   // เปลี่ยน ID ตามจริง
+
+                    yearSelect.empty();
+
+                    $.each(response.Year, function (index, year) {
+                        yearSelect.append($('<option>', {
+                            value: year,
+                            text: year
+                        }));
+                    });
+                    OnLoad(); // เรียก function ต่อเมื่อเสร็จ
+                } else {
+                    showAlert('error', response.word, function () { });
+                }
+
+            }
+        });
+    }
+   function OnLoad() {
+        var Year = $('#Year').val();
+        var url = '@Url.Action("Load_Report_Analysis", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ Year: Year }),
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    var Sumequipment = response.Sumequipment;
+                    var Sumtools = response.Sumtools;
+                    var rawData = response.Sumdepartment;
+
+                    var departmentMap = {};
+
+                    // วนลูปข้อมูลแล้วจัดกลุ่มตาม department
+                    rawData.forEach(function (item) {
+                        var dept = item.Department;
+
+                        if (!departmentMap[dept]) {
+                            departmentMap[dept] = [];
+                        }
+
+                        departmentMap[dept].push(item);
+                    });
+
+                    console.log(departmentMap);
+                    GetEquipmentchart(Sumequipment);
+                    GetToolschart(Sumtools);
+                    GetDepartmentchart(departmentMap);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred: ' + textStatus + ', ' + errorThrown);
+            }
+        });
+    }
+
+    function GetEquipmentchart(data) {
+        // ✅ ลงทะเบียน plugin datalabels สำหรับ Chart.js v4 (ทำครั้งเดียวก่อนเรียกฟังก์ชันนี้ก็ได้)
+        Chart.register(ChartDataLabels);
+
+        // สร้าง labels สำหรับ 53 สัปดาห์
+        var labels = Array.from({ length: 53 }, (_, i) => 'WW' + (i + 1));
+
+        // เตรียม array สำหรับทุกแผนก
+        var departments = {};
+
+        data.forEach(function (item) {
+            var week = parseInt(item.WorkWeek);
+            var value = parseInt(item.SumEquipment);
+            var dept = item.Department;
+
+            if (!departments[dept]) {
+                departments[dept] = new Array(53).fill(0);
+            }
+            departments[dept][week - 1] = value;
+        });
+
+        // แม่สี (ไม่ผูกกับชื่อโดยตรง)
+        var colorPalette = ['#4dc9f6', '#f67019', '#f53794', '#537bc4', '#acc236', '#00a950', '#ffa600'];
+        var colorIndex = 0;
+        var departmentColors = {};
+
+        Object.keys(departments).forEach(dept => {
+            if (!departmentColors[dept]) {
+                departmentColors[dept] = colorPalette[colorIndex % colorPalette.length];
+            colorIndex++;
+            }
+        });
+
+    var datasets = Object.keys(departments).map(function (dept) {
+        return {
+            label: dept,
+            data: departments[dept],
+            backgroundColor: departmentColors[dept],
+            stack: 'stack1'
+        };
+    });
+
+    // ทำลาย chart เก่า
+    if (window.myChart) {
+        window.myChart.destroy();
+    }
+
+    // สร้าง chart ใหม่
+    var ctx = document.getElementById('myBarChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                },
+                datalabels: {
+                    anchor: 'center',
+                    align: 'center',
+                    color: 'white',
+                    font: {
+                        size: 10,
+                        weight: 'bold'
+                    },
+                    formatter: function (value) {
+                        return value > 0 ? value : '';
+                    }
+                },
+                legend: {
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        autoSkip: false
+                    },
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // ✅ จำเป็นสำหรับ Chart.js v4
+    });
+
+    window.myChart = myChart;
+    }
+
+    function GetToolschart(data){
+        // สร้าง labels สำหรับ 53 สัปดาห์
+        var labels = Array.from({ length: 53 }, (_, i) => i + 1);
+        labels = labels.map(w => 'WW' + w);
+        // เตรียม array สำหรับทุกแผนก
+        var departments = {};
+
+        data.forEach(function (item) {
+            var week = parseInt(item.WorkWeek);
+            var value = parseInt(item.SumTools);
+            var dept = item.Department;
+
+            if (!departments[dept]) {
+                departments[dept] = new Array(53).fill(0);
+            }
+            departments[dept][week - 1] = value;
+        });
+
+        // แม่สี (ไม่ผูกกับชื่อโดยตรง)
+        var colorPalette = ['#4dc9f6', '#f67019', '#f53794', '#537bc4', '#acc236', '#00a950', '#ffa600'];
+        var colorIndex = 0;
+        var departmentColors = {};
+
+        Object.keys(departments).forEach(dept => {
+            if (!departmentColors[dept]) {
+                departmentColors[dept] = colorPalette[colorIndex % colorPalette.length];
+                colorIndex++;
+            }
+        });
+        var datasets = Object.keys(departments).map(function (dept) {
+            return {
+                label: dept,
+                data: departments[dept],
+                backgroundColor: departmentColors[dept],
+                stack: 'stack1' // ✅ สำคัญ: ทุกอันต้อง stack เดียวกัน
+            };
+        });
+        console.log(datasets);
+        if (window.myChart1) {
+            window.myChart1.destroy();
+        }
+
+        var ctx = document.getElementById('myBarChart1').getContext('2d');
+        var myChart1 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels, // ← สัปดาห์
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    datalabels: {
+                        anchor: 'center',
+                        align: 'center',
+                        color: 'white',
+                        font: {
+                            size: 10,
+                            weight: 'bold'
+                        },
+                        formatter: function (value) {
+                            return value > 0 ? value : '';
+                        }
+                    },
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            autoSkip: false
+                        },
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // ✅ จำเป็นสำหรับ Chart.js v4
+        });
+
+        window.myChart1 = myChart1;
+    }
+    function GetDepartmentchart(departmentMap) {
+            console.log('departmentMap', departmentMap);
+            $("#department").empty();
+
+            var labels = Array.from({ length: 53 }, (_, i) => 'WW' + (i + 1));
+
+            Object.keys(departmentMap).forEach(function (deptName, index) {
+                var canvasId = 'chart_' + index;
+
+                var chartHtml =
+                    '<div class="chart-container">' +
+                    '<h3 class="text-center">' + deptName + '</h3>' +
+                    '<div style="height:300px;">' +
+                    '<canvas id="' + canvasId + '"></canvas>' +
+                    '</div>' +
+                    '</div>';
+
+                $("#department").append(chartHtml);
+
+                var equipmentData = new Array(53).fill(null);
+                var toolsData = new Array(53).fill(null);
+
+                departmentMap[deptName].forEach(function (item) {
+                    var week = parseInt(item.WorkWeek);
+                    equipmentData[week - 1] = parseInt(item.SumEquipment);
+                    toolsData[week - 1] = parseInt(item.SumTools);
+                });
+
+                function getLastNonNullIndex(dataArray) {
+                    for (let i = dataArray.length - 1; i >= 0; i--) {
+                        if (dataArray[i] !== null) {
+                            return i;
+                        }
+                    }
+                    return 0;
+                }
+
+                var lastEquipmentIndex = getLastNonNullIndex(equipmentData);
+                var lastToolsIndex = getLastNonNullIndex(toolsData);
+                var lastIndex = Math.max(lastEquipmentIndex, lastToolsIndex);
+
+        // ถ้าอยากให้ก่อนหน้าไม่เป็น null แต่เป็น 0
+        var processedEquipment = equipmentData.map((val, i) => {
+            if (i <= lastIndex) {
+                return val !== null ? val : 0; // null -> 0
+        }
+            return null; // หลัง lastIndex เป็น null
+        });
+
+        var processedTools = toolsData.map((val, i) => {
+            if (i <= lastIndex) {
+                return val !== null ? val : 0;
+        }
+            return null;
+        });
+
+        var ctx = document.getElementById(canvasId).getContext('2d');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Equipment/Machine',
+                        data: processedEquipment,
+                        borderColor: '#4dc9f6',
+                        borderWidth: 1,
+                        backgroundColor: 'transparent',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Tools',
+                        data: processedTools,
+                        borderColor: '#f67019',
+                        borderWidth: 1,
+                        backgroundColor: 'transparent',
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    datalabels: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            autoSkip: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+            });
+        });
+    }
+
+
+</script>

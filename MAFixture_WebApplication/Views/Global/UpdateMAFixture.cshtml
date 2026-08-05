@@ -1,0 +1,570 @@
+﻿
+@{
+    ViewBag.Title = "Update Fixture Maintenance";
+}
+
+<h3>Update Fixture Maintenance</h3>
+<hr />
+
+<div class="col-custom" id="video-col-custom" style="display: none;">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12 mb-3" style="padding: 0px 0px;">
+            <div id="sourceSelectPanel" style="display:none;">
+                <label for="sourceSelect">Change video source:</label>
+                <select id="sourceSelect" style="max-width:400px" class="ant-select"></select>
+            </div>
+            <video id="video" height="400" style="border: 1px solid gray; width: 100%; margin: 5px 0px;"></video>
+            <div id="video-message" style="width: 100%; text-align: center; background-color: #fffbe6; padding: 5px; border: 1px solid #ffe58f; border-radius: 4px;">
+                Point the camera at the barcode.
+            </div>
+
+            <hr />
+        </div>
+    </div>
+</div>
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 0px 0px;">
+            <a class="btn btn-filled" onclick="toggleVideo()" style="width: 100%;" id="startButton" href="javascript:void(0)"><i style="font-size: 18px;" id="video-icon" class="fas fa-video-slash"></i></a>
+        </div>
+        <div class="col-md-4 col-sm-6 col-12 mb-3">
+            <input type="text" class="form-control" id="Serial_No_Input" name="Serial_No_Input" placeholder="Scan serial here..." onkeydown="checkSerial(event)" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div id="update-form" style="display: none;">
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Serial no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Serial_No"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Equipment no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Equipment_No"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Equipment name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Equipment_Name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Section :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Section"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Last MA Date :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="LastMA_date"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Product name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Product_name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Type :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Type_MC"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-sm-12 col-12 mb-3" style="padding: 3px 0px;">
+                <hr />
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 10px 0px;">
+                <div>Maintenance Date :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 0px 15px;">
+                <input type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")" class="form-control" id="Createdate" name="Createdate" />
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 10px 0px;">
+                <div>Planning :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 0px 15px;">
+                <select class="ant-select" name="Planning" id="Planning">
+                    <option value="Weekly" selected>Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quarterly">Quarterly</option>
+                    <option value="Semiannual">Semiannual</option>
+                    <option value="Yearly">Yearly</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-12 mb-3" style="padding: 3px 0px;">
+                <table class="table table-bordered table-sm" id="tableCheckList">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Detail</th>
+                            <th>Status</th>
+                            <th>Problem</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 10px 0px;">
+                <div>*Upload before :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <div class="input-file-container">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label for="file-input-before">Upload File</label>
+                        <i style="cursor: pointer;" class="fas fa-times" onclick="OnRemoveFile('before')"></i>
+                    </div>
+                    <input type="file" id="file-input-before" accept=".jpg, .jpeg, .png, .heic" class="file-input" onchange="updateFileName('before')" style="display: none;">
+                    <label for="file-input-before" class="file-label">
+                        Choose File
+                        <span id="file-name-before">No file selected</span>
+                    </label>
+                    <div id="image-preview-container-before" style="display: none;">
+                        <img id="image-preview-before" src="" alt="Image preview" style="width: 25px; height: 25px; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 15px 0px;">
+                <div>*Upload after :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding-top: 6px;">
+                <div class="input-file-container">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label for="file-input-after">Upload File</label>
+                        <i style="cursor: pointer;" class="fas fa-times" onclick="OnRemoveFile('after')"></i>
+                    </div>
+                    <input type="file" id="file-input-after" accept=".jpg, .jpeg, .png, .heic" class="file-input" onchange="updateFileName('after')" style="display: none;">
+                    <label for="file-input-after" class="file-label">
+                        Choose File
+                        <span id="file-name-after">No file selected</span>
+                    </label>
+                    <div id="image-preview-container-after" style="display: none;">
+                        <img id="image-preview-after" src="" alt="Image preview" style="width: 25px; height: 25px; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-sm-10 col-12 mb-3">
+            </div>
+            <div class="col-sm-2 col-12 mb-3" style="padding: 10px 0px; display: flex; justify-content: flex-end; column-gap: 5px;">
+                <button class="btn btn-filled" onclick="OnSave()">Save</button>
+                <button class="btn btn-transparent" onclick="OnCancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var data = {};
+    var videoStatus = true;
+    var videoInputDevicesStatus = false;
+
+    window.onload = function () {
+        var selectedDeviceId;
+        document.getElementById('video').style.display = "none";
+        var codeReader = new ZXing.BrowserMultiFormatReader();
+
+        // List video input devices (cameras)
+        codeReader.listVideoInputDevices()
+            .then(function (videoInputDevices) {
+                var sourceSelect = document.getElementById('sourceSelect');
+                selectedDeviceId = videoInputDevices[0].deviceId;
+
+                // Populate the sourceSelect dropdown with available camera devices
+                if (videoInputDevices.length >= 1) {
+                    videoInputDevicesStatus = true;
+                    videoInputDevices.forEach(function (element) {
+                        var sourceOption = document.createElement('option');
+                        sourceOption.text = element.label;
+                        sourceOption.value = element.deviceId;
+                        sourceSelect.appendChild(sourceOption);
+                    });
+
+                    // Update the selected device when the dropdown changes
+                    sourceSelect.onchange = function () {
+                        selectedDeviceId = sourceSelect.value;
+                    };
+
+                    // Show the source selection dropdown if more than one camera is available
+                    var sourceSelectPanel = document.getElementById('sourceSelectPanel');
+                    sourceSelectPanel.style.display = 'block';
+                }
+
+                // Start scanning when the "Start" button is clicked
+                document.getElementById('startButton').addEventListener('click', function () {
+                    event.preventDefault();
+                    toggleCodeReader(codeReader, selectedDeviceId);
+                });
+
+                document.getElementById('sourceSelect').addEventListener('change', function () {
+                    videoStatus = true;
+                    document.getElementById('startButton').click();
+                });
+
+            })
+            .catch(function (err) {
+                showAlert('error', err, function () { });
+            });
+    };
+
+    function checkSerial(event) {
+        if (event.key === "Enter") {
+            data = {};
+            var form = document.getElementById("update-form");
+            form.style.display = "none";
+            document.getElementById("Serial_No").textContent = '';
+            document.getElementById("Section").textContent = '';
+            document.getElementById("LastMA_date").textContent = '';
+            document.getElementById("Product_name").textContent = '';
+            document.getElementById("Equipment_Name").textContent = '';
+            document.getElementById("Type_MC").textContent = '';
+            document.getElementById("Equipment_No").textContent = '';
+            var url = '@Url.Action("Load_MAFixture_By_ID", "Global")';
+            var dataJson = JSON.stringify({ Serial_No: event.target.value })
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: dataJson,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (response) {
+                    document.getElementById('video-message').textContent = "Point the camera at the barcode.";
+                    document.getElementById('video-message').style.backgroundColor = '#fffbe6';
+                    document.getElementById('video-message').style.borderColor = '#ffe58f';
+                    if (response.success) {
+                        if (response.data) {
+                            videoStatus = false;
+                            document.getElementById('startButton').click();
+                            data = response.data;
+                            form.style.display = "block";
+                            document.getElementById("Serial_No").textContent = response.data.Serial_No;
+                            document.getElementById("Section").textContent = response.data.Section;
+                            document.getElementById("LastMA_date").textContent = formatDate(response.data.LastMA_date, 2);
+                            document.getElementById("Product_name").textContent = response.data.Product_name;
+                            document.getElementById("Equipment_No").textContent = response.data.Equipment_No;
+                            document.getElementById("Equipment_Name").textContent = response.data.Equipment_Name;
+                            document.getElementById("Type_MC").textContent = response.data.Type_MC;
+
+                            document.getElementById("Serial_No_Input").value = '';
+                            getMasterChecklist();
+                        }
+                    } else {
+                        showAlert('error', 'Serial number is not found.', function () { });
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                }
+            });
+        }
+    }
+
+    function getMasterChecklist() {
+        var url = '@Url.Action("Load_Master_Checklist", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        response.data.forEach(function (item, index) {
+                            var tableBody = document.querySelector('#tableCheckList tbody');
+                            var newRow = tableBody.insertRow();
+
+                            newRow.insertCell(0).innerText = index + 1;
+                            newRow.insertCell(1).innerHTML = '<span>' + item.DetailEng + '</span><br><span style="color: grey;">' + item.DetailThai + '</span>';
+                            newRow.insertCell(2).innerHTML = '<div onclick="toggleStatus(Status_' + index + ')" style="text-align: center;"><i id="Status_' + index + '" class="fas fa-circle" style="font-size: 22px; cursor: pointer; color: #1890ff;"></i></div>';
+                            newRow.insertCell(3).innerHTML = '<textarea class="form-control" id="Problem_' + index + '" name="Problem" placeholder="Problem"></textarea>';
+                            newRow.insertCell(4).innerHTML = '<textarea class="form-control" id="Remark_' + index + '" name="Remark" placeholder="Remark"></textarea>';
+                        });
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnCancel() {
+        var dateTimeNow = new Date().format('yyyy-mm-dd HH:MM:ss');
+        var form = document.getElementById("update-form");
+        document.getElementById("Serial_No").textContent = '';
+        document.getElementById("Section").textContent = '';
+        document.getElementById("LastMA_date").textContent = '';
+        document.getElementById("Product_name").textContent = '';
+        document.getElementById("Equipment_Name").textContent = '';
+        document.getElementById("Type_MC").textContent = '';
+        document.getElementById("Equipment_No").textContent = '';
+        document.getElementById("Planning").value = 'Weekly';
+        document.getElementById("Createdate").value =dateTimeNow;
+        document.getElementById("file-input-before").value = '';
+        document.getElementById("file-name-before").textContent = "No file selected";
+        document.getElementById("file-input-after").value = '';
+        document.getElementById("file-name-after").textContent = "No file selected";
+        document.getElementById('image-preview-container-before').style.display = 'none';
+        document.getElementById('image-preview-container-after').style.display = 'none';
+        var tableBody = document.querySelector('#tableCheckList tbody');
+        tableBody.innerHTML = '';
+        var form = document.getElementById("update-form");
+        form.style.display = "none";
+    }
+
+    function OnSave() {
+        var fileBefore = document.getElementById("file-input-before").files[0];
+        var fileNameBefore = document.getElementById("file-name-before");
+        var fileAfter = document.getElementById("file-input-after").files[0];
+        var fileNameAfter = document.getElementById("file-name-after");
+
+        if (!fileBefore || !fileAfter) {
+            showAlert("error", "Please fill out all required fields.", function () { });
+            return;
+        }
+
+        var newFileNameBefore = "";
+        var newFileNameAfter = "";
+
+        if (fileBefore && fileAfter) {
+            var formDataFile = new FormData();
+            formDataFile.append("file", fileBefore);
+
+            var url = '@Url.Action("Upload", "Global")';
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: formDataFile,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+
+                        newFileNameBefore = response.fileName;
+                        setTimeout(function() {
+                            var formDataFile2 = new FormData();
+                            formDataFile2.append("file", fileAfter);
+                            $.ajax({
+                                url: url,
+                                type: "POST",
+                                data: formDataFile2,
+                                processData: false,
+                                contentType: false,
+                                success: function (response) {
+                                    if (response.success) {
+
+                                        newFileNameAfter = response.fileName;
+                                        var filesMA = {
+                                            MA_ID: data.MA_ID,
+                                            Name: "NO FILE",
+                                            Createdate: document.getElementById("Createdate").value,
+                                            PlanName: document.getElementById("Planning").value,
+                                            Format: 'UPDATE',
+                                            FilenameBefore: newFileNameBefore,
+                                            FilenameAfter: newFileNameAfter
+                                        };
+                                        Record_FilesMA(filesMA)
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                                }
+                            });
+                        }, 1000); // 1000ms = 1 second delay
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                }
+            });
+        }
+    }
+
+    function Record_FilesMA(data) {
+        var url = '@Url.Action("Record_FilesMA", "Global")';
+
+        $.ajax({
+            url: url, type: "POST", processData: false,
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    var tableBody = document.querySelector('#tableCheckList tbody');
+                    var rows = tableBody.rows;
+                    var dataUpdate = [];
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = rows[i];
+                        var cells = row.cells;
+                        let detailWithLineBreaks = cells[1].innerHTML.replace(/<br\s*\/?>/g, '\n');
+                        let htmlString = detailWithLineBreaks;
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(htmlString, 'text/html');
+                        let item = doc.body.textContent || doc.body.innerText;
+
+                        dataUpdate.push({
+                            FID: response.data.ID,
+                            Checklistdetail: item,
+                            Status: (document.getElementById("Status_" + i).classList.contains('fa-check-circle') ? "True" : "False"),
+                            Problem: document.getElementById("Problem_" + i).value,
+                            Remark: document.getElementById("Remark_" + i).value,
+                        });
+                    }
+
+                    Record_MAChecklistdetail(dataUpdate);
+                } 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function Record_MAChecklistdetail(data) {
+        var url = '@Url.Action("Record_MAChecklistdetail", "Global")';
+
+        $.ajax({
+            url: url, type: "POST", processData: false,
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    showAlert('success', response.word, function () {
+                        OnCancel();
+                    });
+                } else {
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function toggleStatus(icon) {
+        if (icon.classList.contains('fa-check-circle')) {
+            icon.classList.remove('fa-check-circle');
+            icon.classList.add('fa-circle');
+        } else {
+            icon.classList.remove('fa-circle');
+            icon.classList.add('fa-check-circle');
+        }
+
+    }
+
+    function OnRemoveFile(bottom) {
+        document.getElementById("file-input-" + bottom).value = '';
+        document.getElementById("file-name-" + bottom).textContent = 'No file selected';
+        var imagePreviewContainer = document.getElementById('image-preview-container-' + bottom);
+        imagePreviewContainer.style.display = 'none';
+    }
+
+    function updateFileName(bottom) {
+        var fileInput = document.getElementById("file-input-" + bottom);
+        var fileNameDisplay = document.getElementById("file-name-" + bottom);
+        var imagePreviewContainer = document.getElementById('image-preview-container-' + bottom);
+        var imagePreview = document.getElementById('image-preview-' + bottom);
+
+        // Get the selected file
+        if (fileInput.files.length > 0) {
+            var file = fileInput.files[0];
+            var fileName = file.name;
+            var fileType = file.type;
+
+            // Allowed image types
+            var allowedTypes = ['image/jpeg', 'image/png', 'image/heic'];
+
+            // Check if the selected file type is valid
+            if (allowedTypes.indexOf(fileType) !== -1) {
+                fileNameDisplay.textContent = fileName;
+                var reader = new FileReader();
+
+                // When the file is loaded, display the preview
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block'; // Show the preview container
+                };
+
+                reader.readAsDataURL(fileInput.files[0]); // Read the file as a Data URL
+            } else {
+                showAlert('error', 'Please select a valid image file (HEIC, JPEG, JPG, or PNG).', function () { });
+                fileInput.value = '';
+                fileNameDisplay.textContent = "No file selected";
+                imagePreviewContainer.style.display = 'none';
+            }
+        } else {
+            fileNameDisplay.textContent = "No file selected";
+            imagePreviewContainer.style.display = 'none';
+        }
+    }
+</script>

@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "Summary_THT_Pallet";
+}
+
+<h2>Summary THT Pallet</h2>
+
+
+<div class="row">
+    <div class="col-md-2 col-sm-2 col-12 mb-3">
+        <div class="form-group">
+            <label for="search-date-from">Product Name :</label>
+            <input type="text" class="form-control" id="Product_name">
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-3 col-12 mb-3">
+        <div style="margin-left:15px;margin-top:30px">
+            <button class="btn btn-primary" id="search-button" onclick="OnLoad()">Search</button>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-6 mb-3" style="padding: 3px 0px;">
+        <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 50%; font-size: 12px !important;">
+            @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
+            <table id="TableMAPlan" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        LoadAll();
+    });
+    function LoadAll() {
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        console.log(response.data);
+                        $.each(response.data.Department, function (index, item) {
+                            $('#Section').append('<option value="' + item.Section + '">' + item.Section + '</option>');
+                        });
+                        $("#Section").val("THT_HM");
+
+                        OnLoad();
+                }
+            }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+     function OnLoad() {
+        var Product_name = $('#Product_name').val();
+        var dataSet = [];
+        var dataFull = [];
+        var url = '@Url.Action("Load_SummaryTHTPallet", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                Product_name: Product_name,
+            }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success && response.data) {
+                    var maPlan = response.data;
+                    var now = Date.now();
+
+                    $(maPlan).each(function (index, item) {
+                        var newItem = [];
+                        newItem.push(index + 1);
+                        newItem.push(item.Product_name || '');
+                        newItem.push(item.Count || '');
+                        dataSet.push(newItem);
+                        dataFull.push(item);
+                    });
+
+                    if ($.fn.dataTable.isDataTable('#TableMAPlan')) {
+                        $('#TableMAPlan').DataTable().clear().destroy();
+                    }
+
+                    $('#TableMAPlan').DataTable({
+                        order: [[0, "desc"]],
+                        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                        iDisplayLength: 100,
+                        data: dataSet,
+                        dom: 'lBrtip',
+                        autoWidth: false,
+                        scrollX: false,
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                autoFilter: true,
+                                exportOptions: {
+                                    format: {
+                                        body: function (data, row, col, node) {
+                                            if (data && /<[^>]+>/g.test(data)) {
+                                                if (/<br\s*\/?>/i.test(data)) {
+                                                    return data.replace(/<br\s*\/?>/gi, ' ');
+                                                } else {
+                                                    var parser = new DOMParser();
+                                                    var doc = parser.parseFromString(data, 'text/html');
+                                                    return doc.body.textContent || doc.body.innerText;
+                                                }
+                                            }
+                                            return data;
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        columns: [
+                            { title: "No."},
+                            {
+                                title: "Product Name",
+                                className: "product-col"
+                            },
+                            {
+                                title: "Amount",
+                            },
+                        ],
+                        deferRender: true,
+                        destroy: true,
+                        rowCallback: function (row) {
+                            $(row).find('td:first').addClass('expandable');
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+</script>

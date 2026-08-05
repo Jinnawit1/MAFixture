@@ -1,0 +1,979 @@
+@{
+    ViewBag.Title = "New Equipment";
+}
+
+<h3 id="topic"></h3>
+<hr />
+
+<style>
+</style>
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b>Picture</b>
+            </div>
+            <div class="panel-body text-center">
+                <!-- Preview -->
+                <img id="image-preview-after"
+                     src=""
+                     style="width:100%; max-height:200px; object-fit:contain; border:1px solid #ddd; padding:5px; margin-bottom:10px;"
+                     alt="No Image" />
+                <!-- Upload -->
+                <div class="input-file-container">
+                    <input type="file"
+                           id="file-input-after"
+                           accept=".jpg, .jpeg, .png, .heic"
+                           class="file-input"
+                           onchange="previewImage(event)"
+                           style="display: none;">
+                    <label for="file-input-after" class="btn btn-default" style="width:100%;">
+                        Choose File
+                    </label>
+                    <div id="file-name-after" style="margin-top:5px; font-size:12px; color:#777;">
+                        No file selected
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Department :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="ant-select" name="Department" id="Department"></select>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3">
+                    <div>MA type :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <label class="container">
+                        Maintenance
+                        <input type="radio" checked="checked" value="Maintenance" name="Type_MC">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        Calibration
+                        <input type="radio" value="Calibration" name="Type_MC">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div><span style="color: red;">*</span>Customer :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="ant-select" name="Customer" id="Customer"></select>
+                    <input name="Customerid" id="Customerid" hidden />
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Drawing :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="form-control" name="Drawing" id="Drawing"></select>
+                </div>
+            </div>
+        </div>
+        <div class="col-custom">
+            <div class="row">
+
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>MA type :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style=" padding-top: 10px;">
+                    <label class="container">
+                        Equipment/Machine
+                        <input type="radio" checked="checked" value="Equipment/Machine" name="Type_MA">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        SparePart
+                        <input type="radio" value="Sparepart" name="Type_MA">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        Tools
+                        <input type="radio" value="Tools" name="Type_MA">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div><span style="color: red;">*</span>Product name :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <textarea class="form-control" id="Product_name" style="height:80px" name="Product_name" placeholder="Product name"></textarea>  @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+            </div>
+        </div>
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div><span style="color: red;">*</span>Serial no :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Serial_No" name="Serial_No" placeholder="Serial no" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div><span style="color: red;">*</span>Equipment no :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Equipment_No" name="Equipment_No" placeholder="Machine/Equipment no" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+
+            </div>
+        </div>
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div><span style="color: red;">*</span>Equipment name :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Equipment_Name" name="Equipment_Name" placeholder="Machine/Equipment name" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                    <input type="hidden" class="form-control" id="Equipment_Name_old" />
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Model no :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Model" name="Model" placeholder="Model no" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+            </div>
+        </div>
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Reference no :</div>
+                    <small class="text-muted" style="color:red;">(Serial Of Fixture)</small>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input class="form-control" list="Referrence_No_List" name="Referrence_No" id="Referrence_No">
+                    <datalist id="Referrence_No_List"></datalist>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Responsible name :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Responsible_Name" name="Responsible_Name" placeholder="Refference name" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+            </div>
+        </div>
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Manufacture :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Manufacture" name="Manufacture" placeholder="Manufacture" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Property :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <label class="container">
+                        GPV
+                        <input type="radio" checked="checked" value="GPV" name="Property">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        Customer
+                        <input type="radio" value="Customer" name="Property">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Pin No. :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="ant-select" name="Pinnumber" id="Pinnumber"></select>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Lifetime :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Lifetime" name="Lifetime" placeholder="Lifetime" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-custom">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Location :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="Location" name="Location" placeholder="Location" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                        <div>Description :</div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-12 mb-3">
+                        <textarea class="form-control" id="Description" name="Description" placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-custom Toolvisible">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>GPV-Process :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="text" class="form-control" id="GPVProcess" name="GPVProcess" placeholder="Wave / Solder" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Process-Side :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="ant-select" name="ProcessSide" id="ProcessSide">
+                        <option value="" selected>N/A</option>
+                        <option value ="Top">Top</option>
+                        <option value="Bottom">Buttom</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-custom Toolvisible">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>WithTopCover :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="ant-select" name="WithTopCover" id="WithTopCover">
+                        <option value="" selected>N/A</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>WithControlTooling :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="ant-select" name="WithControlTooling" id="WithControlTooling">
+                        <option value="" selected>N/A</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-custom Toolvisible" style="padding-top:10px">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Grade Status :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="ant-select" name="Grade_Status" id="Grade_Status">
+                        <option value="" selected>N/A</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Dimension :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="unit-input">
+                        <input type="text" id="Dimension" class="form-control" placeholder="Width × Length × Height">
+                        <span class="unit">cm</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-custom" id="Adddate" style="display:none;">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Plan :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" value="1" checked> Daily
+                        </label>
+                        <label>
+                            <input type="checkbox" value="2"> Weekly
+                        </label>
+                        <label>
+                            <input type="checkbox" value="3"> Monthly
+                        </label>
+                        <label>
+                            <input type="checkbox" value="4"> Quarterly
+                        </label>
+                        <label>
+                            <input type="checkbox" value="5"> Semi_annually
+                        </label>
+                        <label>
+                            <input type="checkbox" value="6"> Yearly
+                        </label>
+                        <label>
+                            <input type="checkbox" value="7"> Manually
+                        </label>
+                    </div>
+                </div>
+                @*<div class="input-file-container">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label for="file-input-after">Upload File</label>
+                    </div>
+                    <input type="file" id="file-input-after" accept=".jpg, .jpeg, .png, .heic" class="file-input" onchange="updateFileName('after')" style="display: none;">
+                    <label for="file-input-after" class="file-label">
+                        Choose File
+                        <span id="file-name-after">No file selected</span>
+                    </label>
+                    <div id="image-preview-container-after" style="display: none; flex-direction: column; column-gap: 3px;">
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+        <div class="col-custom" id="Editdate" style="display:none;">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Daily :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <input id="Daily" class="form-control" type="datetime-local" style="margin-right:20PX;" />
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Weekly :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <input id="Weekly" class="form-control" type="datetime-local" style="margin-right: 20PX;" />
+
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Monthly :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <input id="Monthly" class="form-control" type="datetime-local" style="margin-right: 20PX;" />
+
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Quarterly :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <input id="Quarterly" class="form-control" type="datetime-local" style="margin-right: 20PX;" />
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Semi_annually :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <input id="Semiannually" class="form-control" type="datetime-local" style="margin-right:20PX;" />
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Yearly :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <input id="Yearly" class="form-control" type="datetime-local" style="margin-right:20PX;" />
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Manually :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+                    <input id="Manually" class="form-control" type="datetime-local" style="margin-right:20PX;" />
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+
+<div class="col-custom">
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-12" style="display: flex; justify-content: flex-end; column-gap: 5px; padding-top: 10px;">
+        <button class="btn btn-filled" onclick="onSave()">Save</button>
+        <button class="btn btn-transparent" onclick="onCancel()">Cancel</button>
+    </div>
+</div>
+</div>
+
+<script>
+    var lists = {};
+    var editData = {};
+    var Equipment_Picture = "";
+    $(document).ready(function () {
+        var topic = document.getElementById("topic");
+        if ("@ViewData["MA_ID"]" != "") {
+            topic.textContent = "Edit Equipment";
+            $("#Editdate").show();
+        }
+        else {
+            topic.textContent = "Add Equipment";
+            $("#Adddate").show();
+        }
+
+        loadAllLists();
+        $('#Drawing').select2({
+            width: '100%',
+            minimumInputLength: 3
+        });
+        $('input[name="Type_MA"]').trigger("change");
+
+    });
+    $('#Customer').change(function () {
+        var Customer = $(this).val();
+        $('#Product_name').val('');
+        if (Customer && Customer != "N/A") {
+            LoadDrawingByCustomer(Customer);
+        }
+    });
+    $('input[name="Type_MA"]').change(function () {
+        console.log("Test");
+        var value = $('input[name="Type_MA"]:checked').val();
+
+        if (value === "Tools") {
+            $(".Toolvisible").show();
+        } else {
+            $(".Toolvisible").hide();
+        }
+
+    });
+
+    $('#Drawing').on('change', function () {
+        var Drawing = $(this).val();
+        if ($('#Product_name').val() == "") {
+            $('#Product_name').val(Drawing);
+            LoadCustomerByDrawing(Drawing);
+        }
+        else {
+            $('#Product_name').val($('#Product_name').val() + '/' + Drawing);
+        }
+    });
+    function previewImage(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            document.getElementById("file-name-after").innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("image-preview-after").src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.getElementById('Equipment_No').addEventListener('change', function (event) {
+        event.preventDefault();
+        checkDuplicates({ serialNo: "", Equipment_No: event.target.value, maId: "@ViewData["MA_ID"]" });
+    });
+
+
+    document.getElementById('Serial_No').addEventListener('change', function (event) {
+        event.preventDefault();
+        checkDuplicates({ serialNo: event.target.value, Equipment_No: "", maId: "@ViewData["MA_ID"]" });
+    });
+
+    document.getElementById('Pinnumber').addEventListener('change', function (event) {
+        event.preventDefault();
+        getInformationFromDatabase(event.target.value)
+    });
+
+    function LoadDrawingByCustomer(Customer) {
+        console.log('customer', Customer);
+        var url = '@Url.Action("Load_Drawing_By_Customer", "Global")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify({ Customer: Customer }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    $('#Drawing').empty();
+                    lists = response.data;
+                    console.log('test');
+                    $('<option>', {
+                        text: 'N/A',
+                        value: 'N/A',
+                        disabled: true,
+                        selected: true
+                    }).appendTo('#Drawing');
+                    lists.forEach(function (item) {
+                        $('<option>', {
+                            text: item,
+                            value: item
+                        }).appendTo('#Drawing');
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#info-container').html('<p>An error occurred while fetching data. Please try again.</p>');
+            }
+        });
+    }
+
+    function LoadCustomerByDrawing(Drawing) {
+        console.log('Drawing', Drawing);
+        var url = '@Url.Action("Load_Customer_By_Drawing", "Global")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify({ Drawing: Drawing }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    lists = response.data;
+                    console.log(lists);
+                    $('#Customer').val(lists);
+                    LoadDrawingByCustomer($('#Customer').val());
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#info-container').html('<p>An error occurred while fetching data. Please try again.</p>');
+            }
+        });
+    }
+
+    function getInformationFromDatabase(P_ID) {
+        var url = '@Url.Action("GetInformation", "Global")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify({ ID: P_ID }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    // Populate the information in the info-container div
+                    //$('#info-container').html(`<p><strong>Data:</strong> ${response.data}</p>`);
+                    document.getElementById("Lifetime").value = response.data.Lifetime; // Assuming `Name` is a field in the Customer object
+                } else {
+                    //$('#info-container').html(`<p>${response.word}</p>`);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#info-container').html('<p>An error occurred while fetching data. Please try again.</p>');
+            }
+        });
+    }
+
+    function checkDuplicates(data) {
+        var url = '@Url.Action("CheckForDuplicateNames", "Global")';
+        var dataJson = JSON.stringify({ serialNo: data.serialNo, Equipment_No: data.Equipment_No, maId: data.maId })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (!response.success) {
+                    showAlert('error', response.word, function () { });
+                    if (data.Equipment_No != "") {
+                        document.getElementById('Equipment_No').value = "";
+                    }
+                    if (data.serialNo != "") {
+                        document.getElementById('Serial_No').value = "";
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+    function onLoad() {
+        var url = '@Url.Action("Load_MAFixture_By_ID", "Global")';
+        var dataJson = JSON.stringify({ MA_ID: "@ViewData["MA_ID"]" })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        editData = response.data;
+                        document.getElementById("Department").value = response.data.GE_ID;
+                        if (response.data.Customer_Name && response.data.Customer_Name != "N/A") {
+                            console.log("onload", response.data.Customer_Name);
+                            $("#Customer").val(response.data.Customer_Name);
+                            LoadDrawingByCustomer(response.data.Customer_Name);
+                        }
+                        const radioButtonsTypeMC = document.getElementsByName("Type_MC");
+                        for (let i = 0; i < radioButtonsTypeMC.length; i++) {
+                            if (radioButtonsTypeMC[i].value === response.data.Type_MC) {
+                                radioButtonsTypeMC[i].checked = true;
+                                break;
+                            }
+                        }
+
+                        const radioButtonsTypeMA = document.getElementsByName("Type_MA");
+                        for (let i = 0; i < radioButtonsTypeMA.length; i++) {
+                            if (radioButtonsTypeMA[i].value === response.data.Type_MA) {
+                                radioButtonsTypeMA[i].checked = true;
+                                break;
+                            }
+                        }
+
+                        const radioButtonsProperty = document.getElementsByName("Property");
+                        for (let i = 0; i < radioButtonsTypeMC.length; i++) {
+                            if (radioButtonsProperty[i].value === response.data.Property) {
+                                radioButtonsProperty[i].checked = true;
+                                break;
+                            }
+
+                        }
+                        //prevent old version error
+                        $("#Customerid").val(response.data.Customer);
+                        document.getElementById("Equipment_Name").value = response.data.Equipment_Name;
+                        document.getElementById("Equipment_Name_old").value = response.data.Equipment_Name;
+                        document.getElementById("Equipment_No").value = response.data.Equipment_No;
+                        document.getElementById("Model").value = response.data.Model;
+                        document.getElementById("Serial_No").value = response.data.Serial_No;
+                        document.getElementById("Referrence_No").value = response.data.Referrence_No;
+                        document.getElementById("Responsible_Name").value = response.data.Responsible_Name;
+                        document.getElementById("Manufacture").value = response.data.Manufacture;
+                        document.getElementById("Product_name").value = response.data.Product_name;
+                        document.getElementById("Description").value = response.data.Description;
+
+                        document.getElementById("Daily").value = formatDate(response.data.Plan_Daily, 1);
+                        document.getElementById("Weekly").value = formatDate(response.data.Plan_Weekly, 1);
+                        document.getElementById("Monthly").value = formatDate(response.data.Plan_Monthly, 1);
+                        document.getElementById("Quarterly").value = formatDate(response.data.Plan_Quarterly, 1);
+                        document.getElementById("Semiannually").value = formatDate(response.data.Plan_Semi_annually, 1);
+                        document.getElementById("Yearly").value = formatDate(response.data.Plan_Yearly, 1);
+                        document.getElementById("Manually").value = formatDate(response.data.Plan_Manually, 1);
+                        document.getElementById("Pinnumber").value = response.data.P_ID ? response.data.P_ID : "1";
+                        getInformationFromDatabase(response.data.P_ID)
+                        //document.getElementById("Lifetime").value = response.data.Lifetime;
+                        document.getElementById("Location").value = response.data.Location
+
+                        document.getElementById("GPVProcess").value = response.data.GPVProcess ? response.data.GPVProcess : "";
+                        document.getElementById("ProcessSide").value =  response.data.GPVProcess ? response.data.ProcessSide : "" ;
+                        document.getElementById("WithTopCover").value =  response.data.GPVProcess ? response.data.WithTopCover : "";
+                        document.getElementById("WithControlTooling").value =  response.data.GPVProcess ? response.data.WithControlTooling : "";
+                        document.getElementById("Grade_Status").value =  response.data.GPVProcess ? response.data.Grade_Status : "";
+                        document.getElementById("Dimension").value =  response.data.Dimension ? response.data.Dimension : "" ;
+                        var fileName = response.data.Equipment_Picture;
+                        console.log(fileName);
+                        console.log(basePath + fileName);
+                        if (fileName) {
+                            $("#image-preview-after").attr("src", basePath + fileName);
+                        } else {
+                            $("#image-preview-after").attr("src", "no-image.png");
+                        }
+                        $('input[name="Type_MA"]').trigger("change");
+                        Equipment_Picture = fileName;
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function loadAllLists() {
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success && response.data) {
+                    var lists = response.data;
+                    
+                    var customerHtml = '<option value="N/A" selected="selected">N/A</option>';
+                    lists.Customer.forEach(function (item) {
+                        customerHtml += '<option value="' + item + '">' + item + '</option>';
+                    });
+                    document.getElementById("Customer").innerHTML = customerHtml;
+
+                    var departmentHtml = '';
+                    lists.Department.forEach(function (item) {
+                        departmentHtml += '<option value="' + item.ID + '">' + item.Section + '</option>';
+                    });
+                    document.getElementById("Department").innerHTML = departmentHtml;
+
+                    var pinnumberHtml = '';
+                    lists.Pinnumber.forEach(function (item) {
+                        pinnumberHtml += '<option value="' + item.ID + '">' + item.Pinnumber + '</option>';
+                    });
+                    document.getElementById("Pinnumber").innerHTML = pinnumberHtml;
+
+                    var serialHtml = '';
+                    lists.Serial.forEach(function (item) {
+                        serialHtml += '<option value="' + item + '"></option>';
+                    });
+                    document.getElementById("Referrence_No_List").innerHTML = serialHtml;
+
+                    var drawingHtml = '<option value="" disabled="disabled" selected="selected">N/A</option>';
+                    lists.Drawing.forEach(function (item) {
+                        drawingHtml += '<option value="' + item.Drawing + '">' + item.Drawing + '</option>';
+                    });
+                    document.getElementById("Drawing").innerHTML = drawingHtml;
+
+                    if ("@ViewData["MA_ID"]") {
+                        onLoad();
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function uploadImage(callback) {
+        var fileInput = document.getElementById("file-input-after");
+        if (fileInput.files.length === 0) {
+            callback(Equipment_Picture); // ไม่มีรูป
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+        var url = '@Url.Action("UploadImage", "Global")';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                if (res.success) {
+                    Equipment_Picture = res.fileName; // 🔥 update global
+                    callback(res.fileName);
+                } else {
+                    showAlert('error', 'Upload failed', function () { });
+                }
+            },
+            error: function () {
+                showAlert('error', 'Upload error', function () { });
+            }
+        });
+    }
+
+    function onSave() {
+
+        uploadImage(function (fileName) {
+            var Equipment_Picture = fileName;
+            var dateTimeNow = new Date().format('yyyy-mm-dd HH:MM:ss');
+            const planning = document.querySelectorAll(".checkbox-group input[type='checkbox']");
+            var department = document.getElementById("Department");
+            var pinnumber = document.getElementById("Pinnumber");
+            var customerid = document.getElementById("Customerid").value;
+            var Type_MA = document.querySelector('input[name="Type_MA"]:checked').value;
+            if ($("#Equipment_No").val() == "" || $("#Equipment_Name").val() == "" || $("#Product_name").val() == "" || !$("#Customer").val() || $("#Serial_No").val() == "") {
+                return showAlert('error', "Please fill out required fields.", function () { });
+            }
+            var GPVProcess = $("#GPVProcess").val();
+            var ProcessSide = $("#ProcessSide").val();
+            var WithTopCover =$("#WithTopCover").val();
+            var WithControlTooling =  $("#WithControlTooling").val();
+            var Grade_Status =  $("#Grade_Status").val();
+            var Dimension = $("#Dimension").val();
+            if(Type_MA != "Tools"){
+                GPVProcess = "";
+                ProcessSide = "";
+                WithTopCover = "";
+                WithControlTooling = "";
+                Grade_Status ="";
+                Dimension = "";
+            }
+            var form;
+            var replace = $("#Equipment_Name_old").val();
+            if (editData.MA_ID > 0) {
+                formatDateToSave(editData);
+                form = {
+                    MA_ID: editData.MA_ID,
+                    StatusF: editData.StatusF,
+                    Equipment_No: document.getElementById("Equipment_No").value,
+                    Equipment_Name: document.getElementById("Equipment_Name").value,
+                    Product_name: document.getElementById("Product_name").value,
+                    Type_MC: document.querySelector('input[name="Type_MC"]:checked').value,
+                    Model: document.getElementById("Model").value,
+                    Serial_No: document.getElementById("Serial_No").value,
+                    Property: document.querySelector('input[name="Property"]:checked').value,
+                    Referrence_No: document.getElementById("Referrence_No").value,
+                    Responsible_Name: document.getElementById("Responsible_Name").value,
+                    Manufacture: document.getElementById("Manufacture").value,
+                    Description: document.getElementById("Description").value,
+                    //LastMA_date: dateTimeNow,
+                    UpdateBy: "@ViewData["EMPLOYEE_ID"]",
+                    Startdate: editData.Startdate,
+                    GE_ID: department.value,
+                    Section: department.options[department.selectedIndex].text,
+                    Type_MA: Type_MA,
+                    Customer: customerid && customerid != "" ? customerid : "10112",
+                    Customer_Name: document.getElementById("Customer").value,
+                    Plan_Daily: document.getElementById("Daily").value,
+                    Plan_Weekly: document.getElementById("Weekly").value,
+                    Plan_Monthly: document.getElementById("Monthly").value,
+                    Plan_Quarterly: document.getElementById("Quarterly").value,
+                    Plan_Semi_annually: document.getElementById("Semiannually").value,
+                    Plan_Yearly: document.getElementById("Yearly").value,
+                    Plan_Manually: document.getElementById("Manually").value,
+                    P_ID: pinnumber.value,
+                    Pinnumber: pinnumber.options[pinnumber.selectedIndex].text,
+                    Lifetime: document.getElementById("Lifetime").value,
+                    Location: document.getElementById("Location").value,
+
+                    GPVProcess: GPVProcess,
+                    ProcessSide: ProcessSide,
+                    WithTopCover: WithTopCover,
+                    WithControlTooling: WithControlTooling,
+                    Grade_Status: Grade_Status,
+                    Dimension: Dimension,
+                    Equipment_Picture: Equipment_Picture
+
+                };
+
+            } else {
+                form = {
+                    Equipment_No: document.getElementById("Equipment_No").value,
+                    Equipment_Name: document.getElementById("Equipment_Name").value,
+                    Product_name: document.getElementById("Product_name").value,
+                    Type_MC: document.querySelector('input[name="Type_MC"]:checked').value,
+                    Model: document.getElementById("Model").value,
+                    Serial_No: document.getElementById("Serial_No").value,
+                    Property: document.querySelector('input[name="Property"]:checked').value,
+                    Referrence_No: document.getElementById("Referrence_No").value,
+                    Responsible_Name: document.getElementById("Responsible_Name").value,
+                    Manufacture: document.getElementById("Manufacture").value,
+                    Description: document.getElementById("Description").value,
+                    LastMA_date: dateTimeNow,
+                    Startdate: dateTimeNow,
+                    CreateBy: "@ViewData["EMPLOYEE_ID"]",
+
+                    GE_ID: department.value,
+                    Section: department.options[department.selectedIndex].text,
+                    Type_MA: Type_MA,
+                    Customer: '10112', //N/A
+                    Customer_Name: document.getElementById("Customer").value,
+                    Plan_Daily: planning[0].checked ? Dateformat(addDays(dateTimeNow, 1)) : '',
+                    Plan_Weekly: planning[1].checked ? Dateformat(addDays(dateTimeNow, 7)) : '',
+                    Plan_Monthly: planning[2].checked ? Dateformat(addDays(dateTimeNow, 30)) : '',
+                    Plan_Quarterly: planning[3].checked ? Dateformat(addDays(dateTimeNow, 90)) : '',
+                    Plan_Semi_annually: planning[4].checked ? Dateformat(addDays(dateTimeNow, 182)) : '',
+                    Plan_Yearly: planning[5].checked ? Dateformat(addDays(dateTimeNow, 365)) : '',
+                    Plan_Manually: planning[6].checked ? dateTimeNow : '',
+                    P_ID: pinnumber.value,
+                    Pinnumber: pinnumber.options[pinnumber.selectedIndex].text,
+
+                    Lifetime: document.getElementById("Lifetime").value,
+                    Location: document.getElementById("Location").value,
+                    GPVProcess: GPVProcess,
+                    ProcessSide: ProcessSide,
+                    WithTopCover: WithTopCover,
+                    WithControlTooling: WithControlTooling,
+                    Grade_Status: Grade_Status,
+                    Dimension: Dimension,
+                    Equipment_Picture: Equipment_Picture,
+                    StatusF: '1'
+                };
+            }
+            if ("@ViewData["MA_ID"]" && $("#Equipment_Name").val() != $("#Equipment_Name_old").val()) {
+            Record_MAPlan(form, replace);
+        }
+        else {
+            Record_MAPlan(form, '');
+        }
+        });
+    }
+
+    function Record_MAPlan(data, replace)
+    {
+        var url = '@Url.Action("Record_MAPlan", "Global")';
+        var dataJson = JSON.stringify({ data: data, replace: replace });
+        console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        showAlert('success', response.word, function () { });
+                        onCancel();
+                    }
+                } else {
+                    showAlert('error', response.word, function () { });
+                }
+            }, error: function (jqXHR, textStatus, errorThrown) { showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { }); }
+        });
+    }
+    function onCancel() {
+        //document.getElementById("Department").selectedIndex = 0;
+        //document.getElementById("Customer").selectedIndex = 0;
+        //// Clear Radio buttons (Type_MC, Property)
+        //const radioButtonsTypeMC = document.getElementsByName("Type_MC");
+        //radioButtonsTypeMC[0].checked = true;
+
+        //const radioButtonsProperty = document.getElementsByName("Property");
+        //radioButtonsProperty[0].checked = true;
+
+        //// Clear Text Inputs (Equipment Name, Equipment No, etc.)
+        //document.getElementById("Equipment_Name").value = "";
+        //document.getElementById("Equipment_No").value = "";
+        //document.getElementById("Model").value = "";
+        //document.getElementById("Serial_No").value = "";
+        //document.getElementById("Referrence_No").value = "";
+        //document.getElementById("Responsible_Name").value = "";
+        //document.getElementById("Manufacture").value = "";
+        //document.getElementById("Product_name").value = "";
+        //document.getElementById("Description").value = "";
+
+        //// Clear Checkboxes (Plan)
+        //const planning = document.querySelectorAll(".checkbox-group input[type='checkbox']");
+        //planning.forEach(function (item, index) {
+        //    if (index == 0) item.checked = true;
+        //    else item.checked = false;
+        //});
+        document.location = '@Url.Action("Index", "Global")';
+    }
+</script>
+<style>
+    .unit-input {
+        position: relative;
+    }
+
+        .unit-input input {
+            padding-right: 30px;
+        }
+
+        .unit-input .unit {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+</style>

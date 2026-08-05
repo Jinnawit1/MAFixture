@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Service1" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpsBinding_IService1_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://10.52.60.225/Wcf_connectdatabase2/Service1.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://10.52.60.225/Wcf_connectdatabase2/Service1.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://10.52.60.225/Wcf_connectdatabase2/Service1.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Wcf_Connectdatabase2" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IService1_GetData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetData" />
+  </wsdl:message>
+  <wsdl:message name="IService1_GetData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_GetDataUsingDataContract_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataUsingDataContract" />
+  </wsdl:message>
+  <wsdl:message name="IService1_GetDataUsingDataContract_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataUsingDataContractResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_GetConnectMAFixture_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectMAFixture" />
+  </wsdl:message>
+  <wsdl:message name="IService1_GetConnectMAFixture_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectMAFixtureResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectAOIHM_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectAOIHM" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectAOIHM_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectAOIHMResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectPackingmaterial_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectPackingmaterial" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectPackingmaterial_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectPackingmaterialResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectMinitabGenerator_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectMinitabGenerator" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectMinitabGenerator_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectMinitabGeneratorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectMon_program_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectMon_program" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectMon_program_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectMon_programResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectGrundfosTest_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectGrundfosTest" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectGrundfosTest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectGrundfosTestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectDanelecPTS_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectDanelecPTS" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectDanelecPTS_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectDanelecPTSResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectMechanic_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectMechanic" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectMechanic_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectMechanicResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSMTAOI_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSMTAOI" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSMTAOI_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSMTAOIResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSMTAOIREPORT_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSMTAOIREPORT" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSMTAOIREPORT_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSMTAOIREPORTResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSMTSchedule_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSMTSchedule" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSMTSchedule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSMTScheduleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSmartDigital_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSmartDigital" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSmartDigital_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSmartDigitalResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectTestLogOnBase_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectTestLogOnBase" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectTestLogOnBase_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectTestLogOnBaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSTMPTS_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSTMPTS" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSTMPTS_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSTMPTSResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectPTS_HM_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectPTS_HM" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectPTS_HM_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectPTS_HMResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectAOIInspection_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectAOIInspection" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectAOIInspection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectAOIInspectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectOven_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectOven" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectOven_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectOvenResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectComet_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectComet" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectComet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectCometResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectRecom_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectRecom" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectRecom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectRecomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectLaserMarkDanfoss_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectLaserMarkDanfoss" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectLaserMarkDanfoss_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectLaserMarkDanfossResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectHoneywell_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectHoneywell" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectHoneywell_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectHoneywellResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectRotork_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectRotork" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectRotork_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectRotorkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectILoq_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectILoq" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectILoq_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectILoqResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectRD_MES_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectRD_MES" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectRD_MES_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectRD_MESResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSSM_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSSM" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectSSM_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectSSMResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectABB_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectABB" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectABB_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectABBResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectNordson_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectNordson" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConnectNordson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectNordsonResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IService1">
+    <wsdl:operation name="GetData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/GetData" message="tns:IService1_GetData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/GetDataResponse" message="tns:IService1_GetData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDataUsingDataContract">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/GetDataUsingDataContract" message="tns:IService1_GetDataUsingDataContract_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/GetDataUsingDataContractResponse" message="tns:IService1_GetDataUsingDataContract_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectMAFixture">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/GetConnectMAFixture" message="tns:IService1_GetConnectMAFixture_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/GetConnectMAFixtureResponse" message="tns:IService1_GetConnectMAFixture_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectAOIHM">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectAOIHM" message="tns:IService1_ConnectAOIHM_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectAOIHMResponse" message="tns:IService1_ConnectAOIHM_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectPackingmaterial">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectPackingmaterial" message="tns:IService1_ConnectPackingmaterial_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectPackingmaterialResponse" message="tns:IService1_ConnectPackingmaterial_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMinitabGenerator">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectMinitabGenerator" message="tns:IService1_ConnectMinitabGenerator_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectMinitabGeneratorResponse" message="tns:IService1_ConnectMinitabGenerator_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMon_program">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectMon_program" message="tns:IService1_ConnectMon_program_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectMon_programResponse" message="tns:IService1_ConnectMon_program_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectGrundfosTest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectGrundfosTest" message="tns:IService1_ConnectGrundfosTest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectGrundfosTestResponse" message="tns:IService1_ConnectGrundfosTest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectDanelecPTS">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectDanelecPTS" message="tns:IService1_ConnectDanelecPTS_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectDanelecPTSResponse" message="tns:IService1_ConnectDanelecPTS_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMechanic">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectMechanic" message="tns:IService1_ConnectMechanic_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectMechanicResponse" message="tns:IService1_ConnectMechanic_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTAOI">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectSMTAOI" message="tns:IService1_ConnectSMTAOI_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectSMTAOIResponse" message="tns:IService1_ConnectSMTAOI_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTAOIREPORT">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectSMTAOIREPORT" message="tns:IService1_ConnectSMTAOIREPORT_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectSMTAOIREPORTResponse" message="tns:IService1_ConnectSMTAOIREPORT_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTSchedule">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectSMTSchedule" message="tns:IService1_ConnectSMTSchedule_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectSMTScheduleResponse" message="tns:IService1_ConnectSMTSchedule_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSmartDigital">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectSmartDigital" message="tns:IService1_ConnectSmartDigital_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectSmartDigitalResponse" message="tns:IService1_ConnectSmartDigital_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectTestLogOnBase">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectTestLogOnBase" message="tns:IService1_ConnectTestLogOnBase_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectTestLogOnBaseResponse" message="tns:IService1_ConnectTestLogOnBase_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSTMPTS">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectSTMPTS" message="tns:IService1_ConnectSTMPTS_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectSTMPTSResponse" message="tns:IService1_ConnectSTMPTS_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectPTS_HM">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectPTS_HM" message="tns:IService1_ConnectPTS_HM_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectPTS_HMResponse" message="tns:IService1_ConnectPTS_HM_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectAOIInspection">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectAOIInspection" message="tns:IService1_ConnectAOIInspection_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectAOIInspectionResponse" message="tns:IService1_ConnectAOIInspection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectOven">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectOven" message="tns:IService1_ConnectOven_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectOvenResponse" message="tns:IService1_ConnectOven_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectComet">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectComet" message="tns:IService1_ConnectComet_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectCometResponse" message="tns:IService1_ConnectComet_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRecom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectRecom" message="tns:IService1_ConnectRecom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectRecomResponse" message="tns:IService1_ConnectRecom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectLaserMarkDanfoss">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectLaserMarkDanfoss" message="tns:IService1_ConnectLaserMarkDanfoss_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectLaserMarkDanfossResponse" message="tns:IService1_ConnectLaserMarkDanfoss_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectHoneywell">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectHoneywell" message="tns:IService1_ConnectHoneywell_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectHoneywellResponse" message="tns:IService1_ConnectHoneywell_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRotork">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectRotork" message="tns:IService1_ConnectRotork_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectRotorkResponse" message="tns:IService1_ConnectRotork_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectILoq">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectILoq" message="tns:IService1_ConnectILoq_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectILoqResponse" message="tns:IService1_ConnectILoq_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRD_MES">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectRD_MES" message="tns:IService1_ConnectRD_MES_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectRD_MESResponse" message="tns:IService1_ConnectRD_MES_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSSM">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectSSM" message="tns:IService1_ConnectSSM_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectSSMResponse" message="tns:IService1_ConnectSSM_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectABB">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectABB" message="tns:IService1_ConnectABB_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectABBResponse" message="tns:IService1_ConnectABB_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectNordson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConnectNordson" message="tns:IService1_ConnectNordson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConnectNordsonResponse" message="tns:IService1_ConnectNordson_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IService1" type="tns:IService1">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetData">
+      <soap:operation soapAction="http://tempuri.org/IService1/GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataUsingDataContract">
+      <soap:operation soapAction="http://tempuri.org/IService1/GetDataUsingDataContract" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectMAFixture">
+      <soap:operation soapAction="http://tempuri.org/IService1/GetConnectMAFixture" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectAOIHM">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectAOIHM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectPackingmaterial">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectPackingmaterial" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMinitabGenerator">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectMinitabGenerator" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMon_program">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectMon_program" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectGrundfosTest">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectGrundfosTest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectDanelecPTS">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectDanelecPTS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMechanic">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectMechanic" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTAOI">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSMTAOI" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTAOIREPORT">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSMTAOIREPORT" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTSchedule">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSMTSchedule" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSmartDigital">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSmartDigital" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectTestLogOnBase">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectTestLogOnBase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSTMPTS">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSTMPTS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectPTS_HM">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectPTS_HM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectAOIInspection">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectAOIInspection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectOven">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectOven" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectComet">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectComet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRecom">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectRecom" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectLaserMarkDanfoss">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectLaserMarkDanfoss" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectHoneywell">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectHoneywell" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRotork">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectRotork" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectILoq">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectILoq" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRD_MES">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectRD_MES" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSSM">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSSM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectABB">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectABB" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectNordson">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectNordson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpsBinding_IService1" type="tns:IService1">
+    <wsp:PolicyReference URI="#BasicHttpsBinding_IService1_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetData">
+      <soap:operation soapAction="http://tempuri.org/IService1/GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataUsingDataContract">
+      <soap:operation soapAction="http://tempuri.org/IService1/GetDataUsingDataContract" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectMAFixture">
+      <soap:operation soapAction="http://tempuri.org/IService1/GetConnectMAFixture" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectAOIHM">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectAOIHM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectPackingmaterial">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectPackingmaterial" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMinitabGenerator">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectMinitabGenerator" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMon_program">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectMon_program" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectGrundfosTest">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectGrundfosTest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectDanelecPTS">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectDanelecPTS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectMechanic">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectMechanic" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTAOI">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSMTAOI" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTAOIREPORT">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSMTAOIREPORT" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSMTSchedule">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSMTSchedule" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSmartDigital">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSmartDigital" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectTestLogOnBase">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectTestLogOnBase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSTMPTS">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSTMPTS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectPTS_HM">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectPTS_HM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectAOIInspection">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectAOIInspection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectOven">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectOven" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectComet">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectComet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRecom">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectRecom" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectLaserMarkDanfoss">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectLaserMarkDanfoss" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectHoneywell">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectHoneywell" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRotork">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectRotork" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectILoq">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectILoq" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectRD_MES">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectRD_MES" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectSSM">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectSSM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectABB">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectABB" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectNordson">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConnectNordson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service1">
+    <wsdl:port name="BasicHttpBinding_IService1" binding="tns:BasicHttpBinding_IService1">
+      <soap:address location="http://10.52.60.225/Wcf_connectdatabase2/Service1.svc" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpsBinding_IService1" binding="tns:BasicHttpsBinding_IService1">
+      <soap:address location="https://rdappserver.gpv-asia.local/Wcf_connectdatabase2/Service1.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

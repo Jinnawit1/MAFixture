@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Barcode Scanner";
+}
+
+<div class="wrapper" style="padding-top:2em">
+    <section class="container" id="demo-content">
+        <h1 class="title">Scan 1D/2D Code from Video Camera</h1>
+
+        <div>
+            <a class="btn btn-filled" id="startButton" href="javascript:void(0)">Start</a>
+            <a class="btn btn-filled" id="resetButton" href="javascript:void(0)">Reset</a>
+        </div>
+
+        <div>
+            <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
+        </div>
+
+        <div id="sourceSelectPanel" style="display:none">
+            <label for="sourceSelect">Change video source:</label>
+            <select id="sourceSelect" style="max-width:400px" class="ant-select"></select>
+        </div>
+
+        <label>Result:</label>
+        <pre><code id="result"></code></pre>
+    </section>
+</div>
+
+ Custom Script for Scanning 
+<script type="text/javascript">
+    window.onload = function () {
+        var selectedDeviceId;
+        var codeReader = new ZXing.BrowserMultiFormatReader();
+
+        // List video input devices (cameras)
+        codeReader.listVideoInputDevices()
+            .then(function (videoInputDevices) {
+                var sourceSelect = document.getElementById('sourceSelect');
+                selectedDeviceId = videoInputDevices[0].deviceId;
+
+                // Populate the sourceSelect dropdown with available camera devices
+                if (videoInputDevices.length >= 1) {
+                    videoInputDevices.forEach(function (element) {
+                        var sourceOption = document.createElement('option');
+                        sourceOption.text = element.label;
+                        sourceOption.value = element.deviceId;
+                        sourceSelect.appendChild(sourceOption);
+                    });
+
+                    // Update the selected device when the dropdown changes
+                    sourceSelect.onchange = function () {
+                        selectedDeviceId = sourceSelect.value;
+                    };
+
+                    // Show the source selection dropdown if more than one camera is available
+                    var sourceSelectPanel = document.getElementById('sourceSelectPanel');
+                    sourceSelectPanel.style.display = 'block';
+                }
+
+                // Start scanning when the "Start" button is clicked
+                document.getElementById('startButton').addEventListener('click', function () {
+                    event.preventDefault(); 
+                    codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', function (result, err) {
+                        if (result) {
+                            document.getElementById('result').textContent = result.text;
+                        }
+                        if (err && !(err instanceof ZXing.NotFoundException)) {
+                            showAlert('error', err, function () { });
+                        }
+                    });
+                });
+
+                // Reset the scanner when the "Reset" button is clicked
+                document.getElementById('resetButton').addEventListener('click', function () {
+                    codeReader.reset();
+                    document.getElementById('result').textContent = '';
+                });
+
+            })
+            .catch(function (err) {
+                showAlert('error', err, function () { });
+            });
+    };
+</script>

@@ -1,0 +1,243 @@
+﻿@{
+    ViewBag.Title = "Obsolete Fixture";
+}
+
+<style>
+    .shown {
+        background-color: #e6f7ff !important;
+    }
+
+    .shown-child {
+        background-color: #e6f7ff !important;
+    }
+
+    .action {
+        padding: 7px;
+        border-radius: 4px;
+        width: 100%;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+    }
+</style>
+
+<h3>Obsolete Fixture</h3>
+<hr />
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-12 mb-3" style="padding: 3px 0px;">
+            <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+                @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
+                <table id="TableMAPlan" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        OnLoad()
+    });
+
+    function OnLoad() {
+        var dataSet = [];
+        var dataFull = [];
+        var url = '@Url.Action("Load_Obsolete", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        var maPlan = response.data
+                        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    if (response.data) {
+                                        var customer = response.data.Customer;
+                                        $(maPlan).each(function (index, item) {
+                                            var newItem = [];
+                                            newItem.push(index + 1);
+                                            newItem.push(item.MA_ID || '');
+                                            newItem.push(item.Serial_No || '');
+                                            newItem.push(item.Equipment_No || '');
+                                            newItem.push(item.Equipment_Name || '');
+                                            newItem.push(item.Product_name || '');
+                                            newItem.push(item.Type_MC || '');
+                                            newItem.push(item.Section || '');
+                                            //customer.forEach(function (customerItem, index) {
+                                            //    if (item.Customer == customerItem.ID) newItem.push(customerItem.Cust_name);
+                                            //});
+                                            newItem.push(item.Customer_Name || '');
+                                            newItem.push(formatDate(item.LastMA_date, "2"));
+
+                                            dataSet.push(newItem);
+                                            dataFull.push(item);
+                                        });
+
+                                        // Destroy the existing DataTable if it exists
+                                        if ($.fn.dataTable.isDataTable('#TableMAPlan')) {
+                                            $('#TableMAPlan').DataTable().clear().destroy();
+                                        }
+
+                                        $('#TableMAPlan').DataTable({
+                                            order: [[0, "desc"]],
+                                            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                                            iDisplayLength: 100,
+                                            data: dataSet, // This is the array of data that contains your standard packing items
+                                            dom: 'lBfrtip',
+                                            fixedHeader: true,
+                                            autoWidth: true,
+                                            buttons: [],
+                                            scrollX: false,
+                                            buttons: [
+                                                {
+                                                    extend: 'excel',
+                                                    autoFilter: true,
+                                                    exportOptions: {
+                                                        format: {
+                                                            body: function (data, row, col, node) {
+                                                                if (data && /<[^>]+>/g.test(data)) {
+                                                                    if (data && /<br\s*\/?>/i.test(data)) {
+                                                                        data = data.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with a space
+                                                                        return data;
+                                                                    } else {
+                                                                        let htmlString = data;
+                                                                        let parser = new DOMParser();
+                                                                        let doc = parser.parseFromString(htmlString, 'text/html');
+                                                                        let item = doc.body.textContent || doc.body.innerText;
+                                                                        return item;
+                                                                    }
+                                                                }
+                                                                else return data;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ],
+                                            columns: [
+                                                {
+                                                    title: "No.",
+                                                    orderable: false,
+                                                    render: function (data, type, row, meta) {
+                                                        return '<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i>' + data;
+                                                    }
+                                                },
+                                                {
+                                                    title: "View",
+                                                    orderable: false,
+                                                    render: function (data, type, row) {
+                                                        return '<div href="#" onclick="OnDetail(\'' + data + '\')" style="width: 100%; text-align: center; color: #1890ff !important; font-size: 22px;"><i style="cursor: pointer;" class="fas fa-search"></i></div>';
+                                                    },
+                                                },
+                                                { title: "Serial No" },
+                                                { title: "Equipment No" },
+                                                { title: "Equipment Name" },
+                                                { title: "Product Name" },
+                                                { title: "Type MC" },
+                                                { title: "Section" },
+                                                { title: "Customer" },
+                                                { title: "LastMA Date" }
+                                            ],
+                                            deferRender: true,
+                                            destroy: true,
+                                            createdRow: function (row, data, dataIndex) {
+                                                // Add a click handler to the first column for expanding/collapsing the row
+                                                $(row).on('click', 'td', function () {
+                                                    if ($(this).index() === 0) {
+                                                        var tr = $(this).closest('tr');
+                                                        var row = $('#TableMAPlan').DataTable().row(tr);
+
+                                                        // Toggle the row's child visibility
+                                                        if (row.child.isShown()) {
+                                                            // If the row is already expanded, collapse it
+                                                            row.child.hide();
+                                                            tr.removeClass('shown');
+                                                            $(row.child()).removeClass('shown-child');
+                                                            $(tr).find('td:first').html('<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                                                        } else {
+                                                            // If the row is collapsed, expand it
+                                                            row.child(formatDetails(dataFull[dataIndex])).show();
+
+                                                            $(row.child()).addClass('shown-child');
+                                                            tr.addClass('shown');
+                                                            $(tr).find('td:first').html('<i class="fas fa-caret-down" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            rowCallback: function (row, data, index) {
+                                                // Add an indicator or style to the row to show it's expandable/collapsible
+                                                $(row).find('td:first').addClass('expandable');
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    showAlert('error', response.word, function () { });
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                            }
+                        });
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function formatDetails(data) {
+        return '<div style="display: flex; column-gap: 5px;">' +
+                '<div class="action" style="background-color: #79D7BE;" onclick="OnRecover(\'' + data.MA_ID + '\')">Recover <i class="fas fa-trash-restore"></i></div>' +
+            '</div>';
+    }
+
+    function OnDetail(data) {
+        document.location = '@Url.Action("MaintenanceHistory", "Global")' + '?id=' + data;
+    }
+
+    function OnEdit(data) {
+        document.location = '@Url.Action("NewEquipment", "Global")' + '?serialNo=' + data;
+    }
+
+    function OnRecover(data) {
+        confirm(("Are you sure you want to recover fixture ID: " + data + "?"), function () {
+            var url = '@Url.Action("Recover_Fixture_By_MA_ID", "Global")';
+            var dataJson = JSON.stringify({ MA_ID: data })
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: dataJson,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (response) {
+                    if (response.success) {
+                        showAlert('success', response.word, function () { });
+                        OnLoad();
+                    } else showAlert('error', response.word, function () { });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                }
+            });
+        }, function () { });
+    }
+</script>

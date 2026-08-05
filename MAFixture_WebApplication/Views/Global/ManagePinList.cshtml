@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewBag.Title = "ManagePinList";
+}
+
+<h3 id="topic"></h3>
+<hr />
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Pinnumber :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input class="form-control" id="Pinnumber" name="Pinnumber" placeholder="Pinnumber" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Pinname :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input class="form-control" id="Pinname" name="Pinname" placeholder="Pinname" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Product :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input class="form-control" id="Product" name="Product" placeholder="Product" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Lifetime :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input type="text" class="form-control" id="Lifetime" name="Lifetime" placeholder="Lifetime" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-7 col-sm-8 col-12 mb-3" style="display: flex; justify-content: flex-end; column-gap: 5px; padding-top: 5px;">
+            <button onclick="OnSave()" class="btn btn-filled">Save</button>
+            <button onclick="onCancel()" class="btn btn-transparent">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var data = {};
+    $(document).ready(function () {
+        var topic = document.getElementById("topic");
+        if ("@ViewData["ID"]" != "") {
+            topic.textContent = "Edit Pin";
+            onLoad();
+        }
+    else topic.textContent = "Add Pin";
+    });
+
+    function onLoad() {
+        var url = '@Url.Action("Load_PinList_By_ID", "Global")';
+        var dataJson = JSON.stringify({ ID: "@ViewData["ID"]" })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        data = response.data;
+                        document.getElementById("Pinnumber").value = response.data.Pinnumber;
+                        document.getElementById("Pinname").value = response.data.Pinname;
+                        document.getElementById("Product").value = response.data.Product;
+                        document.getElementById("Lifetime").value = response.data.Lifetime;
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnSave() {
+        var Pinnumber = document.getElementById("Pinnumber").value.trim();
+        var Pinname = document.getElementById("Pinname").value.trim();
+        var Product = document.getElementById("Product").value.trim();
+        var Lifetime = document.getElementById("Lifetime").value.trim();
+        var formData = {};
+
+        if (Pinnumber == "" || Product == "" || Lifetime == "") {
+            return showAlert('error', "Please fill out all fields.", function () { });
+        }
+
+        if ("@ViewData["ID"]" != "") {
+            formData = {
+                ID: data.ID,
+                Pinnumber: Pinnumber,
+                Product: Product,
+                Lifetime: Lifetime,
+                Pinname: Pinname
+            }
+        } else {
+           formData = {
+               Pinnumber: Pinnumber,
+               Product: Product,
+               Lifetime: Lifetime,
+               Pinname: Pinname
+           }
+    }
+    Record_PinList(formData);
+    }
+
+    function Record_PinList(data) {
+        var url = '@Url.Action("Record_PinList", "Global")';
+        var dataJson = JSON.stringify(data)
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    showAlert('success', response.word, function () { });
+                    onCancel();
+                } else {
+
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+    function onCancel() {
+        document.location = '@Url.Action("PinList", "Global")';
+    }
+</script>

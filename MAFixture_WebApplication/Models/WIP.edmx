@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="WIP_status">
+          <Key>
+            <PropertyRef Name="WID" />
+          </Key>
+          <Property Name="WID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Workorder" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Drawing" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartesQTY" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="ScheduledEnd" Type="datetime" />
+          <Property Name="Operation" Type="varchar" MaxLength="30" />
+          <Property Name="GoodQTY" Type="int" Nullable="false" />
+          <Property Name="ErrorQTY" Type="int" />
+          <Property Name="SettledWith" Type="varchar" MaxLength="50" />
+          <Property Name="Reference" Type="varchar" MaxLength="10" />
+          <Property Name="Customer" Type="nvarchar" MaxLength="150" />
+          <Property Name="Latestdate" Type="varchar" MaxLength="15" />
+          <Property Name="Latesttime" Type="varchar" MaxLength="15" />
+          <Property Name="Operation_num" Type="int" />
+          <Property Name="Work_centre" Type="varchar" MaxLength="20" />
+          <Property Name="InsertDate" Type="datetime" />
+          <Property Name="UpdateFile" Type="datetime" />
+          <Property Name="Status_Close" Type="varchar" MaxLength="6" />
+          <Property Name="Status_modify" Type="char" MaxLength="1" />
+          <Property Name="BOMnumber" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK_WIP_status_WIP_status">
+          <End Role="WIP_status" Type="Self.WIP_status" Multiplicity="1" />
+          <End Role="WIP_status1" Type="Self.WIP_status" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="WIP_status">
+              <PropertyRef Name="WID" />
+            </Principal>
+            <Dependent Role="WIP_status1">
+              <PropertyRef Name="WID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WipModelStoreContainer">
+          <EntitySet Name="WIP_status" EntityType="Self.WIP_status" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_WIP_status_WIP_status" Association="Self.FK_WIP_status_WIP_status">
+            <End Role="WIP_status" EntitySet="WIP_status" />
+            <End Role="WIP_status1" EntitySet="WIP_status" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WipModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="WIP_status">
+          <Key>
+            <PropertyRef Name="WID" />
+          </Key>
+          <Property Name="WID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Workorder" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Drawing" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StartesQTY" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="ScheduledEnd" Type="DateTime" Precision="3" />
+          <Property Name="Operation" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="GoodQTY" Type="Int32" Nullable="false" />
+          <Property Name="ErrorQTY" Type="Int32" />
+          <Property Name="SettledWith" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Reference" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Customer" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Latestdate" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Latesttime" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Operation_num" Type="Int32" />
+          <Property Name="Work_centre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="InsertDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateFile" Type="DateTime" Precision="3" />
+          <Property Name="Status_Close" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="Status_modify" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="BOMnumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="WIP_status1" Relationship="WipModel.FK_WIP_status_WIP_status" FromRole="WIP_status" ToRole="WIP_status1" />
+          <NavigationProperty Name="WIP_status2" Relationship="WipModel.FK_WIP_status_WIP_status" FromRole="WIP_status1" ToRole="WIP_status" />
+        </EntityType>
+        <EntityContainer Name="WipEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="WIP_status" EntityType="Self.WIP_status" />
+          <AssociationSet Name="FK_WIP_status_WIP_status" Association="WipModel.FK_WIP_status_WIP_status">
+            <End Role="WIP_status" EntitySet="WIP_status" />
+            <End Role="WIP_status1" EntitySet="WIP_status" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_WIP_status_WIP_status">
+          <End Type="WipModel.WIP_status" Role="WIP_status" Multiplicity="1" />
+          <End Type="WipModel.WIP_status" Role="WIP_status1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="WIP_status">
+              <PropertyRef Name="WID" />
+            </Principal>
+            <Dependent Role="WIP_status1">
+              <PropertyRef Name="WID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WipModelStoreContainer" CdmEntityContainer="WipEntities">
+          <EntitySetMapping Name="WIP_status">
+            <EntityTypeMapping TypeName="WipModel.WIP_status">
+              <MappingFragment StoreEntitySet="WIP_status">
+                <ScalarProperty Name="WID" ColumnName="WID" />
+                <ScalarProperty Name="Workorder" ColumnName="Workorder" />
+                <ScalarProperty Name="Drawing" ColumnName="Drawing" />
+                <ScalarProperty Name="StartesQTY" ColumnName="StartesQTY" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ScheduledEnd" ColumnName="ScheduledEnd" />
+                <ScalarProperty Name="Operation" ColumnName="Operation" />
+                <ScalarProperty Name="GoodQTY" ColumnName="GoodQTY" />
+                <ScalarProperty Name="ErrorQTY" ColumnName="ErrorQTY" />
+                <ScalarProperty Name="SettledWith" ColumnName="SettledWith" />
+                <ScalarProperty Name="Reference" ColumnName="Reference" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="Latestdate" ColumnName="Latestdate" />
+                <ScalarProperty Name="Latesttime" ColumnName="Latesttime" />
+                <ScalarProperty Name="Operation_num" ColumnName="Operation_num" />
+                <ScalarProperty Name="Work_centre" ColumnName="Work_centre" />
+                <ScalarProperty Name="InsertDate" ColumnName="InsertDate" />
+                <ScalarProperty Name="UpdateFile" ColumnName="UpdateFile" />
+                <ScalarProperty Name="Status_Close" ColumnName="Status_Close" />
+                <ScalarProperty Name="Status_modify" ColumnName="Status_modify" />
+                <ScalarProperty Name="BOMnumber" ColumnName="BOMnumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

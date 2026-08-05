@@ -1,0 +1,1097 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - MA Fixture</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap4")
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #222;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0,0,0,0.7);
+            text-align: center;
+        }
+
+        .progress-main {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+            z-index: 9999;
+            cursor: wait;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f0f2f5;
+            color: #001529;
+            transition: top 0.3s ease; /* Smooth transition when top changes */
+        }
+
+        .navbar-logo {
+            font-weight: bold;
+            color: #001529;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-links {
+            display: flex;
+            list-style-type: none;
+            margin-left: 20px;
+        }
+
+            .navbar-links li {
+                margin: 0 10px;
+                padding-top: 10px;
+            }
+
+            .navbar-links a {
+                color: #001529;
+                text-decoration: none;
+                font-size: 14px;
+                padding: 10px;
+                transition: color 0.3s;
+            }
+
+                .navbar-links a:hover {
+                    color: #1890ff;
+                }
+
+        .navbar-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        /* Style for the dropdown */
+        .navbar-links .dropdown {
+            position: relative;
+        }
+
+        /* Style the dropdown menu */
+        .navbar-links .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 160px;
+            list-style: none;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 5px 0;
+            margin: 0;
+        }
+
+        /* Show the dropdown menu on hover */
+        .navbar-links .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Style for the dropdown items */
+        .navbar-links .dropdown-menu li {
+            padding: 8px 16px;
+        }
+
+            /* Hover effect for dropdown items */
+            .navbar-links .dropdown-menu li:hover {
+                background-color: #f1f1f1;
+            }
+
+            .navbar-links .dropdown-menu li a:hover {
+                background-color: transparent; /* Remove the background */
+                color: #333; /* Optional: customize text color on hover */
+            }
+
+            /* Optional: Remove focus effect if needed (for accessibility) */
+            .navbar-links .dropdown-menu li a:focus {
+                outline: none; /* Remove focus outline */
+                background-color: transparent; /* Remove background color on focus */
+            }
+
+        .btn {
+            padding: 7px 14px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-transparent {
+            background-color: transparent;
+            color: #1890ff;
+            border: 1px solid #1890ff;
+        }
+
+            .btn-transparent:hover {
+                background-color: #1890ff;
+                color: white;
+            }
+
+        .btn-filled {
+            background-color: #1890ff;
+            color: white;
+        }
+
+            .btn-filled:hover {
+                background-color: #40a9ff;
+            }
+
+            .btn-transparent:focus, .btn-filled:focus,
+            .btn-transparent:active, .btn-filled:active {
+                outline: none !important;
+                color: inherit !important;
+            }
+
+        .content {
+            margin-top: 70px;
+            min-height: calc(100vh - 140px);
+            padding: 0px 20px;
+            font-size: 14px;
+        }
+
+        .alert {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            position: fixed;
+            top: 5px;
+            right: 10px;
+            z-index: 1000;
+        }
+
+        .alert-success {
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
+            color: #389e0d;
+        }
+
+        .alert-error {
+            background-color: #fff2f0;
+            border: 1px solid #ffccc7;
+            color: #f5222d;
+        }
+
+        .show {
+            display: flex;
+        }
+
+        .alert span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        table.dataTable thead th {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+
+        table.dataTable {
+            margin-top: 0 !important;
+        }
+
+            table.dataTable tbody td, table.dataTable > thead > tr > th {
+                padding: 5px 5px;
+            }
+
+        .dataTables_length {
+            margin-left: 10px;
+        }
+
+            .dataTables_length label {
+                font-weight: bold;
+                margin-right: 5px;
+            }
+
+            .dataTables_length select {
+                border-radius: 6px;
+                padding: 5px;
+                background-color: whitesmoke;
+                border: 1px solid #ccc;
+                cursor: pointer;
+            }
+
+        table tr {
+            vertical-align: top;
+        }
+
+        table thead {
+            background-color: whitesmoke;
+        }
+
+        .dt-buttons {
+            margin: 0px !important;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+            .dt-buttons .dt-button {
+                min-width: 60px;
+                background-color: #1890ff;
+                color: white;
+                padding: 8px 12px;
+                font-size: 12px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                .dt-buttons .dt-button:hover {
+                    background-color: #40a9ff !important;
+                    color: black;
+                    font-size: 12px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    padding: 8px 12px;
+                    border: none !important;
+                }
+
+        .dataTables_filter {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+            .dataTables_filter input[type="search"] {
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                background-color: whitesmoke;
+                padding: 8px;
+                margin-left: 10px;
+                width: 250px;
+                transition: border-color 0.3s;
+            }
+
+                .dataTables_filter input[type="search"]:focus {
+                    outline: none;
+                }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 6px;
+            background-color: whitesmoke !important;
+            font-weight: normal;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+                background-color: lightgray !important;
+                color: white;
+                cursor: pointer;
+            }
+
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+                color: gray;
+                background-color: lightgray;
+                border-color: lightgray;
+                cursor: not-allowed;
+            }
+
+        .form-control {
+            border-radius: 6px;
+            margin: 3px 0px;
+            /*padding: 10px 10px;*/
+            width: 100%;
+            font-size: 12px;
+            border: 1px solid #d9d9d9;
+            outline: none;
+            background-color: whitesmoke;
+        }
+
+        select.ant-select {
+            width: 100%;
+            padding: 8px 6px;
+            margin: 3px 0px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            background-color: whitesmoke;
+            font-size: 12px;
+            color: #595959;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+            select.ant-select:focus {
+                border-color: #40a9ff;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+            }
+
+            select.ant-select option {
+                padding: 8px;
+                background-color: #fff;
+                color: #000;
+            }
+
+                select.ant-select option:hover {
+                    background-color: #f0f0f0;
+                }
+
+            select.ant-select:disabled {
+                background-color: #f5f5f5;
+                border-color: #d9d9d9;
+                color: #bfbfbf;
+            }
+
+        .select2-container--default .select2-selection--single {
+            background-color: whitesmoke;
+            border: 1px solid #ccc;
+        }
+        /* The container */
+        .container {
+            display: block;
+            width: 100%;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: normal;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+            /* Hide the browser's default radio button */
+            .container input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+            }
+
+        /* Create a custom radio button */
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 50%;
+        }
+
+        /* On mouse-over, add a grey background color */
+        .container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        /* When the radio button is checked, add a blue background */
+        .container input:checked ~ .checkmark {
+            background-color: #1890ff;
+        }
+
+        /* Create the indicator (the dot/circle - hidden when not checked) */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the indicator (dot/circle) when checked */
+        .container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Style the indicator (dot/circle) */
+        .container .checkmark:after {
+            top: 6px;
+            left: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            margin-bottom: 3px;
+        }
+
+        .input-file-container {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #d9d9d9;
+            padding: 20px;
+            background-color: whitesmoke;
+            border-radius: 8px;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #595959;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 12px;
+            color: #1890ff;
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+            .file-label:hover {
+                background-color: #1890ff;
+                border-color: #1890ff;
+                color: white;
+            }
+
+            .file-label:active {
+                background-color: #40a9ff;
+                border-color: #1890ff;
+            }
+
+            .file-label span {
+                margin-left: 8px;
+            }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #595959;
+            word-wrap: break-word;
+        }
+
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .confirm-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .confirm-modal-actions {
+            margin-top: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+            /* Checkbox label style to look like Ant Design */
+            .checkbox-group label {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 400;
+            }
+
+            /* Style the actual checkboxes */
+            .checkbox-group input[type="checkbox"] {
+                appearance: none; /* Remove default checkbox appearance */
+                width: 18px;
+                height: 18px;
+                border-radius: 4px;
+                border: 2px solid #d9d9d9;
+                background-color: #fff;
+                margin-right: 8px;
+                position: relative;
+                transition: all 0.2s ease;
+                cursor: pointer;
+            }
+
+                /* When checkbox is checked, add background and border */
+                .checkbox-group input[type="checkbox"]:checked {
+                    background-color: #1890ff;
+                    border-color: #1890ff;
+                }
+
+                    /* Add a checkmark inside the box when checked */
+                    .checkbox-group input[type="checkbox"]:checked::before {
+                        content: '';
+                        position: absolute;
+                        top: 1px;
+                        left: 4px;
+                        width: 6px;
+                        height: 10px;
+                        border: solid white;
+                        border-width: 0 3px 3px 0;
+                        transform: rotate(45deg);
+                    }
+
+                /* Hover effect for checkboxes */
+                .checkbox-group input[type="checkbox"]:hover {
+                    border-color: #1890ff;
+                }
+
+                .checkbox-group input[type="checkbox"]:focus {
+                    outline: none; /* Remove the focus outline */
+                }
+
+        body.modal-open {
+            overflow: hidden !important;
+            position: fixed;
+            width: 100%;
+        }
+
+        #TableMAPlan th.product-col,
+        #TableMAPlan td.product-col {
+            min-width: 300px !important;
+            max-width: 300px !important;
+        }
+
+        #TableMAPlan th.description-col,
+        #TableMAPlan td.description-col {
+            min-width: 300px !important;
+            max-width: 300px !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Success Alert (Initially Hidden) -->
+    <div id="alert-success" class="alert alert-success">
+        <span id="alert-success-text"></span>
+    </div>
+
+    <!-- Error Alert (Initially Hidden) -->
+    <div id="alert-error" class="alert alert-error">
+        <span id="alert-error-text"></span>
+    </div>
+
+    <!-- Navbar (Top Menu) -->
+    <nav class="navbar">
+        <div class="navbar-logo"><img src="~/Images/GPV_Logo.png" alt="GPV_Logo" class="img-rounded" style="width: 95px; height: 45px; padding: 10px;"></div>
+        <ul class="navbar-links">
+            <li><a href="@Url.Action("Index", "Global")">Home</a></li>
+            <li><a href="@Url.Action("MaintenanceHistory", "Global")" id="MaintenanceHistory">MA History</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fixture<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="@Url.Action("NewEquipment", "Global")">New Equipment</a></li>
+                    <li><a href="@Url.Action("FixtureMaintenance", "Global")">Fixture Maintenance</a></li>
+                    <li><a href="@Url.Action("ObsoleteFixture", "Global")">Obsolete Fixture</a></li>
+                    <!-- Add more submenu items as needed -->
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Manage Lists<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="@Url.Action("Customer", "Global")">Customer</a></li>
+                    <li><a href="@Url.Action("EmailList", "Global")">Email List</a></li>
+                    <li><a href="@Url.Action("MasterMAList", "Global")">MasterMA List</a></li>
+                    <li><a href="@Url.Action("PinList", "Global")">PIN List</a></li>
+                    @*<li><a href="@Url.Action("MachineList", "Global")">Machine List</a></li>*@
+                    <!-- Add more submenu items as needed -->
+                </ul>
+            </li>
+            <li><a href="@Url.Action("Instruction", "Global")">Instruction Video</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="@Url.Action("Report_Analysis", "Global")">Report Analysis</a></li>
+                    <li><a href="@Url.Action("Report_Overdue", "Global")">Report Overdue</a></li>
+                    <li><a href="@Url.Action("Report_Nearly", "Global")">Report Nearly</a></li>
+                </ul>
+            </li>
+            <li><a href="@Url.Action("THT_Location", "Global")">THT Location</a></li>
+            <li><a href="@Url.Action("Summary_THT_Pallet", "Global")">Summary THT Pallet</a></li>
+
+        </ul>
+        <div class="navbar-actions">
+            <div id="signin-name" style="display: flex; align-items: center; font-size: 12px;"></div>
+            <button class="btn btn-filled" id="signin-text" onclick="delCookie()">Sign In</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Section -->
+    <div class="content">
+        @RenderBody()
+    </div>
+    <div id="upload-wait-overlay" class="progress-main">
+        <div class="progress-text">
+            Please wait...
+            <div id="upload-progress" style="margin-top:10px; font-size:14px; color:#ccc;"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <hr />
+        <footer style="display: inline-flexbox; font-size: 9px; padding-left: 5px; padding-bottom: 1px;">
+            <p><i class="fas fa-code-branch"></i> 1.0.0 &copy; 2024 R&D Electronics Production, GPV-Asia(Thailand) Co.,Ltd. Samutprakarn, Thailand.</p>
+        </footer>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-modal-content">
+            <p id="confirmMessage"></p>
+            <div class="confirm-modal-actions">
+                <button id="confirmButton" class="btn btn-filled">Yes</button>
+                <button id="cancelButton" class="btn btn-transparent">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login -->
+    <div class="modal fade" id="myModalLogIn" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" style="width: 350px;" role="document">
+            <div class="modal-content" style="border-radius: 8px; border: none; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);">
+                <!-- Modal Header -->
+                <div class="modal-header" style="padding: 20px; background-color: #f0f2f5; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                    <div class="col-md-12" style="display: block; margin: 0 auto;">
+                        <img alt="GPV-LOGO" class="img-responsive" src="~/Images/GPV_Logo.png" style="height: 60px; width: auto; display: block; margin-left: auto; margin-right: auto;" />
+                    </div>
+                </div>
+                @*<div class="lineStrong" style="margin-top: 0px; margin-bottom: 0px;"></div>*@
+                <!-- Modal Body -->
+                <div class="modal-body" style="background-color: white; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; align-content: center;width: 100%; column-gap: 20px;">
+                    <div class="form-group" style="width: 100%;">
+                        <label for="Login" style="font-size: 12px; color: #595959;">Login</label>
+                        <input type="text" class="form-control" id="Login" name="Login" placeholder="Login"
+                               style="border-radius: 6px; padding: 12px 16px; width: 100%; width: 100%; font-size: 12px; border: 1px solid #d9d9d9; outline: none; transition: all 0.3s ease-in-out;">
+                    </div>
+                    <div class="form-group" style="width: 100%;">
+                        <label for="Password" style="font-size: 12px; color: #595959;">Password</label>
+                        <input type="password" class="form-control" id="Password" name="Password" placeholder="Password"
+                               style="border-radius: 6px; padding: 12px 16px; width: 100%; width: 100%; font-size: 12px; border: 1px solid #d9d9d9; outline: none; transition: all 0.3s ease-in-out;">
+                    </div>
+                    <div id="StatusLogin" style="margin-top: 10px; color: #ff4d4f;"></div>
+                </div>
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="padding: 20px; border-top: 1px solid #e8e8e8; text-align: center;">
+                    <button id="SubmitLogin" type="button" class="btn btn-filled">
+                        Login
+                    </button>
+                    <button type="button" class="btn btn-transparent" data-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var isLocal = (location.hostname === "localhost" || location.hostname === "127.0.0.1");
+
+    var basePath = isLocal
+        ? "/Equipment_Picture/"
+        : "/MATesting/Equipment_Picture/";
+    const url = new URL(window.location.href);
+    const path = url.pathname;
+    $(document).ready(function () {
+
+        console.log(path);
+        if (
+            url.searchParams.has('username') &&
+            url.searchParams.has('password')
+        ) {
+            const username = url.searchParams.get('username');
+            const password = url.searchParams.get('password');
+            Login(username, password);
+        }
+        $('input').attr('readonly', true).on('mouseover', function () {
+            $(this).removeAttr('readonly');
+        });
+        $('input').attr('readonly', true).on('focus', function () {
+            $(this).removeAttr('readonly');
+        });
+        // เรียก CheckCookieLoad() เฉพาะถ้าไม่ใช่ Report_Analysis
+        if (path.includes("Report_Analysis") || path.includes("THT_Location") || path.includes("Summary_THT_Pallet")) {
+            $("#signin-text").hide();
+        }
+        else {
+            CheckCookieLoad();
+            $("#signin-text").show();
+        }
+        
+    });
+    $('#logout').click(function () { delCookie(); });
+
+    $('#SubmitLogin').click(function () { Login(); });
+    $(document).keydown(function (e) {
+        if (e.which === 13 && $("#SubmitLogin").is(":visible")) {
+            $("#SubmitLogin").click();
+        }
+    });
+    $('#myModalLogIn').on('shown.bs.modal', function () {
+        document.getElementById("UserName").focus();
+    });
+
+    $('#myModalLogIn').on('hidden.bs.modal', function () {
+        //ClearTextBox();
+        CheckCookieLoad();
+    });
+
+    $('.btnLoading').on('click', function () {
+        var $btn = $(this).button('loading');
+
+        setTimeout(function Call() {
+            $btn.button('reset');
+        }, 3000);
+
+    });
+    let lastScrollTop = 0; // Variable to keep track of last scroll position
+
+    window.addEventListener('scroll', function () {
+        let navbar = document.querySelector('.navbar'); // Select the navbar element
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+            // If scrolling down, hide the navbar
+            navbar.style.top = "-70px"; // Adjust this value to match your navbar height
+        } else {
+            // If scrolling up, show the navbar
+            navbar.style.top = "0";
+        }
+
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Prevent negative scroll position
+    });
+
+
+    function getFormLogIn() {
+        var Login = $("#Login").val();
+        var password = $("#Password").val();
+        return { Login: Login, Password: password };
+    }
+
+    function Login(username, password) {
+        var datajson = JSON.stringify(getFormLogIn());
+        if (username && password) {
+            datajson = JSON.stringify({ Login: username, Password: password });
+        }
+        var url = '@Url.Action("LogIn", "Global")';
+        $.ajax({
+            type: 'Post',
+            url: url,
+            data: datajson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (username && password) {
+                        const url = new URL(window.location.href);
+                        url.searchParams.delete('username');
+                        url.searchParams.delete('password');
+                        window.history.replaceState(null, '', url.toString());
+                    }
+                    CheckCookieLoad();
+                    location.reload();
+                }
+                else { $('#StatusLogin').html('<div style="color:red"><i class="fas fa-times-circle"></i> Incorrect UserName Or Password</span></div>'); }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function delCookie() {
+        interuptAjax = $.ajax({
+            type: "POST", data: JSON.stringify(), url: "@Url.Action("DelCookie", "Global")", async: true,
+            success: function (datares) {
+                document.location = '@Url.Action("Index", "Global")';
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function CheckCookieLoad() {
+        var datajson = JSON.stringify();
+
+        var url = "@Url.Action("GetCookie", "Global")";
+        $.ajax({
+            type: 'Post',
+            url: url,
+            data: datajson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                const text = document.getElementById("signin-text");
+                if (response.success) {
+                    document.getElementById("signin-name").innerText = response.data;
+                    text.textContent = "Sign out";
+                }
+                else {
+                    text.textContent = "Sign in";
+
+                    $("#myModalLogIn").modal("show");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function confirm(message, onConfirm, onCancel) {
+        confirmMessage.innerText = message;
+
+        confirmModal.style.display = 'flex';
+
+        // Handle the confirm button click
+        confirmButton.onclick = function () {
+            confirmModal.style.display = 'none'; // Hide modal
+            if (onConfirm) onConfirm();  // Call the onConfirm callback
+        };
+
+        // Handle the cancel button click
+        cancelButton.onclick = function () {
+            confirmModal.style.display = 'none'; // Hide modal
+            if (onCancel) onCancel();  // Call the onCancel callback (if provided)
+        };
+
+        // Close the modal if the user clicks outside of it
+        window.onclick = function (event) {
+            if (event.target === confirmModal) {
+                confirmModal.style.display = 'none';
+                if (onCancel) onCancel();
+            }
+        };
+    }
+
+    function showAlert(type, message, callback) {
+        var alert = document.getElementById('alert-' + type);
+        var alertText = document.getElementById('alert-' + type + '-text');
+
+        alertText.innerText = message;
+        alert.style.display = 'flex';
+        alert.classList.add('show');
+
+        // Hide alert after 2 seconds
+        setTimeout(function () {
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
+
+            alert.classList.remove('show');
+            alert.style.display = 'none';
+        }, 3000);
+    }
+    function Dateformat(date) {
+        return date.getFullYear() + '-' +
+               String(date.getMonth() + 1).padStart(2, '0') + '-' +
+               String(date.getDate()).padStart(2, '0') + ' ' +
+               String(date.getHours()).padStart(2, '0') + ':' +
+               String(date.getMinutes()).padStart(2, '0') + ':' +
+               String(date.getSeconds()).padStart(2, '0');
+    }
+
+    function addDays(date, days) {
+        let result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    function formatDate(item, option) {
+        if (item) {
+            // Remove non-numeric characters and parse the timestamp
+            const timestamp = parseInt(item.replace(/[^0-9\.]/g, ''), 10);
+
+            // Create a new Date object from the parsed timestamp
+            const date = new Date(timestamp);
+
+            // Format the date and time
+            const formattedDate = date.format('yyyy-mm-dd');
+            const formattedTime = date.format('HH:MM:ss');
+
+            // Combine the date and time with a <br> separator
+            if (option == 1) {
+                return formattedDate + ' ' + formattedTime;
+            } else if (option == 2) {
+                return formattedDate;
+            } else if (option == 3) {
+                return formattedTime;
+            }
+        }
+        return '';
+    }
+
+    function toggleCodeReader(codeReader, selectedDeviceId) {
+        var videoDiv = document.getElementById('video-col-custom');
+        if (!videoStatus) {
+            videoDiv.style.display = 'block';
+            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', function (result, err) {
+                if (result) {
+                    document.getElementById('Serial_No_Input').value = result.text;
+
+                    document.getElementById('video-message').textContent = "Success! Barcode detected.";
+                    document.getElementById('video-message').style.backgroundColor = '#f6ffed';
+                    document.getElementById('video-message').style.borderColor = '#b7eb8f';
+
+                    var event = new KeyboardEvent('keydown', {
+                        key: 'Enter', // The key that was pressed
+                        code: 'Enter', // The code for the Enter key
+                        keyCode: 13, // The keycode for Enter key (13)
+                        which: 13, // The which value for Enter key (13)
+                        bubbles: true, // Make the event bubble up the DOM
+                        cancelable: true // Allow the event to be canceled
+                    });
+
+                    // Dispatch the event on the input field
+                    document.getElementById('Serial_No_Input').dispatchEvent(event);
+                }
+                if (err && !(err instanceof ZXing.NotFoundException)) {
+                    showAlert('error', err, function () { });
+                }
+            });
+        } else {
+            codeReader.reset();
+            videoDiv.style.display = 'none';
+        }
+    }
+
+    function toggleVideo() {
+        var videoIcon = document.getElementById('video-icon');
+        if (videoStatus) {
+            if (videoInputDevicesStatus) {
+                videoIcon.classList.remove("fa-video-slash");
+                videoIcon.classList.add("fa-video");
+                document.getElementById('video').style.display = "block";
+                videoStatus = false;
+            } else showAlert('error', "Camera not found.", function () { });
+        } else {
+            videoIcon.classList.remove("fa-video");
+            videoIcon.classList.add("fa-video-slash");
+            document.getElementById('video').style.display = "none";
+            videoStatus = true;
+        }
+    }
+
+    function formatDateToSave(data) {
+        if (data != null) {
+            for (var key in data) {
+                if (data.hasOwnProperty(key) &&
+                    (key.toLowerCase().includes('date') || key.toLowerCase().includes('plan_'))
+                ) {
+                    var rawValue = data[key];
+                    if (rawValue) {
+                        var dateObj = null;
+
+                        // Case: "/Date(1754298922000)/"
+                        if (typeof rawValue === 'string' && rawValue.indexOf('/Date') !== -1) {
+                            var timestamp = parseInt(rawValue.replace(/[^0-9]/g, ''), 10);
+                            if (!isNaN(timestamp)) {
+                                dateObj = new Date(timestamp);
+                            }
+                        } else {
+                            dateObj = new Date(rawValue);
+                        }
+
+                        // Validate date
+                        if (dateObj && !isNaN(dateObj.getTime())) {
+                            var yyyy = dateObj.getFullYear();
+                            var mm = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+                            var dd = ('0' + dateObj.getDate()).slice(-2);
+                            var HH = ('0' + dateObj.getHours()).slice(-2);
+                            var MM = ('0' + dateObj.getMinutes()).slice(-2);
+                            var ss = ('0' + dateObj.getSeconds()).slice(-2);
+
+                            data[key] = yyyy + '-' + mm + '-' + dd + ' ' + HH + ':' + MM + ':' + ss;
+                        } else {
+                            console.warn("Invalid date for key:", key, rawValue);
+                        }
+                    }
+                }
+            }
+        }
+
+        return data;
+    }
+    function highlightDate(data, daysRange) {
+        if (!data) return "";
+
+        let now = new Date();
+        let date = new Date(data);
+        if (isNaN(date.getTime())) return data; // ถ้าไม่ใช่วันที่ ให้คืนค่าปกติ
+
+        // วันที่ limit (ช่วงวันข้างหน้า)
+        let limitDate = new Date();
+        limitDate.setDate(now.getDate() + daysRange);
+
+        // คำนวณจำนวนวันที่เหลือจากวันนี้
+        let diffTime = date - now; // หน่วย: มิลลิวินาที
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // แปลงเป็นวัน (ปัดขึ้น)
+
+        let dayText = "";
+        if (diffDays > 0) {
+            dayText = '<small style="color: gray;">('+diffDays+' day)</small>';
+        }
+
+        // เงื่อนไข
+        if (date < now) {
+            // ถ้าเก่ากว่าวันนี้
+            return '<div style="color: red;">' + data + '</div>';
+        } else if (date >= now && date <= limitDate) {
+            // ถ้าอยู่ในช่วงวันข้างหน้า
+            return '<div style="color: orange; font-weight: bold;">' + data + ' ' + dayText + '</div>';
+        } else {
+            // ปกติ
+            return data;
+        }
+    }
+
+</script>

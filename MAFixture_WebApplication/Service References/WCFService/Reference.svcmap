@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9075b909-720c-41fb-97c8-8e31ed3ac7d6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://10.52.60.227/wcf_connectdatabase/Service1.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Service1.xsd" MetadataType="Schema" ID="105dcdec-98a6-489b-b630-f192f4e9b342" SourceId="1" SourceUrl="http://rdreporters.gpv-asia.local/Wcf_Connectdatabase/Service1.svc?xsd=xsd4" />
+    <MetadataFile FileName="Service11.xsd" MetadataType="Schema" ID="570611cc-7056-4350-80f3-856720bddc79" SourceId="1" SourceUrl="http://rdreporters.gpv-asia.local/Wcf_Connectdatabase/Service1.svc?xsd=xsd2" />
+    <MetadataFile FileName="Service12.xsd" MetadataType="Schema" ID="b717ba83-d381-430d-9b5b-d3ef47103f02" SourceId="1" SourceUrl="http://rdreporters.gpv-asia.local/Wcf_Connectdatabase/Service1.svc?xsd=xsd3" />
+    <MetadataFile FileName="Service1.disco" MetadataType="Disco" ID="3c01059a-9afb-4913-b8c3-38b851d74ca3" SourceId="1" SourceUrl="http://rdreporters.gpv-asia.local/Wcf_Connectdatabase/Service1.svc?disco" />
+    <MetadataFile FileName="Service13.xsd" MetadataType="Schema" ID="1cd13c98-1d7b-4a6f-8e9a-9e371e1aa759" SourceId="1" SourceUrl="http://rdreporters.gpv-asia.local/Wcf_Connectdatabase/Service1.svc?xsd=xsd1" />
+    <MetadataFile FileName="Service14.xsd" MetadataType="Schema" ID="9f9c6d15-b4ac-469c-879f-1b40677c0119" SourceId="1" SourceUrl="http://rdreporters.gpv-asia.local/Wcf_Connectdatabase/Service1.svc?xsd=xsd0" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="737888c3-6417-4aca-b4df-44024f243136" SourceId="1" SourceUrl="http://rdreporters.gpv-asia.local/Wcf_Connectdatabase/Service1.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

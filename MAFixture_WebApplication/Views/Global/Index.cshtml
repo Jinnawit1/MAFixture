@@ -1,0 +1,485 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<style>
+    .shown {
+        background-color: #e6f7ff !important;
+    }
+
+    .shown-child {
+        background-color: #e6f7ff !important;
+    }
+    .action {
+        padding: 7px;
+        border-radius: 4px;
+        width: 100%;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+    }
+</style>
+
+<h3>Fixture</h3>
+<hr />
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label>Serial No :</label>
+                <input type="text" class="form-control" id="Serial_No">
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label>LastMA Date From:</label>
+                <input type="date" class="form-control" id="From">
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-date-to">LastMA Date To:</label>
+                <input type="date" class="form-control" id="To">
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-request-by">Customer :</label>
+                <input type="text" class="form-control" id="Customer">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-date-from">Product Name :</label>
+                <input type="text" class="form-control" id="Product_name">
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-date-to">Section :</label>
+                <select type="text" class="form-control" id="Section">
+                    <option value="" selected>All</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-request-by">Type MC:</label>
+                <select type="text" class="form-control" id="Type_MC">
+                    <option value="" selected>All</option>
+                    <option value="0">Maintenance</option>
+                    <option value="1">Calibration</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-name">Type MA:</label>
+                <select  class="form-control" id="Type_MA">
+                    <option value="" selected>All</option>
+                    <option value="0">Equipment/Machine</option>
+                    <option value="1">Sparepart</option>
+                    <option value="2">Tools</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-name">Location:</label>
+                <input type="text" class="form-control" id="Location" />
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
+                <label for="search-name">Property:</label>
+                <select class="form-control" id="Property">
+                    <option value="" selected>All</option>
+                    <option value="GPV">GPV</option>
+                    <option value="Customer">Customer</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div style="margin-left:15px;">
+        <button class="btn btn-primary" id="search-button" onclick="OnLoad()">Search</button>
+        
+    </div>
+</div>
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-12 mb-3" style="padding: 3px 0px;">
+            <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+                @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
+                <table id="TableMAPlan" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        LoadAll();
+    });
+
+    function LoadAll() {
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        console.log(response.data);
+                        $.each(response.data.Department, function (index, item) {
+                            $('#Section').append('<option value="' + item.Section + '">' + item.Section + '</option>');
+                        });
+                        OnLoad();
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnLoad() {
+        var Serial_No = $('#Serial_No').val();
+        var From = $('#From').val();
+        var To = $('#To').val();
+        var Customer = $('#Customer').val();
+        var Product_name = $('#Product_name').val();
+        var Section = $('#Section').val();
+        var Type_MC = $('#Type_MC').val();
+        var Type_MA = $('#Type_MA').val();
+        var Location = $('#Location').val();
+        var Property = $('#Property').val();
+        var dataSet = [];
+        var dataFull = [];
+        var url = '@Url.Action("Load_MAPlan", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                Serial_No: Serial_No,
+                From: From,
+                To: To,
+                Customer: Customer,
+                Product_name: Product_name,
+                Section: Section,
+                Type_MC: Type_MC,
+                Type_MA: Type_MA,
+                Location: Location,
+                Property: Property
+            }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success && response.data) {
+                    var maPlan = response.data;
+                    var now = Date.now();
+                    $(maPlan).each(function (index, item) {
+                        item.Equipment_Picture = item.Equipment_Picture
+                          ? '<a href="' + basePath + item.Equipment_Picture + '" target="_blank">' +
+                              '<i class="fas fa-image" style="font-size: 20px; color: #007bff;"></i>' +
+                              '</a>'
+                          : "";
+                        var newItem = [];
+                        newItem.push(index + 1);
+                        newItem.push(item.MA_ID || '');
+                        newItem.push(item.MA_ID || '');
+                        newItem.push(item.Serial_No || '');
+                        newItem.push(item.Equipment_No || '');
+                        newItem.push(item.Equipment_Name || '');
+                        newItem.push(item.Product_name || '');
+                        newItem.push(item.Description || '');
+                        newItem.push(item.Equipment_Picture || '');
+                        newItem.push(item.Model || '');
+                        newItem.push(item.Referrence_No || '');
+                        newItem.push(item.Pinnumber || '');
+                        newItem.push(item.Lifetime || '');
+                        newItem.push(item.Property || '');
+                        newItem.push(item.Type_MC || '');
+                        newItem.push(item.Type_MA || '');
+                        newItem.push(item.Section || '');
+                        newItem.push(item.Responsible_Name || '');
+                        newItem.push(item.Manufacture || '');
+                        newItem.push(item.Location || '');
+                        newItem.push(item.Customer_Name || '');
+                        newItem.push(formatDate(item.Plan_Daily, "2"));
+                        newItem.push(formatDate(item.Plan_Weekly, "2"));
+                        newItem.push(formatDate(item.Plan_Monthly, "2"));
+                        newItem.push(formatDate(item.Plan_Quarterly, "2"));
+                        newItem.push(formatDate(item.Plan_Semi_annually, "2"));
+                        newItem.push(formatDate(item.Plan_Yearly, "2"));
+                        newItem.push(formatDate(item.Plan_Manually, "2"));
+                        newItem.push(formatDate(item.LastMA_date, "2"));
+                        newItem.push(item.CreateBy || '');
+                        newItem.push(formatDate(item.Startdate, "2"));
+                        dataSet.push(newItem);
+                        dataFull.push(item);
+                    });
+
+                    if ($.fn.dataTable.isDataTable('#TableMAPlan')) {
+                        $('#TableMAPlan').DataTable().clear().destroy();
+                    }
+
+                    $('#TableMAPlan').DataTable({
+                        order: [[0, "desc"]],
+                        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                        iDisplayLength: 100,
+                        data: dataSet,
+                        dom: 'lBfrtip',
+                        autoWidth: false,
+                        scrollX: false,
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                autoFilter: true,
+                                exportOptions: {
+                                    format: {
+                                        body: function (data, row, col, node) {
+                                            if (data && /<[^>]+>/g.test(data)) {
+                                                if (/<br\s*\/?>/i.test(data)) {
+                                                    return data.replace(/<br\s*\/?>/gi, ' ');
+                                                } else {
+                                                    var parser = new DOMParser();
+                                                    var doc = parser.parseFromString(data, 'text/html');
+                                                    return doc.body.textContent || doc.body.innerText;
+                                                }
+                                            }
+                                            return data;
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        columns: [
+                            {
+                                title: "No.",
+                                orderable: false,
+                                render: function (data, type, row, meta) {
+                                    return '<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i>' + data;
+                                }
+                            },
+                            {
+                                title: "MA_ID",
+                                visible: false // ซ่อนในหน้าจอ
+                            },
+                            {
+                                title: "View",
+                                orderable: false,
+                                render: function (data, type, row) {
+                                    return '<div href="#" onclick="OnDetail(\'' + data + '\')" style="width: 100%; text-align: center; color: #1890ff; font-size: 22px;"><i style="cursor: pointer;" class="fas fa-search"></i></div>';
+                                }
+                            },
+                            { title: "Serial No" },
+                            { title: "Equipment No" },
+                            { title: "Equipment Name" },
+                            {
+                                title: "Product Name",
+                                className: "product-col"
+                            },
+                            {
+                                title: "Description",
+                                className: "description-col"
+                            },
+                           {
+                               title: "Equipment Picture",
+                               className: "text-center",
+                           },
+                            {
+                                title: "Model",
+                                visible: false // ซ่อนในหน้าจอ
+                            },
+                            { title: "Referrence No" },
+                            { title: "Pinnumber" },
+                            {
+                                title: "Lifetime",
+                                visible: false // ซ่อนในหน้าจอ
+                            },
+                            { title: "Property" },
+                            { title: "Type MC" },
+                            { title: "Type MA" },
+                            { title: "Section" },
+                            {
+                                title: "Responsible_Name",
+                                visible: false // ซ่อนในหน้าจอ
+                            },
+                            {
+                                title: "Manufacture",
+                                visible: false // ซ่อนในหน้าจอ
+                            },
+                            { title: "Location" },
+                            { title: "Customer" },
+                            {
+                                title: "Plan Daily",
+                                orderable: false,
+                                render: function (data) {
+                                    let timestamp = new Date(data).getTime();
+                                    return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                                }
+                            },
+                            {
+                                title: "Plan Weekly",
+                                orderable: false,
+                                render: function (data) {
+                                    return highlightDate(data, 3);
+                                }
+                            },
+                            {
+                                title: "Plan Monthly",
+                                orderable: false,
+                                render: function (data) {
+                                    return highlightDate(data, 7);
+                                }
+                            },
+                            {
+                                title: "Plan Quarterly",
+                                orderable: false,
+                                render: function (data) {
+                                    return highlightDate(data, 14);
+                                }
+                            },
+                            {
+                                title: "Plan Semi-annually",
+                                orderable: false,
+                                render: function (data) {
+                                    return highlightDate(data, 14);
+                                }
+                            },
+                            {
+                                title: "Plan Yearly",
+                                orderable: false,
+                                render: function (data) {
+                                    return highlightDate(data, 14);
+                                }
+                            },
+                            {
+                                title: "Plan Manually",
+                            },
+                            { title: "Last MA Date" },
+                            { title: "CreateBy" },
+                            { title: "CreateDate" },
+                        ],
+                        deferRender: true,
+                        destroy: true,
+                        createdRow: function (row, data, dataIndex) {
+                            $(row).on('click', 'td', function () {
+                                if ($(this).index() === 0) {
+                                    var tr = $(this).closest('tr');
+                                    var rowObj = $('#TableMAPlan').DataTable().row(tr);
+
+                                    if (rowObj.child.isShown()) {
+                                        rowObj.child.hide();
+                                        tr.removeClass('shown');
+                                        $(rowObj.child()).removeClass('shown-child');
+                                        $(tr).find('td:first').html('<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                                    } else {
+                                        rowObj.child(formatDetails(dataFull[dataIndex], data[16])).show();
+                                        $(rowObj.child()).addClass('shown-child');
+                                        tr.addClass('shown');
+                                        $(tr).find('td:first').html('<i class="fas fa-caret-down" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                                    }
+                                }
+                            });
+                        },
+                        columnDefs: [
+                            { targets: 6, width: "200px" }  // Product Name column
+                        ],
+                        rowCallback: function (row) {
+                            $(row).find('td:first').addClass('expandable');
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+
+    function formatDetails(data, section) {
+        if ((section == "THT" || section == "THT_HM") && '@ViewData["EMPLOYEE_ID"]' != "56258") {
+            showAlert('error', 'You are not authorized to access Section '+section);
+            return;
+        }
+        return '<div style="display: flex; column-gap: 5px;">' +
+                '<div class="action" style="background-color: #79D7BE;" onclick="OnEdit(\'' + data.MA_ID + '\')">Edit <i class="fas fa-edit"></i></div>' +
+                '<div class="action" style="background-color: #F72C5B;" onclick="OnDelete(\'' + data.MA_ID + '\')">Delete <i class="fas fa-trash"></i></div>' +
+                '<div class="action" style="background-color: #474E93;" onclick="OnObsolete(\'' + data.MA_ID + '\')">Obsolete <i class="fas fa-lock"></i></div>' +
+            '</div>';
+    }
+
+    function OnDetail(data) {
+        document.location = '@Url.Action("MaintenanceHistory", "Global")' + '?id=' + data;
+    }
+
+    function OnEdit(data) {
+        document.location = '@Url.Action("NewEquipment", "Global")' + '?id=' + data;
+    }
+
+    function OnObsolete(data) {
+        confirm(("Are you sure you want to obsolete fixture ID: " + data + "?"), function () {
+            var url = '@Url.Action("Obsolete_Fixture_By_MA_ID", "Global")';
+            var dataJson = JSON.stringify({ MA_ID: data })
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: dataJson,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (response) {
+                    if (response.success) {
+                        showAlert('success', response.word, function () { });
+                        OnLoad();
+                    } else showAlert('error', response.word, function () { });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                }
+            });
+        }, function () { });
+    }
+
+    function OnDelete(data) {
+        confirm(("Are you sure you want to delete fixture ID: " + data + "?"), function () {
+            var url = '@Url.Action("Delete_Fixture_By_MA_ID", "Global")';
+            var dataJson = JSON.stringify({ MA_ID: data })
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: dataJson,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (response) {
+                    if (response.success) {
+                        showAlert('success', response.word, function () { });
+                        OnLoad();
+                    } else showAlert('error', response.word, function () { });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                }
+            });
+        }, function () { });
+    }
+</script>

@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "Manage Customer";
+}
+
+<h3 id="topic"></h3>
+<hr />
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Customer Name :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input type="text" class="form-control" id="Cust_name" name="Cust_name" placeholder="Customer Name" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Customer Codename :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input type="text" class="form-control" id="Cust_codename" name="Cust_codename" placeholder="Customer Codename" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-7 col-sm-8 col-12 mb-3" style="display: flex; justify-content: flex-end; column-gap: 5px; padding-top: 5px;">
+            <button onclick="OnSave()" class="btn btn-filled">Save</button>
+            <button onclick="onCancel()" class="btn btn-transparent">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var data = {};
+    $(document).ready(function () {
+        var topic = document.getElementById("topic");
+        if ("@ViewData["ID"]" != "") {
+            topic.textContent = "Edit Customer";
+            onLoad();
+        }
+        else topic.textContent = "Add Customer";
+    });
+
+    function onLoad() {
+        var url = '@Url.Action("Load_Customer_By_ID", "Global")';
+        var dataJson = JSON.stringify({ ID: "@ViewData["ID"]" })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        data = response.data;
+                        document.getElementById("Cust_name").value = response.data.Cust_name;
+                        document.getElementById("Cust_codename").value = response.data.Cust_codename;
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+
+    function OnSave() {
+        var dateTimeNow = new Date().format('yyyy-mm-dd HH:MM:ss');
+        var custName = document.getElementById("Cust_name").value;
+        var custCodename = document.getElementById("Cust_codename").value;
+        var formData = {};
+
+        if (custName == "" || custCodename == "") {
+            return showAlert('error', "Please fill out all fields.", function () { });
+        }
+
+        if ("@ViewData["ID"]" != "") {
+            formData = {
+                ID: data.ID,
+                Cust_name: custName,
+                Cust_codename: custCodename,
+                CreateDate: formatDateToSave(data.CreateDate),
+                Createby: data.Createby
+            }
+        } else {
+            formData = {
+                Cust_name: custName,
+                Cust_codename: custCodename,
+                CreateDate: dateTimeNow,
+                Createby: "@ViewData["EMPLOYEE_ID"]"
+            }
+        }
+        Record_Customer(formData);
+    }
+
+    function Record_Customer(data) {
+        var url = '@Url.Action("Record_Customer", "Global")';
+        var dataJson = JSON.stringify(data)
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    showAlert('success', response.word, function () { });
+                    onCancel();
+                } else {
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function onCancel() {
+        document.location = '@Url.Action("Customer", "Global")';
+    }
+</script>

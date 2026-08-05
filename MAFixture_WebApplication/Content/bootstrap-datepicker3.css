@@ -1,0 +1,4041 @@
+.datepicker
+{
+    PADDING-BOTTOM: 4px;
+    DIRECTION: ltr;
+    PADDING-TOP: 4px;
+    PADDING-LEFT: 4px;
+    PADDING-RIGHT: 4px;
+    border-radius: 4px
+}
+.datepicker-inline
+{
+    WIDTH: 220px
+}
+.datepicker-rtl
+{
+    DIRECTION: rtl
+}
+.datepicker-rtl TABLE TR TD SPAN
+{
+    FLOAT: right
+}
+.datepicker-dropdown
+{
+    LEFT: 0px;
+    TOP: 0px
+}
+.datepicker-dropdown:before
+{
+    BORDER-TOP: 0px;
+    BORDER-RIGHT: transparent 7px solid;
+    BORDER-BOTTOM: 7px solid;
+    POSITION: absolute;
+    BORDER-LEFT: transparent 7px solid;
+    DISPLAY: inline-block
+}
+.datepicker-dropdown:after
+{
+    BORDER-TOP: 0px;
+    BORDER-RIGHT: transparent 6px solid;
+    BORDER-BOTTOM: #fff 6px solid;
+    POSITION: absolute;
+    BORDER-LEFT: transparent 6px solid;
+    DISPLAY: inline-block
+}
+.datepicker-orient-left:before
+{
+    LEFT: 6px
+}
+.datepicker-orient-left:after
+{
+    LEFT: 7px
+}
+.datepicker-orient-right:before
+{
+    RIGHT: 6px
+}
+.datepicker-orient-right:after
+{
+    RIGHT: 7px
+}
+.datepicker-orient-top:before
+{
+    TOP: -7px
+}
+.datepicker-orient-top:after
+{
+    TOP: -6px
+}
+.datepicker-orient-bottom:before
+{
+    BORDER-TOP: #999 7px solid;
+    BORDER-BOTTOM: 0px;
+    BOTTOM: -7px
+}
+.datepicker-orient-bottom:after
+{
+    BORDER-TOP: #fff 6px solid;
+    BORDER-BOTTOM: 0px;
+    BOTTOM: -6px
+}
+.datepicker > DIV
+{
+    DISPLAY: none
+}
+.days .datepicker-days
+{
+    DISPLAY: block
+}
+.months .datepicker-months
+{
+    DISPLAY: block
+}
+.years .datepicker-years
+{
+    DISPLAY: block
+}
+.datepicker TABLE
+{
+    MARGIN: 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+.datepicker TABLE TR TD
+{
+    BORDER-TOP: medium none;
+    HEIGHT: 30px;
+    BORDER-RIGHT: medium none;
+    WIDTH: 30px;
+    BORDER-BOTTOM: medium none;
+    TEXT-ALIGN: center;
+    BORDER-LEFT: medium none;
+    border-radius: 4px
+}
+.datepicker TABLE TR TH
+{
+    BORDER-TOP: medium none;
+    HEIGHT: 30px;
+    BORDER-RIGHT: medium none;
+    WIDTH: 30px;
+    BORDER-BOTTOM: medium none;
+    TEXT-ALIGN: center;
+    BORDER-LEFT: medium none;
+    border-radius: 4px
+}
+.table-striped .datepicker TABLE TR TD
+{
+    BACKGROUND-COLOR: transparent
+}
+.table-striped .datepicker TABLE TR TH
+{
+    BACKGROUND-COLOR: transparent
+}
+.datepicker TABLE TR TD.day:hover
+{
+    CURSOR: pointer;
+    BACKGROUND: #eeeeee
+}
+.datepicker TABLE TR TD.focused
+{
+    CURSOR: pointer;
+    BACKGROUND: #eeeeee
+}
+.datepicker TABLE TR TD.old
+{
+    COLOR: #999999
+}
+.datepicker TABLE TR TD.new
+{
+    COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled
+{
+    CURSOR: default;
+    BACKGROUND: none transparent scroll repeat 0% 0%;
+    COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    CURSOR: default;
+    BACKGROUND: none transparent scroll repeat 0% 0%;
+    COLOR: #999999
+}
+.datepicker TABLE TR TD.today
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.today:focus
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.today:hover:focus
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.today:active
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.today:hover:active
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.open .datepicker TABLE TR TD.today
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.open .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f59e00;
+    BORDER-LEFT-COLOR: #f59e00;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f59e00;
+    BORDER-RIGHT-COLOR: #f59e00;
+    BACKGROUND-COLOR: #ffcd70
+}
+.datepicker TABLE TR TD.today:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.today:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.today
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.today:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today:hover:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].today:hover:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #ffb733;
+    BORDER-LEFT-COLOR: #ffb733;
+    BORDER-BOTTOM-COLOR: #ffb733;
+    BORDER-RIGHT-COLOR: #ffb733;
+    BACKGROUND-COLOR: #ffdb99
+}
+.datepicker TABLE TR TD.today:hover
+{
+    COLOR: #000
+}
+.datepicker TABLE TR TD.active:hover
+{
+    COLOR: #fff
+}
+.datepicker TABLE TR TD.range
+{
+    BACKGROUND: #eeeeee;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.range:hover
+{
+    BACKGROUND: #eeeeee;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.disabled
+{
+    BACKGROUND: #eeeeee;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BACKGROUND: #eeeeee;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.today
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77;
+    border-radius: 0
+}
+.datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.today:focus
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.today:hover:focus
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.today:active
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.today:hover:active
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.open .datepicker TABLE TR TD.today
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.open .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #bf800c;
+    BORDER-LEFT-COLOR: #bf800c;
+    COLOR: #000000;
+    BORDER-BOTTOM-COLOR: #bf800c;
+    BORDER-RIGHT-COLOR: #bf800c;
+    BACKGROUND-COLOR: #f4bb51
+}
+.datepicker TABLE TR TD.today:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.today:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.today
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.today:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today:hover:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].today:hover:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.today:hover:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #f1a417;
+    BORDER-LEFT-COLOR: #f1a417;
+    BORDER-BOTTOM-COLOR: #f1a417;
+    BORDER-RIGHT-COLOR: #f1a417;
+    BACKGROUND-COLOR: #f7ca77
+}
+.datepicker TABLE TR TD.selected
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.selected:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.selected:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.selected:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.selected:focus
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.selected:hover:focus
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.selected:active
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.selected:hover:active
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.open .datepicker TABLE TR TD.selected
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.open .datepicker TABLE TR TD.selected:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #373737;
+    BORDER-LEFT-COLOR: #373737;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #373737;
+    BORDER-RIGHT-COLOR: #373737;
+    BACKGROUND-COLOR: #858585
+}
+.datepicker TABLE TR TD.selected:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.selected:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.selected
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.selected:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected:hover:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected:hover:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].selected:hover:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.selected:hover:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #555555;
+    BORDER-LEFT-COLOR: #555555;
+    BORDER-BOTTOM-COLOR: #555555;
+    BORDER-RIGHT-COLOR: #555555;
+    BACKGROUND-COLOR: #999999
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:hover:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:hover:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD.active:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.active
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD.disabled:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN
+{
+    CURSOR: pointer;
+    HEIGHT: 54px;
+    WIDTH: 23%;
+    FLOAT: left;
+    MARGIN: 1%;
+    DISPLAY: block;
+    LINE-HEIGHT: 54px;
+    border-radius: 4px
+}
+.datepicker TABLE TR TD SPAN:hover
+{
+    BACKGROUND: #eeeeee
+}
+.datepicker TABLE TR TD SPAN.disabled
+{
+    CURSOR: default;
+    BACKGROUND: none transparent scroll repeat 0% 0%;
+    COLOR: #999999
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    CURSOR: default;
+    BACKGROUND: none transparent scroll repeat 0% 0%;
+    COLOR: #999999
+}
+.datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD SPAN.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:hover:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.disabled:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:hover:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.disabled:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD SPAN.disabled
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.open .datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #285e8e;
+    BORDER-LEFT-COLOR: #285e8e;
+    COLOR: #ffffff;
+    BORDER-BOTTOM-COLOR: #285e8e;
+    BORDER-RIGHT-COLOR: #285e8e;
+    BACKGROUND-COLOR: #3276b1
+}
+.datepicker TABLE TR TD SPAN.active:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.active:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.disabled:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.disabled:hover:active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.active
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD SPAN.active
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD SPAN.active:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD SPAN.disabled
+{
+    BACKGROUND-IMAGE: none
+}
+.open .datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BACKGROUND-IMAGE: none
+}
+.datepicker TABLE TR TD SPAN.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled:hover:focus
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.disabled:hover:active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN[disabled].active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+FIELDSET[disabled] .datepicker TABLE TR TD SPAN.active:hover
+{
+    BORDER-TOP-COLOR: #357ebd;
+    BORDER-LEFT-COLOR: #357ebd;
+    BORDER-BOTTOM-COLOR: #357ebd;
+    BORDER-RIGHT-COLOR: #357ebd;
+    BACKGROUND-COLOR: #428bca
+}
+.datepicker TABLE TR TD SPAN.old
+{
+    COLOR: #999999
+}
+.datepicker TABLE TR TD SPAN.new
+{
+    COLOR: #999999
+}
+.datepicker .datepicker-switch
+{
+    WIDTH: 145px
+}
+.datepicker THEAD TR:first-child TH
+{
+    CURSOR: pointer
+}
+.datepicker TFOOT TR TH
+{
+    CURSOR: pointer
+}
+.datepicker THEAD TR:first-child TH:hover
+{
+    BACKGROUND: #eeeeee
+}
+.datepicker TFOOT TR TH:hover
+{
+    BACKGROUND: #eeeeee
+}
+.datepicker .cw
+{
+    FONT-SIZE: 10px;
+    WIDTH: 12px;
+    VERTICAL-ALIGN: middle;
+    PADDING-BOTTOM: 0px;
+    PADDING-TOP: 0px;
+    PADDING-LEFT: 5px;
+    PADDING-RIGHT: 2px
+}
+.datepicker THEAD TR:first-child .cw
+{
+    CURSOR: default;
+    BACKGROUND-COLOR: transparent
+}
+.date .input-group-addon
+{
+    CURSOR: pointer
+}
+.input-daterange
+{
+    WIDTH: 100%
+}
+.input-daterange INPUT
+{
+    TEXT-ALIGN: center
+}
+.input-daterange INPUT:first-child
+{
+    border-radius: 3px 0 0 3px
+}
+.input-daterange INPUT:unknown
+{
+    border-radius: 0 3px 3px 0
+}
+.input-daterange .input-group-addon
+{
+    BORDER-TOP: #cccccc 1px solid;
+    BORDER-RIGHT: #cccccc 0px solid;
+    WIDTH: auto;
+    VERTICAL-ALIGN: middle;
+    MIN-WIDTH: 16px;
+    BORDER-BOTTOM: #cccccc 1px solid;
+    FONT-WEIGHT: normal;
+    PADDING-BOTTOM: 4px;
+    TEXT-ALIGN: center;
+    PADDING-TOP: 4px;
+    PADDING-LEFT: 5px;
+    MARGIN-LEFT: -5px;
+    BORDER-LEFT: #cccccc 0px solid;
+    LINE-HEIGHT: 1.4285;
+    PADDING-RIGHT: 5px;
+    BACKGROUND-COLOR: #eeeeee;
+    MARGIN-RIGHT: -5px;
+    text-shadow: 0 1px 0 #fff
+}

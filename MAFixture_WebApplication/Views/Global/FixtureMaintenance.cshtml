@@ -1,0 +1,1261 @@
+﻿@{
+    ViewBag.Title = "Fixture Maintenance";
+}
+
+<style>
+    .image-preview-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        column-gap: 5px;
+        padding: 3px 5px;
+        margin-top: 3px;
+        border: solid 1px #1890ff;
+        background-color: white;
+        border-radius: 6px;
+    }
+
+    .image-preview {
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+    }
+
+    .image-name {
+        display: block;
+        font-size: 11px;
+        text-align: center;
+    }
+
+    .cross-icon {
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+
+<h3>Update Fixture Maintenance</h3>
+<hr />
+
+<div class="col-custom" id="video-col-custom" style="display: none;">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12 mb-3">
+            <div id="sourceSelectPanel" style="display:none;">
+                <label for="sourceSelect">Change video source:</label>
+                <select id="sourceSelect" style="max-width:400px" class="ant-select"></select>
+            </div>
+            <video id="video" height="400" style="border: 1px solid gray; width: 100%; margin: 5px 0px;"></video>
+            <div id="video-message" style="width: 100%; text-align: center; background-color: #fffbe6; padding: 5px; border: 1px solid #ffe58f; border-radius: 4px;">
+                Point the camera at the barcode.
+            </div>
+
+            <hr />
+        </div>
+    </div>
+</div>
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-2 col-sm-6 col-12 mb-3">
+            <a class="btn btn-filled" onclick="toggleVideo()" style="margin-top: 3px; width: 100%;" id="startButton" href="javascript:void(0)"><i style="font-size: 18px;" id="video-icon" class="fas fa-video-slash"></i></a>
+        </div>
+        <div class="col-md-4 col-sm-6 col-12 mb-3">
+            <input type="text" class="form-control" id="Serial_No_Input" name="Serial_No_Input" placeholder="Scan serial here..." autocomplete="off" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom" style="display: none;" id="equipmentNameSelectDiv">
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+            <div>Select equipment name :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <select class="ant-select" name="Equipment_Name_Select" id="Equipment_Name_Select"></select>
+        </div>
+    </div>
+</div>
+
+<div id="update-form" style="display: none;">
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-xs-6 mb-3">
+                <div>Serial no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-6 mb-3">
+                <span id="Serial_No"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-6 mb-3">
+                <div>Equipment no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-6 mb-3">
+                <span id="Equipment_No"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Equipment name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Equipment_Name"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Section :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Section"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Type :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Type_MC"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Last MA Date :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="LastMA_date"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Customer :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Customer"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Product name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Product_name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Model :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Model"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Referrence_No :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Referrence_No"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Property :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Property"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Manufacture :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Manufacture"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>ResponsibleName :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Responsible_Name"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Description :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Description"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Pin No. :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Pinnumber"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Lifetime :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Lifetime"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Location :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Location"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Maintenance Type:</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Type_MA"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom Toolvisible">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>GPV Process :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="GPVProcess"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Process Side:</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="ProcessSide"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom Toolvisible">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>With Top Cover :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="WithTopCover"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>With Control Tooling:</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="WithControlTooling"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom Toolvisible">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Grade Status :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Grade_Status"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Dimension :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Dimension"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                <div>SparePart :</div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-12 mb-3">
+                <select style="width:100%;" name="Sparepart_Select" id="Sparepart_Select" multiple></select>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-sm-12 col-12 mb-3">
+                <hr />
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding-top: 10px;">
+                <div>Maintenance Date :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <input type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")" class="form-control" id="Createdate" name="Createdate" />
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3 Toolvisible" style="padding-top: 10px;">
+                <div>Grade Status :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <input id="GradeBefore" style="display:none;" />
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3 Toolvisible">
+                <select class="ant-select" name="GradeAfter" id="GradeAfter">
+                    <option value="" selected>N/A</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding-top: 10px;">
+                <div>Planning :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding-bottom: 0px;">
+                <select class="ant-select" name="Planning" id="Planning" >
+                    <option value="Daily">Daily</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quarterly">Quarterly</option>
+                    <option value="Semi_annually">Semi_annually</option>
+                    <option value="Yearly">Yearly</option>
+                    <option value="Manually">Manually</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding-top: 10px;">
+                <div><span style="color: red;">*</span>Upload before :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding-top: 6px;">
+                <div class="input-file-container">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label for="file-input-before">Upload File</label>
+                        @*<i style="cursor: pointer;" class="fas fa-times" onclick="OnRemoveFile('before')"></i>*@
+                    </div>
+                    <input type="file" id="file-input-before" accept=".jpg, .jpeg, .png, .heic" class="file-input" onchange="updateFileName('before')" style="display: none;">
+                    <label for="file-input-before" class="file-label">
+                        Choose File
+                        <span id="file-name-before">No file selected</span>
+                    </label>
+                    <div id="image-preview-container-before" style="display: none; flex-direction: column; column-gap: 3px;">
+                        @*<img id="image-preview-before" src="" alt="Image preview" style="width: 25px; height: 25px; object-fit: cover;">*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding-top: 10px;">
+                <div><span style="color: red;">*</span>Upload after :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding-top: 6px;">
+                <div class="input-file-container">
+                    <div style="display: flex; justify-content: space-between;">
+                        <label for="file-input-after">Upload File</label>
+                        @*<i style="cursor: pointer;" class="fas fa-times" onclick="OnRemoveFile('after')"></i>*@
+                    </div>
+                    <input type="file" id="file-input-after" accept=".jpg, .jpeg, .png, .heic" class="file-input" onchange="updateFileName('after')" style="display: none;">
+                    <label for="file-input-after" class="file-label">
+                        Choose File
+                        <span id="file-name-after">No file selected</span>
+                    </label>
+                    <div id="image-preview-container-after" style="display: none; flex-direction: column; column-gap: 3px;">
+                        @*<img id="image-preview-after" src="" alt="Image preview" style="width: 25px; height: 25px; object-fit: cover;">*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-12 mb-3" style="padding-top: 6px;">
+                <table class="table table-bordered table-sm" id="tableCheckList">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th style="width:60%">Detail</th>
+                            <th>Status</th>
+                            <th>Problem</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+
+        <div class="row">
+            <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                <div>Maintenance Status :</div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-12 mb-3">
+                <select class="ant-select" name="MA_Status" id="MA_Status">
+                    <option value="OK" selected>OK</option>
+                    <option value="Not OK">Not OK</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding-top: 10px;">
+                <div>Comment :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding-bottom: 0px;">
+                <textarea class="form-control" style="height:80px" id="Comment"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-sm-10 col-12 mb-3">
+            </div>
+            <div class="col-sm-2 col-12 mb-3" style="display: flex; justify-content: flex-end; column-gap: 5px;" id="buttons">
+                <button class="btn btn-filled" onclick="OnSave()">Save</button>
+                <button class="btn btn-transparent" onclick="OnCancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var data = {};
+    var videoStatus = true;
+    var videoInputDevicesStatus = false;
+    var imageB = [];
+    var imageA = [];
+    var fileMAID = 0;
+    var totalFiles = 0;
+    var completedFiles = 0;
+    $(document).ready(function () {
+        $("#Sparepart_Select").select2();
+        const url = new URL(window.location.href);
+        if (
+                url.searchParams.has('Serial_No') &&
+                url.searchParams.has('Equipment_Name')
+            ) {
+            const serialNo = url.searchParams.get('Serial_No');
+            const equipmentName = url.searchParams.get('Equipment_Name');
+            $('#Serial_No_Input').val(serialNo);
+            checkSerial(serialNo, equipmentName);
+        }
+        var selectedDeviceId;
+        document.getElementById('video').style.display = "none";
+        var codeReader = new ZXing.BrowserMultiFormatReader();
+
+        // List video input devices (cameras)
+        codeReader.listVideoInputDevices()
+            .then(function (videoInputDevices) {
+                console.log("videoInputDevices", videoInputDevices);
+                var sourceSelect = document.getElementById('sourceSelect');
+                selectedDeviceId = videoInputDevices[0].deviceId;
+
+                // Populate the sourceSelect dropdown with available camera devices
+                if (videoInputDevices.length >= 1) {
+                    videoInputDevicesStatus = true;
+                    videoInputDevices.forEach(function (element) {
+                        var sourceOption = document.createElement('option');
+                        sourceOption.text = element.label;
+                        sourceOption.value = element.deviceId;
+                        sourceSelect.appendChild(sourceOption);
+                    });
+
+                    // Update the selected device when the dropdown changes
+                    sourceSelect.onchange = function () {
+                        selectedDeviceId = sourceSelect.value;
+                        // yok
+                        codeReader.reset(); // ปิดกล้องเดิมก่อน
+                        toggleCodeReader(codeReader, selectedDeviceId); // เริ่มกล้องใหม่ตามที่เลือก
+                    };
+
+                    // Show the source selection dropdown if more than one camera is available
+                    var sourceSelectPanel = document.getElementById('sourceSelectPanel');
+                    sourceSelectPanel.style.display = 'block';
+                }
+
+                // Start scanning when the "Start" button is clicked
+                document.getElementById('startButton').addEventListener('click', function () {
+                    event.preventDefault();
+                    toggleCodeReader(codeReader, selectedDeviceId);
+                });
+
+                document.getElementById('sourceSelect').addEventListener('change', function () {
+                    videoStatus = true;
+                    document.getElementById('startButton').click();
+                });
+
+            })
+            .catch(function (err) {
+                //showAlert('error', err, function () { });
+            });
+
+    });
+
+
+    document.getElementById("Serial_No_Input").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            checkSerial(event.target.value);
+        }
+    });
+
+    function checkserialByID(MA_ID) {
+        OnCancel();
+        console.log(imageA);
+        console.log(imageB);
+        data = {};
+        var url = '@Url.Action("Load_MAFixture_By_ID", "Global")';
+        var dataJson = JSON.stringify({ MA_ID: MA_ID })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                document.getElementById('video-message').textContent = "Point the camera at the barcode.";
+                document.getElementById('video-message').style.backgroundColor = '#fffbe6';
+                document.getElementById('video-message').style.borderColor = '#ffe58f';
+                if (response.success) {
+                    if (response.data) {
+                        //prevent json too large
+                        response.data.filesMA = [];
+                        document.getElementById("Equipment_Name_Select").innerHTML = '';
+                        document.getElementById("equipmentNameSelectDiv").style.display = "none";
+                        setFixtureInfo(response.data);
+                        //fetchCustomerName(response.data.Customer);
+                        document.getElementById("Customer").textContent = response.data.Customer_Name;
+                    }
+                } else {
+                    showAlert('error', 'Serial number is not found.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+
+
+    function checkSerial(Serial_No, Equipment_Name) {
+        OnCancel();
+        console.log(imageA);
+        console.log(imageB);
+        data = {};
+        var url = '@Url.Action("Load_MAFixture_By_Serial", "Global")';
+        var dataJson = JSON.stringify({ Serial_No: Serial_No })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                document.getElementById('video-message').textContent = "Point the camera at the barcode.";
+                document.getElementById('video-message').style.backgroundColor = '#fffbe6';
+                document.getElementById('video-message').style.borderColor = '#ffe58f';
+                if (response.success) {
+                    if (response.data) {
+                        //prevent json too large
+                        response.data[0].FilesMAs = [];
+                        document.getElementById("Equipment_Name_Select").innerHTML = '';
+                        document.getElementById("equipmentNameSelectDiv").style.display = "none";
+                        if (response.data.length == 1) {
+                            setFixtureInfo(response.data[0]);
+                            //fetchCustomerName(response.data[0].Customer);
+                            document.getElementById("Customer").textContent = response.data[0].Customer_Name;
+                        } else {
+                            document.getElementById("equipmentNameSelectDiv").style.display = "block";
+                            equipmentName = response.data;
+                            var defaultOption = document.createElement("option");
+                            defaultOption.text = "Select Equipment";
+                            defaultOption.value = "";
+                            defaultOption.disabled = true;
+                            defaultOption.selected = true;
+                            document.getElementById("Equipment_Name_Select").appendChild(defaultOption);
+
+                            equipmentName.forEach(function (item, index) {
+                                var option = document.createElement("option");
+                                option.text = item.Equipment_Name;
+                                option.value = item.MA_ID;
+                                document.getElementById("Equipment_Name_Select").appendChild(option);
+                            });
+                            if (Equipment_Name) {
+                                $('#Equipment_Name_Select option').filter(function () {
+                                    return $(this).text() === Equipment_Name;
+                                }).prop('selected', true);
+                                checkserialByID($('#Equipment_Name_Select').val());
+                            }
+                            else {
+                                document.getElementById("Equipment_Name_Select").addEventListener("change", function (event) {
+                                    checkserialByID(event.target.value);
+                                });
+                            }
+
+                        }
+
+
+                    }
+                } else {
+                    showAlert('error', 'Serial number is not found.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function setFixtureInfo(dataInfo) {
+        var form = document.getElementById("update-form");
+        videoStatus = false;
+        document.getElementById('startButton').click();
+        data = dataInfo;
+        form.style.display = "block";
+        document.getElementById("Serial_No").textContent = dataInfo.Serial_No;
+        document.getElementById("Section").textContent = dataInfo.Section;
+        document.getElementById("LastMA_date").textContent = formatDate(dataInfo.LastMA_date, 2);
+        let productName = data.Product_name ? data.Product_name : "";
+        let items = productName.split(",");
+
+        if (items.length > 2) {
+            document.getElementById("Product_name").textContent = items.slice(0, 2).join(", ") + " And More";
+        } else {
+            document.getElementById("Product_name").textContent = productName;
+        }
+        document.getElementById("Equipment_No").textContent = dataInfo.Equipment_No;
+        document.getElementById("Equipment_Name").textContent = dataInfo.Equipment_Name;
+        document.getElementById("Type_MC").textContent = dataInfo.Type_MC;
+        document.getElementById("Customer").textContent = dataInfo.Customer;
+        document.getElementById("Section").textContent = dataInfo.Section;
+        document.getElementById("Property").textContent = dataInfo.Property;
+        document.getElementById("Responsible_Name").textContent = dataInfo.Responsible_Name;
+        document.getElementById("Description").textContent = dataInfo.Description;
+        document.getElementById("Model").textContent = dataInfo.Model;
+        document.getElementById("Referrence_No").textContent = dataInfo.Referrence_No;
+        document.getElementById("Manufacture").textContent = dataInfo.Manufacture;
+
+        document.getElementById("Pinnumber").textContent = data.Pinnumber;
+        document.getElementById("Lifetime").textContent = data.Lifetime;
+        document.getElementById("Location").textContent = data.Location;
+        document.getElementById("Type_MA").textContent = data.Type_MA;
+        document.getElementById("Serial_No_Input").value = '';
+        if (data.Type_MA === "Tools") {
+            $(".Toolvisible").show();
+        } else {
+            $(".Toolvisible").hide();
+        }
+        document.getElementById("GradeAfter").value = data.Grade_Status;
+        document.getElementById("GradeBefore").value = data.Grade_Status;
+        document.getElementById("GPVProcess").textContent = data.GPVProcess ? data.GPVProcess : "";
+        document.getElementById("ProcessSide").textContent = data.GPVProcess ? data.ProcessSide : "";
+        document.getElementById("WithTopCover").textContent = data.GPVProcess ? data.WithTopCover : "";
+        document.getElementById("WithControlTooling").textContent = data.GPVProcess ? data.WithControlTooling : "";
+        document.getElementById("Grade_Status").textContent = data.GPVProcess ? data.Grade_Status : "";
+        document.getElementById("Dimension").textContent = data.Dimension ? data.Dimension : "";
+        console.log(dataInfo);
+
+        if (dataInfo.Plan_Yearly && dataInfo.Plan_Yearly != "") {
+            $("#Planning").val("Yearly");
+        }
+        if (dataInfo.Plan_Semi_annually && dataInfo.Plan_Semi_annually != "") {
+            $("#Planning").val("Semi_annually");
+        }
+        if (dataInfo.Plan_Quarterly && dataInfo.Plan_Quarterly != "") {
+            $("#Planning").val("Quarterly");
+        }
+        if (dataInfo.Plan_Monthly && dataInfo.Plan_Monthly != "") {
+            $("#Planning").val("Monthly");
+        }
+        if (dataInfo.Plan_Weekly && dataInfo.Plan_Weekly != "") {
+            $("#Planning").val("Weekly");
+        }
+        if (dataInfo.Plan_Daily && dataInfo.Plan_Daily != "") {
+            $("#Planning").val("Daily");
+        }
+        if (dataInfo.Plan_Manually && dataInfo.Plan_Manually != "") {
+            $("#Planning").val("Manually");
+        }
+        LoadSparepart(dataInfo.Serial_No);
+    }
+
+    function LoadSparepart(Serial_No) {
+        var url = '@Url.Action("Load_Sparepart_by_EquipmentName", "Global")';
+        var dataJson = JSON.stringify({ Serial_No: Serial_No });
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: dataJson,
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        response.data.forEach(function (item, index) {
+                            var option = document.createElement("option");
+                            option.text = item.Serial_No;
+                            option.value = item.MA_ID;
+                            document.getElementById("Sparepart_Select").appendChild(option);
+                        });
+
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+        getMasterChecklist($('#Planning').val());
+    }
+
+    function getMasterChecklist(Category) {
+        document.querySelector('#tableCheckList tbody').innerHTML = '';
+        var url = '@Url.Action("Load_Master_Checklist", "Global")';
+        var dataJson = {};
+        dataJson = {
+            Category: Category,
+            Section: data.Section,
+            Type_MA: data.Type_MA,
+            Machinename: data.Equipment_Name
+        }
+        var dataJson = JSON.stringify({ MasterMA: dataJson });
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: dataJson,
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        response.data.forEach(function (item, index) {
+                            var tableBody = document.querySelector('#tableCheckList tbody');
+                            var newRow = tableBody.insertRow();
+
+                            newRow.insertCell(0).innerText = index + 1;
+                            newRow.insertCell(1).innerHTML = '<span>' + item.DetailEng + '</span><br><span style="color: grey;">' + item.DetailThai + '</span>';
+                            newRow.insertCell(2).innerHTML = '<div style="text-align: center;"><i onclick="toggleStatus(this)" id="Status_' + index + '" class="fas fa-circle" style="font-size: 22px; cursor: pointer; color: #1890ff;"></i></div>';
+                            newRow.insertCell(3).innerHTML = '<textarea class="form-control" id="Problem_' + index + '" name="Problem" placeholder="Problem"></textarea>';
+                            newRow.insertCell(4).innerHTML = '<textarea class="form-control" id="Remark_' + index + '" name="Remark" placeholder="Remark"></textarea>';
+                        });
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnCancel() {
+        var dateTimeNow = new Date().format('yyyy-mm-dd HH:MM:ss');
+        document.getElementById("Serial_No").textContent = '';
+        document.getElementById("Section").textContent = '';
+        document.getElementById("LastMA_date").textContent = '';
+        document.getElementById("Product_name").textContent = '';
+        document.getElementById("Equipment_Name").textContent = '';
+        document.getElementById("Type_MC").textContent = '';
+        document.getElementById("Equipment_No").textContent = '';
+        document.getElementById("Planning").value = 'Daily';
+        document.getElementById("Createdate").value = dateTimeNow;
+        document.getElementById("file-input-before").value = '';
+        document.getElementById("file-name-before").textContent = "No file selected";
+        document.getElementById("file-input-after").value = '';
+        document.getElementById("file-name-after").textContent = "No file selected";
+        document.getElementById('image-preview-container-before').style.display = 'none';
+        document.getElementById('image-preview-container-before').innerHTML = "";
+        document.getElementById('image-preview-container-after').style.display = 'none';
+        document.getElementById('image-preview-container-after').innerHTML = "";
+        document.getElementById("GPVProcess").textContent = '';
+        document.getElementById("ProcessSide").textContent = '';
+        document.getElementById("WithTopCover").textContent = '';
+        document.getElementById("WithControlTooling").textContent = '';
+        document.getElementById("Grade_Status").textContent = '';
+        document.getElementById("Dimension").textContent = '';
+        $('#Sparepart_Select').empty();
+        document.getElementById("Sparepart_Select").value = '';
+        var tableBody = document.querySelector('#tableCheckList tbody');
+        tableBody.innerHTML = '';
+        var form = document.getElementById("update-form");
+
+        form.style.display = "none";
+        imageB = [];
+        imageA = [];
+        fileMAID = 0;
+
+    }
+
+    function OnSave() {
+        var updateDate = new Date(document.getElementById("Createdate").value);
+        var dateTimeNow = new Date();
+        var rowCount = $('#tableCheckList tbody tr').length;
+        console.log(rowCount);
+        if (rowCount <= 0) {
+            showAlert("error", "Not Found Maintenance Checklist");
+            return;
+        }
+        if (imageB.length === 0 || imageA.length === 0) {
+            showAlert("error", "Please fill out all required fields.", function () { });
+            return;
+        }
+        if (updateDate.getTime() > dateTimeNow.getTime()) {
+            showAlert("error", "Maintenance Date Should Not More Than Current Date", function () { });
+            return;
+        }
+ 
+        var Sparepart = $('#Sparepart_Select').val();
+        var MA_ID = [];
+        MA_ID.push(data.MA_ID);
+        for (var i = 0; i < Sparepart.length; i++) {
+            MA_ID.push(Sparepart[i]);
+        }
+        totalFiles = MA_ID.length;
+        completedFiles = 0;
+
+        for (var i = 0; i < MA_ID.length; i++) {
+            let filesMA = {
+                MA_ID: parseInt(MA_ID[i]),
+                Name: "NO FILE", // Set accordingly
+                Createdate: document.getElementById("Createdate").value,
+                PlanName: document.getElementById("Planning").value,
+                Format: 'UPLOAD',
+                FilenameBefore: '',
+                FilenameAfter: '',
+                CreateBy: "@ViewData["EMPLOYEE_ID"]",
+                Serial_No: $('#Serial_No').text(),
+                MA_Status: $("#MA_Status").val(),
+                GradeBefore: $("#GradeBefore").val(),
+                GradeAfter: $("#GradeAfter").val(),
+                Comment: $("#Comment").val(),
+            };
+
+            setTimeout(function () {
+                console.log(filesMA);
+                Record_FilesMA(filesMA);
+                completedFiles++;
+            }, i * 1000);
+        }
+    }
+
+    function Record_MAPlan() {
+        formatDateToSave(data);
+        var updateDate = document.getElementById("Createdate").value;
+
+        //data.LastMA_date = updateDate;
+        switch (document.getElementById("Planning").value) {
+            case "Daily":
+                data.Plan_Daily = Dateformat(addDays(updateDate, 1));
+                break;
+
+            case "Weekly":
+                data.Plan_Weekly = Dateformat(addDays(updateDate, 7));
+                break;
+
+            case "Monthly":
+                data.Plan_Monthly = Dateformat(addDays(updateDate, 30));
+                break;
+
+            case "Quarterly":
+                data.Plan_Quarterly = Dateformat(addDays(updateDate, 90));
+                break;
+
+            case "Semi_annually":
+                data.Plan_Semi_annually = Dateformat(addDays(updateDate, 182));
+                break;
+
+            case "Yearly":
+                data.Plan_Yearly = Dateformat(addDays(updateDate, 365));
+                break;
+            case "Manually":
+                data.Plan_Manually = updateDate;
+                break;
+        }
+        data.UpdateBy = "@ViewData["EMPLOYEE_ID"]";
+        data.Grade_Status = $("#GradeAfter").val();
+        var url = '@Url.Action("Record_MAPlan", "Global")';
+        var dataJson = JSON.stringify({ data: data });
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        Record_Image_Before();
+                    }
+                } else {
+                    $("#upload-wait-overlay").hide();
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function Record_FilesMA(data) {
+        $("#upload-wait-overlay").show();
+        var url = '@Url.Action("Record_FilesMA", "Global")';
+        $.ajax({
+            url: url, type: "POST", processData: false,
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    fileMAID = response.data.ID;
+                    var tableBody = document.querySelector('#tableCheckList tbody');
+                    var rows = tableBody.rows;
+                    var dataUpdate = [];
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = rows[i];
+                        var cells = row.cells;
+                        let detailWithLineBreaks = cells[1].innerHTML.replace(/<br\s*\/?>/g, '\n');
+                        let htmlString = detailWithLineBreaks;
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(htmlString, 'text/html');
+                        let item = doc.body.textContent || doc.body.innerText;
+
+                        dataUpdate.push({
+                            FID: response.data.ID,
+                            Checklistdetail: item,
+                            Status: (document.getElementById("Status_" + i).classList.contains('fa-check-circle') ? "True" : "False"),
+                            Problem: document.getElementById("Problem_" + i).value,
+                            Remark: document.getElementById("Remark_" + i).value,
+                        });
+                    }
+
+                    Record_MAChecklistdetail(dataUpdate);
+                }
+                else {
+                    $("#upload-wait-overlay").hide();
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function Record_MAChecklistdetail(data) {
+        var url = '@Url.Action("Record_MAChecklistdetail", "Global")';
+        console.log(data);
+        $.ajax({
+            url: url, type: "POST", processData: false,
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    Record_MAPlan();
+                } else {
+                    $("#upload-wait-overlay").hide();
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function Record_Image_Before() {
+        var dateTimeNow = new Date().format('yyyy-mm-dd HH:MM:ss');
+        var filesBefore = document.getElementById("file-input-before").files;
+        var newFileNamesBefore = [];
+
+        var formDataFileBefore = new FormData();
+        for (var i = 0; i < imageB.length; i++) {
+            formDataFileBefore.append("files", imageB[i].File, imageB[i].File.name);
+        }
+        formDataFileBefore.append("filesMA", fileMAID.toString());
+        formDataFileBefore.append("type", 'Before');
+        var url = '@Url.Action("Upload", "Global")';
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formDataFileBefore,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    newFileNamesBefore = response.data;
+
+                    url = '@Url.Action("Record_ImageBefore", "Global")';
+                    var datJson = [];
+                    newFileNamesBefore.forEach(function (item, index) {
+                        datJson.push({
+                            FilesMA_ID: fileMAID,
+                            Image_Name: item,
+                            Date: dateTimeNow
+                        });
+                    });
+
+                    $.ajax({
+                        url: url, type: "POST", processData: false,
+                        data: JSON.stringify(datJson),
+                        dataType: 'json',
+                        contentType: "application/json; charset=utf8",
+                        dataType: "json",
+                        async: true,
+                        success: function (response) {
+                            if (response.success) {
+                                    Record_Image_After();
+                            } else {
+                                showAlert('error', response.word, function () { });
+                                $("#upload-wait-overlay").hide();
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred while uploading before files. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function Record_Image_After() {
+        var dateTimeNow = new Date().format('yyyy-mm-dd HH:MM:ss');
+        var filesAfter = document.getElementById("file-input-after").files;
+        var newFileNamesAfter = [];
+
+        var formDataFileAfter = new FormData();
+        for (var i = 0; i < imageA.length; i++) {
+            formDataFileAfter.append("files", imageA[i].File, imageA[i].File.name);
+        }
+        formDataFileAfter.append("filesMA", fileMAID.toString());
+        formDataFileAfter.append("type",'After');
+        var url = '@Url.Action("Upload", "Global")';
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formDataFileAfter,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    newFileNamesAfter = response.data;
+
+                    url = '@Url.Action("Record_ImageAfter", "Global")';
+                    var datJson = [];
+                    newFileNamesAfter.forEach(function (item, index) {
+                        datJson.push({
+                            FilesMA_ID: fileMAID,
+                            Image_Name: item ,
+                            Date: dateTimeNow
+                        });
+                    });
+
+                    $.ajax({
+                        url: url, type: "POST", processData: false,
+                        data: JSON.stringify(datJson),
+                        dataType: 'json',
+                        contentType: "application/json; charset=utf8",
+                        dataType: "json",
+                        async: true,
+                        success: function (response) {
+                            if (response.success) {
+                                if (completedFiles === totalFiles) {
+                                    $("#upload-wait-overlay").hide();
+                                    showAlert('success', response.word, function () { });
+                                    OnCancel();
+                                }
+                            } else {
+                                showAlert('error', response.word, function () { });
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred while uploading before files. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function toggleStatus(icon) {
+        if (icon.classList.contains('fa-check-circle')) {
+            icon.classList.remove('fa-check-circle');
+            icon.classList.add('fa-circle');
+        } else {
+            icon.classList.remove('fa-circle');
+            icon.classList.add('fa-check-circle');
+        }
+    }
+
+    //function OnRemoveFile(bottom) {
+    //    document.getElementById("file-input-" + bottom).value = '';
+    //    document.getElementById("file-name-" + bottom).textContent = 'No file selected';
+    //    var imagePreviewContainer = document.getElementById('image-preview-container-' + bottom);
+    //    imagePreviewContainer.style.display = 'none';
+    //}
+    
+    function updateFileName(bottom) {
+        var fileInput = document.getElementById("file-input-" + bottom);
+        var fileNameDisplay = document.getElementById("file-name-" + bottom);
+        var imagePreviewContainer = document.getElementById('image-preview-container-' + bottom);
+
+        if (fileInput.files.length > 0) {
+            var file = fileInput.files[0];
+            var fileName = file.name;
+            var ext = file.name.split('.').pop().toLowerCase();
+            var dateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+            var allowedTypes = [
+                'image/jpeg',
+                'image/png',
+                'image/heic',
+                'image/heif',
+                'application/octet-stream'
+            ];
+
+            // ฟังก์ชันหลัก: ใช้ไฟล์ (หลัง convert หรือปกติ)
+            function processFile(finalFile, finalName) {
+                var idImage;
+                if (bottom == "before") {
+                    idImage = imageB.length;
+                    imageB.push({
+                        ID: idImage,
+                        Image_Name: finalName,
+                        File: finalFile,
+                        Date: dateTimeNow
+                    });
+                    fileNameDisplay.textContent = (idImage + 1) + " selected";
+                } else {
+                    idImage = imageA.length;
+                    imageA.push({
+                        ID: idImage,
+                        Image_Name: finalName,
+                        File: finalFile,
+                        Date: dateTimeNow
+                    });
+                    fileNameDisplay.textContent = (idImage + 1) + " selected";
+                }
+
+                // Preview
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var previewWrapper = document.createElement('div');
+                    previewWrapper.classList.add('image-preview-wrapper');
+
+                    var imagePreview = document.createElement('img');
+                    imagePreview.classList.add('image-preview');
+                    imagePreview.src = e.target.result;
+
+                    var imageName = document.createElement('span');
+                    imageName.classList.add('image-name');
+                    imageName.textContent = finalName;
+
+                    var crossIcon = document.createElement('span');
+                    crossIcon.textContent = '×';
+                    crossIcon.classList.add('cross-icon');
+
+                    crossIcon.onclick = function () {
+                        previewWrapper.remove();
+                        if (bottom == "before") {
+                            var newImageB = [];
+                            for (var i = 0; i < imageB.length; i++) {
+                                if (imageB[i].ID !== idImage) {
+                                    newImageB.push(imageB[i]);
+                                }
+                            }
+                            imageB = newImageB;
+                            fileNameDisplay.textContent = imageB.length == 0 ? "No file selected" : ((imageB.length) + " selected");
+                        } else {
+                            var newImageA = [];
+                            for (var i = 0; i < imageA.length; i++) {
+                                if (imageA[i].ID !== idImage) {
+                                    newImageA.push(imageA[i]);
+                                }
+                            }
+                            imageA = newImageA;
+                            fileNameDisplay.textContent = imageA.length == 0 ? "No file selected" : ((imageA.length) + " selected");
+                        }
+                    };
+
+                    previewWrapper.appendChild(imagePreview);
+                    previewWrapper.appendChild(imageName);
+                    previewWrapper.appendChild(crossIcon);
+
+                    imagePreviewContainer.appendChild(previewWrapper);
+                    imagePreviewContainer.style.display = 'flex';
+                };
+                reader.readAsDataURL(finalFile);
+            }
+
+            // ถ้าเป็น HEIC/HEIF → แปลงก่อน
+            if (ext === "heic" || ext === "heif") {
+                $("#upload-wait-overlay").show();
+
+                heic2any({ blob: file, toType: "image/jpeg" })
+                    .then(function (resultBlob) {
+                        var jpegFile = new File([resultBlob], fileName.replace(/\.heic$|\.heif$/i, ".jpg"), {
+                            type: "image/jpeg"
+                        });
+                        $("#upload-wait-overlay").hide();
+                        console.log("✅ Converted to JPEG:", jpegFile);
+                        processFile(jpegFile, jpegFile.name); // ใช้ไฟล์ใหม่แทน
+                    })
+                    .catch(function (err) {
+                        $("#upload-wait-overlay").hide();
+                        console.error("❌ HEIC convert error:", err);
+                        showAlert('error', 'Cannot convert HEIC file.', function () { });
+                    });
+            } else {
+                // ไฟล์ทั่วไป (jpeg, png)
+                if (allowedTypes.indexOf(file.type) !== -1) {
+                    processFile(file, fileName);
+                } else {
+                    showAlert('error', 'Please select a valid image file (HEIC, JPEG, JPG, or PNG).', function () { });
+                    fileInput.value = '';
+                    fileNameDisplay.textContent = "No file selected";
+                    imagePreviewContainer.style.display = 'none';
+                }
+            }
+        }
+    }
+    $(document).ready(function () {
+        $('#Planning').change(function () {
+            var Category = $(this).val(); // Get the selected value
+            getMasterChecklist(Category);
+        });
+    });
+
+</script>

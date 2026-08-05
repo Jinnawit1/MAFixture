@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewBag.Title = "ManageMachineList";
+}
+<h3 id="topic"></h3>
+<hr />
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Machine Name:</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input class="form-control" id="Machinename" name="Machinename" placeholder="Machine Name" />@*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Section :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <select class="ant-select" name="Section" id="Section"></select>
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-7 col-sm-8 col-12 mb-3" style="display: flex; justify-content: flex-end; column-gap: 5px; padding-top: 5px;">
+            <button onclick="OnSave()" class="btn btn-filled">Save</button>
+            <button onclick="onCancel()" class="btn btn-transparent">Cancel</button>
+        </div>
+    </div>
+</div>
+<script>
+    var data = {};
+    $(document).ready(function () {
+        var topic = document.getElementById("topic");
+        if ("@ViewData["ID"]" != "") {
+            topic.textContent = "Edit Machine";
+        }
+        else topic.textContent = "Add Machine";
+        loadAllLists();
+    });
+    function loadAllLists() {
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        lists = response.data;
+
+                        lists.Department.forEach(function (item, index) {
+                            var option = document.createElement("option");
+                            option.text = item.Section;
+                            option.value = item.Section;
+                            document.getElementById("Section").appendChild(option);
+                        });
+                        onLoad();
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+    function onLoad() {
+        var url = '@Url.Action("Load_MachineList_By_ID", "Global")';
+        var dataJson = JSON.stringify({ ID: "@ViewData["ID"]" })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        data = response.data;
+                        document.getElementById("Section").value = response.data.Section;
+                        document.getElementById("Machinename").value = response.data.Machinename;
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+    
+    function OnSave() {
+        var Machinename = document.getElementById("Machinename").value.trim();
+        var Section = document.getElementById("Section").value;
+        var formData = {};
+
+        if (Machinename == "") {
+            return showAlert('error', "Please fill out all fields.", function () { });
+        }
+
+        if ("@ViewData["ID"]" != "") {
+            formData = {
+                ID: data.ID,
+                Machinename: Machinename,
+                Section: Section,
+                
+            }
+        } else {
+            formData = {
+                Machinename: Machinename,
+                Section: Section,
+                
+            }
+    }
+    Record_MachineList(formData);
+    }
+    function Record_MachineList(data) {
+        var url = '@Url.Action("Record_MachineList", "Global")';
+        var dataJson = JSON.stringify(data)
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    showAlert('success', response.word, function () { });
+                    onCancel();
+                } else {
+
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("aa");
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+    function onCancel() {
+        document.location = '@Url.Action("MachineList", "Global")';
+    }
+
+</script>

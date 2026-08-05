@@ -1,0 +1,906 @@
+﻿@{
+    ViewBag.Title = "Maintenance History";
+}
+
+<style>
+    .shown {
+        background-color: #e6f7ff !important;
+    }
+
+    .shown-child {
+        background-color: #e6f7ff !important;
+    }
+</style>
+
+<h3>Maintenance History</h3>
+<hr />
+
+<div class="col-custom" id="video-col-custom" style="display: none;">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12 mb-3">
+            <div id="sourceSelectPanel" style="display:none;">
+                <label for="sourceSelect">Change video source:</label>
+                <select id="sourceSelect" style="max-width:400px" class="ant-select"></select>
+            </div>
+            <video id="video" height="400" style="border: 1px solid gray; width: 100%; margin: 5px 0px;"></video>
+            <div id="video-message" style="width: 100%; text-align: center; background-color: #fffbe6; padding: 5px; border: 1px solid #ffe58f; border-radius: 4px;">
+                Point the camera at the barcode.
+            </div>
+
+            <hr />
+        </div>
+    </div>
+</div>
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-2 col-sm-6 col-12 mb-3">
+            <a class="btn btn-filled" onclick="toggleVideo()" style="margin-top: 3px; width: 100%;" id="startButton" href="javascript:void(0)"><i style="font-size: 18px;" id="video-icon" class="fas fa-video-slash"></i></a>
+        </div>
+        <div class="col-md-4 col-sm-6 col-12 mb-3">
+            <input type="text" class="form-control" id="Serial_No_Input" name="Serial_No_Input" placeholder="Scan serial here..." autocomplete="off" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+
+<div class="col-custom" style="display: none;" id="equipmentNameSelectDiv">
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+            <div>Select equipment name :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <select class="ant-select" name="Equipment_Name_Select" id="Equipment_Name_Select"></select>
+        </div>
+    </div>
+</div>
+<div id="update-form" style="display: none;">
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Serial no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Serial_No"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Equipment no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Equipment_No"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Equipment name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Equipment_Name"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Section :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Section"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Type :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Type_MC"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Last MA Date :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="LastMA_date"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Customer :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Customer"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Product name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Product_name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Model :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Model"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Referrence_No :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Referrence_No"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Property :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Property"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Manufacture :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Manufacture"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Responsible_Name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Responsible_Name"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Description :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Description"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Pin No. :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Pinnumber"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Lifetime :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Lifetime"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Location :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Location"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Maintenance Type:</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Type_MA"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom Toolvisible">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>GPV Process :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="GPVProcess"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Process Side:</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="ProcessSide"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom Toolvisible">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>With Top Cover :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="WithTopCover"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>With Control Tooling:</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="WithControlTooling"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-custom Toolvisible">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Grade Status :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Grade_Status"></span>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-3">
+                <div>Dimension :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <span id="Dimension"></span>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-sm-12 col-12 mb-3">
+                <hr />
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-1 col-sm-2 col-3 mb-3" style="background-color: whitesmoke; border-bottom-right-radius: 50px; border-top-right-radius: 50px; color: black;">
+                <h4>History</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+                    @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
+                    <table id="TableFilesMA" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var data = {};
+    var videoStatus = true;
+    var videoInputDevicesStatus = false;
+
+    $(document).ready(function () {
+        if ("@ViewData["MA_ID"]" != "") {
+            checkserialByID("@ViewData["MA_ID"]");
+        }
+    });
+
+    window.onload = function () {
+        var selectedDeviceId;
+        document.getElementById('video').style.display = "none";
+        var codeReader = new ZXing.BrowserMultiFormatReader();
+
+        // List video input devices (cameras)
+        codeReader.listVideoInputDevices()
+            .then(function (videoInputDevices) {
+                var sourceSelect = document.getElementById('sourceSelect');
+                selectedDeviceId = videoInputDevices[0].deviceId;
+
+                // Populate the sourceSelect dropdown with available camera devices
+                if (videoInputDevices.length >= 1) {
+                    videoInputDevicesStatus = true;
+                    videoInputDevices.forEach(function (element) {
+                        var sourceOption = document.createElement('option');
+                        sourceOption.text = element.label;
+                        sourceOption.value = element.deviceId;
+                        sourceSelect.appendChild(sourceOption);
+                    });
+
+                    // Update the selected device when the dropdown changes
+                    sourceSelect.onchange = function () {
+                        selectedDeviceId = sourceSelect.value;
+                        // yok
+                        codeReader.reset(); // ปิดกล้องเดิมก่อน
+                        toggleCodeReader(codeReader, selectedDeviceId); // เริ่มกล้องใหม่ตามที่เลือก
+                    };
+
+                    // Show the source selection dropdown if more than one camera is available
+                    var sourceSelectPanel = document.getElementById('sourceSelectPanel');
+                    sourceSelectPanel.style.display = 'block';
+                }
+
+                // Start scanning when the "Start" button is clicked
+                document.getElementById('startButton').addEventListener('click', function () {
+                    event.preventDefault();
+                    toggleCodeReader(codeReader, selectedDeviceId);
+                });
+
+                document.getElementById('sourceSelect').addEventListener('change', function () {
+                    videoStatus = true;
+                    document.getElementById('startButton').click();
+                });
+
+            })
+            .catch(function (err) {
+                //showAlert('error', err, function () { });
+            });
+    };
+
+    document.getElementById("Serial_No_Input").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            checkSerial(event.target.value);
+        }
+    });
+
+    $(document).on('click', '.show-images', function () {
+        var images = JSON.parse($(this).attr('data-images')); // Get the image data from the button's data attribute
+        console.log(images);
+        var modalContent = '<div style="display: flex; flex-wrap: wrap; justify-content: flex-start; margin: 20px; max-height: 70vh; overflow-y: auto;">';
+        images.forEach(function (fileName) {
+            modalContent += '<div style="text-align: center; margin: 5px;">' +
+                                '<img src="/MATesting/Uploads/' + fileName.FilesMA_ID + '/' + fileName.Image_Name + '" style="width: 200px; height: auto; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;" class="open-image" data-image="/MATesting/Uploads/' + fileName.FilesMA_ID + '/' + fileName.Image_Name + '" />' +
+                            '</div>';
+        });
+        modalContent += '</div>';
+
+        // Create a simple modal or lightbox
+        var modal = '<div class="modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9999;">' +
+                        '<div style="background: white; padding: 20px; border-radius: 8px;">' +
+                            modalContent +
+                            '<button onclick="closeModal()" style="margin-top: 20px;" class="btn btn-filled">Close</button>' +
+                        '</div>' +
+                     '</div>';
+
+        $('body').append(modal);
+    });
+
+    $(document).on('click', '.open-image', function () {
+        var imageSrc = $(this).attr('data-image'); // Get the image URL
+        window.open(imageSrc, '_blank'); // Open the image in a new tab
+    });
+
+    function closeModal() {
+        $('.modal').remove(); // Remove the modal when close button is clicked
+    }
+
+    function checkserialByID(MA_ID) {
+        data = {};
+        var form = document.getElementById("update-form");
+        form.style.display = "none";
+        document.getElementById("Serial_No").textContent = '';
+        document.getElementById("Section").textContent = '';
+        document.getElementById("LastMA_date").textContent = '';
+        document.getElementById("Product_name").textContent = '';
+        document.getElementById("Equipment_Name").textContent = '';
+        document.getElementById("Type_MC").textContent = '';
+        document.getElementById("Customer").textContent = '';
+        document.getElementById("Section").textContent = '';
+        document.getElementById("Property").textContent = '';
+        document.getElementById("Responsible_Name").textContent = '';
+        document.getElementById("Description").textContent = '';
+        document.getElementById("Model").textContent = '';
+        document.getElementById("Referrence_No").textContent = '';
+        document.getElementById("Manufacture").textContent = '';
+
+        document.getElementById("Pinnumber").textContent = '';
+        document.getElementById("Lifetime").textContent = '';
+        document.getElementById("Location").textContent = '';
+        document.getElementById("Type_MA").textContent = '';
+        document.getElementById("GPVProcess").textContent = '';
+        document.getElementById("ProcessSide").textContent = '';
+        document.getElementById("WithTopCover").textContent = '';
+        document.getElementById("WithControlTooling").textContent = '';
+        document.getElementById("Grade_Status").textContent = '';
+        document.getElementById("Dimension").textContent = '';
+        var url = '@Url.Action("Load_MAFixture_By_ID", "Global")';
+        var dataJson = JSON.stringify({ MA_ID: MA_ID })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                document.getElementById('video-message').textContent = "Point the camera at the barcode.";
+                document.getElementById('video-message').style.backgroundColor = '#fffbe6';
+                document.getElementById('video-message').style.borderColor = '#ffe58f';
+                if (response.success) {
+                    if (response.data) {
+                        
+                        document.getElementById("Equipment_Name_Select").innerHTML = '';
+                        document.getElementById("equipmentNameSelectDiv").style.display = "none";
+                        setFixtureInfo(response.data);
+                        // Call Load_Customer_By_ID and fetch customer name
+                        //fetchCustomerName(response.data.Customer_Name);
+                        document.getElementById("Customer").textContent = response.data.Customer_Name;
+                    }
+                } else {
+                    showAlert('error', 'Serial number is not found.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    @*function fetchCustomerName(customerID) {
+        var url = '@Url.Action("Load_Customer_By_ID", "Global")';
+        var dataJson = JSON.stringify({ ID: customerID });
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    // Update the Customer field in the UI
+                    document.getElementById("Customer").textContent = response.data.Cust_name; // Assuming `Name` is a field in the Customer object
+                } else {
+                    document.getElementById("Customer").textContent = 'Customer not found';
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred while fetching the customer name. Please try again.', function () { });
+            }
+        });
+    }*@
+
+
+    function checkSerial(Serial_No) {
+        data = {};
+        var form = document.getElementById("update-form");
+        form.style.display = "none";
+        document.getElementById("Serial_No").textContent = '';
+        document.getElementById("Section").textContent = '';
+        document.getElementById("LastMA_date").textContent = '';
+        document.getElementById("Product_name").textContent = '';
+        document.getElementById("Equipment_Name").textContent = '';
+        document.getElementById("Type_MC").textContent = '';
+        document.getElementById("Customer").textContent = '';
+        document.getElementById("Section").textContent = '';
+        document.getElementById("Property").textContent = '';
+        document.getElementById("Responsible_Name").textContent = '';
+        document.getElementById("Description").textContent = '';
+        document.getElementById("Model").textContent = '';
+        document.getElementById("Referrence_No").textContent = '';
+        document.getElementById("Manufacture").textContent = '';
+
+        document.getElementById("Pinnumber").textContent = '';
+        document.getElementById("Lifetime").textContent = '';
+        document.getElementById("Location").textContent = '';
+        document.getElementById("Type_MA").textContent = '';
+        document.getElementById("GPVProcess").textContent = '';
+        document.getElementById("ProcessSide").textContent = '';
+        document.getElementById("WithTopCover").textContent = '';
+        document.getElementById("WithControlTooling").textContent = '';
+        document.getElementById("Grade_Status").textContent = '';
+        document.getElementById("Dimension").textContent = '';
+        var url = '@Url.Action("Load_MAFixture_By_Serial", "Global")';
+        var dataJson = JSON.stringify({ Serial_No: Serial_No })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                document.getElementById('video-message').textContent = "Point the camera at the barcode.";
+                document.getElementById('video-message').style.backgroundColor = '#fffbe6';
+                document.getElementById('video-message').style.borderColor = '#ffe58f';
+                if (response.success) {
+                    if (response.data) {
+                        document.getElementById("Equipment_Name_Select").innerHTML = '';
+                        document.getElementById("equipmentNameSelectDiv").style.display = "none";
+                        if (response.data.length == 1) {
+                            setFixtureInfo(response.data[0]);
+                            //fetchCustomerName(response.data[0].Customer_Name);
+                            document.getElementById("Customer").textContent = response.data[0].Customer_Name;
+                        } else {
+                            document.getElementById("equipmentNameSelectDiv").style.display = "block";
+                            equipmentName = response.data;
+                            var defaultOption = document.createElement("option");
+                            defaultOption.text = "Select Equipment";  // Placeholder text
+                            defaultOption.value = "";  // Empty value, ensuring nothing is selected by default
+                            defaultOption.disabled = true;  // Make the default option unselectable
+                            defaultOption.selected = true;  // Ensure it's selected by default, but user cannot choose it
+                            document.getElementById("Equipment_Name_Select").appendChild(defaultOption);
+
+                            equipmentName.forEach(function (item, index) {
+                                var option = document.createElement("option");
+                                option.text = item.Equipment_Name;
+                                option.value = item.MA_ID;
+                                document.getElementById("Equipment_Name_Select").appendChild(option);
+                            });
+
+                            document.getElementById("Equipment_Name_Select").addEventListener("change", function (event) {
+                                checkserialByID(event.target.value);
+                            });
+                        }
+                    }
+                } else {
+                    showAlert('error', 'Serial number is not found.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function setFixtureInfo(dataInfo) {
+        videoStatus = false;
+        var form = document.getElementById("update-form");
+        document.getElementById('startButton').click();
+        data = dataInfo;
+        form.style.display = "block";
+        document.getElementById("Serial_No").textContent = data.Serial_No;
+        document.getElementById("Section").textContent = data.Section;
+        document.getElementById("LastMA_date").textContent = formatDate(data.LastMA_date, 2);
+        let productName = data.Product_name ? data.Product_name : "";
+        let items = productName.split(",");
+
+        if (items.length > 2) {
+            document.getElementById("Product_name").textContent = items.slice(0, 2).join(", ") + " And More";
+        } else {
+            document.getElementById("Product_name").textContent = productName;
+        }
+        document.getElementById("Equipment_No").textContent = data.Equipment_No;
+        document.getElementById("Equipment_Name").textContent = data.Equipment_Name;
+        document.getElementById("Type_MC").textContent = data.Type_MC;
+        document.getElementById("Customer").textContent = data.Customer;
+        document.getElementById("Section").textContent = data.Section;
+        document.getElementById("Property").textContent = data.Property;
+        document.getElementById("Responsible_Name").textContent = data.Responsible_Name;
+        document.getElementById("Description").textContent = data.Description;
+        document.getElementById("Model").textContent = data.Model;
+        document.getElementById("Referrence_No").textContent = data.Referrence_No;
+        document.getElementById("Manufacture").textContent = data.Manufacture;
+
+        document.getElementById("Pinnumber").textContent = data.Pinnumber;
+        document.getElementById("Lifetime").textContent = data.Lifetime;
+        document.getElementById("Location").textContent = data.Location;
+        document.getElementById("Type_MA").textContent = data.Type_MA;
+        document.getElementById("Serial_No_Input").value = '';
+   
+        if (data.Type_MA === "Tools") {
+            $(".Toolvisible").show();
+        } else {
+            $(".Toolvisible").hide();
+        }
+        console.log(data);
+        document.getElementById("GPVProcess").textContent = data.GPVProcess ? data.GPVProcess : "";
+        document.getElementById("ProcessSide").textContent = data.GPVProcess ? data.ProcessSide : "";
+        document.getElementById("WithTopCover").textContent = data.GPVProcess ? data.WithTopCover : "";
+        document.getElementById("WithControlTooling").textContent = data.GPVProcess ? data.WithControlTooling : "";
+        document.getElementById("Grade_Status").textContent = data.GPVProcess ? data.Grade_Status : "";
+        document.getElementById("Dimension").textContent = data.Dimension ? data.Dimension : "";
+
+        OnLoad();
+    }
+
+    function OnLoad() {
+        var dataSet = [];
+        var dataFull = [];
+        $(data.FilesMAs).each(function (index, item) {
+            var newItem = [];
+            //var customer = response.data.Customer;
+
+            newItem.push(index + 1);
+            newItem.push(item.PlanName || '');
+            newItem.push(formatDate(item.Createdate, 1));
+            newItem.push(item.Name != null && item.Name != "NO FILE" ? item.Name : '');
+            newItem.push(item.ID || '');
+            newItem.push(item.ID || '');
+            newItem.push(item.Createby || '');
+            newItem.push(item.MA_Status || '');
+            newItem.push(item.Comment || '');
+            //customer.forEach(function (customerItem, index) {
+            //    if (item.Customer == customerItem.ID) newItem.push(customerItem.Cust_name);
+            //});
+
+            dataSet.push(newItem);
+            dataFull.push(item);
+        });
+
+        // Destroy the existing DataTable if it exists
+        if ($.fn.dataTable.isDataTable('#TableFilesMA')) {
+            $('#TableFilesMA').DataTable().clear().destroy();
+        }
+        $('#TableFilesMA').DataTable({
+            order: [[0, "desc"]],
+            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            iDisplayLength: 100,
+            data: dataSet, // This is the array of data that contains your standard packing items
+            dom: 'lBfrtip',
+            fixedHeader: false,
+            autoWidth: true,
+            buttons: [],
+            scrollX: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    autoFilter: true,
+                    exportOptions: {
+                        format: {
+                            body: function (data, row, col, node) {
+                                if (data && /<[^>]+>/g.test(data)) {
+                                    if (data && /<br\s*\/?>/i.test(data)) {
+                                        data = data.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with a space
+                                        return data;
+                                    } else {
+                                        let htmlString = data;
+                                        let parser = new DOMParser();
+                                        let doc = parser.parseFromString(htmlString, 'text/html');
+                                        let item = doc.body.textContent || doc.body.innerText;
+                                        return item;
+                                    }
+                                }
+                                else return data;
+                            }
+                        }
+                    }
+                }
+            ],
+            columns: [
+                 {
+                     title: "No.",
+                     orderable: false,
+                     render: function (data, type, row, meta) {
+                         return '<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i>' + data;
+                     }
+                 },
+                { title: "Plan" },
+                { title: "Date" },
+                {
+                    title: "File",
+                    orderable: false,
+                    render: function (data, type, row) {
+                        if (data) {
+                            return '<div style="text-align: center;">' +
+                                '<a style="color: #1890ff; font-size: 22px; cursor: pointer;" onclick="renderFile(\'' + row[4] + '\')">' +
+                                '<i class="fas fa-file-pdf"></i>' +
+                                '</a>' +  
+                                '</div>';
+                        } else {
+                            return 'No files';
+                        }
+                    }
+                },
+                {
+                    title: "Image Before",
+                    orderable: false,
+                    render: function (dataid, type, row) {
+                        var imageBItem = null;
+                        // Use forEach loop to find the matching item
+                        if (data.FilesMAs && data.FilesMAs.length > 0) {
+                            data.FilesMAs.forEach(function (item) {
+                                if (item.ID == dataid) {
+                                    imageBItem = item.ImageBefores;
+                                }
+                            });
+                        }
+
+                        if (imageBItem && imageBItem.length > 0) {
+                            var button = '<button class="btn btn-filled show-images" data-images=\'' + JSON.stringify(imageBItem) + '\'>View Images</button>';
+                            return button;
+                        } else {
+                            return 'No files';
+                        }
+                    }
+                },
+                {
+                    title: "Image After",
+                    orderable: false,
+                    render: function (dataid, type, row) {
+                        var imageAItem = null;
+                        // Use forEach loop to find the matching item
+                        if (data.FilesMAs && data.FilesMAs.length > 0) {
+                            data.FilesMAs.forEach(function (item) {
+                                if (item.ID == dataid) {
+                                    imageAItem = item.ImageAfters;
+                                }
+                            });
+                        }
+
+                        if (imageAItem && imageAItem.length > 0) {
+                            var button = '<button class="btn btn-filled show-images" data-images=\'' + JSON.stringify(imageAItem) + '\'>View Images</button>';
+                            return button;
+                        } else {
+                            return 'No files';
+                        }
+                    }
+                },
+                { title: "CreateBy" },
+                { title: "MA Status" },
+                { title: "Comment" }
+            ],
+            deferRender: true,
+            destroy: true,
+            createdRow: function (row, data, dataIndex) {
+                // Add a click handler to the first column for expanding/collapsing the row
+                $(row).on('click', 'td', function () {
+                    if ($(this).index() === 0) {
+                        var tr = $(this).closest('tr');
+                        var row = $('#TableFilesMA').DataTable().row(tr);
+
+                        // Toggle the row's child visibility
+                        if (row.child.isShown()) {
+                            // If the row is already expanded, collapse it
+                            row.child.hide();
+                            tr.removeClass('shown');
+                            $(row.child()).removeClass('shown-child');
+                            $(tr).find('td:first').html('<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                        } else {
+                            // If the row is collapsed, expand it
+                            row.child(formatDetails(dataFull[dataIndex], dataFull[dataIndex].MAChecklistdetails)).show();
+
+                            $(row.child()).addClass('shown-child');
+                            tr.addClass('shown');
+                            $(tr).find('td:first').html('<i class="fas fa-caret-down" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                        }
+                    }
+                });
+            },
+            rowCallback: function (row, data, index) {
+                // Add an indicator or style to the row to show it's expandable/collapsible
+                $(row).find('td:first').addClass('expandable');
+            }
+        });
+
+    }
+
+    function formatDetails(data, checklistData) {
+        // Add the table HTML
+        var detailsHtml = '<button onclick="exportTableToExcel(\'' + data.ID + '\')" class="btn btn-filled" style="margin-bottom: 3px;">Export to Excel</button>';
+        detailsHtml += '<table id="table_' + data.ID + ' " class="table table-bordered table-hovered table-striped child-table">';
+
+        // Add the table header (thead)
+        detailsHtml += '<thead>' +
+            '<tr>' +
+                '<th>No</th>' +
+                '<th>Checklist Detail</th>' +
+                '<th>Status</th>' +
+                '<th>Problem</th>' +
+                '<th>Remark</th>' +
+            '</tr>' +
+        '</thead>';
+
+        // Add the table body (tbody)
+        detailsHtml += '<tbody>';
+        if (checklistData.length > 0) {
+            checklistData.forEach(function (item, index) {
+                detailsHtml += '<tr>' +
+                    '<td>' + (index + 1) + '</td>' +
+                    '<td>' + item.Checklistdetail.replace(/\n/g, '<br>') + '</td>' +
+                    '<td style="text-align: center;">' + (item.Status == "True" ? '<i class="fas fa-check-circle" style="font-size: 22px;"></i>' : '<i class="fas fa-circle" style="font-size: 22px;"></i>') + '</td>' +
+                    '<td>' + (item.Problem || '') + '</td>' +
+                    '<td>' + (item.Remark || '') + '</td>' +
+                '</tr>';
+            });
+        } else {
+            detailsHtml += '<tr><td colspan="5" style="text-align: center; color: red;">No checklist detail data</td></tr>';
+        }
+
+        detailsHtml += '</tbody>';
+        detailsHtml += '</table>';
+        var tableString = detailsHtml;
+
+        return detailsHtml;
+    }
+
+    function exportTableToExcel(id) {
+        let tableData = [];
+        let dataTopic = {};
+
+        data.FilesMAs.forEach(function (item) {
+            if (item.ID == id) {
+                dataTopic = item;
+                if (Array.isArray(item.MAChecklistdetails)) {
+                    item.MAChecklistdetails.forEach(function (checklistItem) {
+                        if (checklistItem.Status == "True") {
+                            tableData.push({
+                                Checklistdetail: checklistItem.Checklistdetail || '',
+                                Status:  "✓",
+                                Problem: checklistItem.Problem || '',
+                                Remark: checklistItem.Remark || '',
+                            });
+                        }
+                    });
+                }
+            }
+        });
+
+        if (tableData.length === 0) {
+            showAlert('error', 'No checklist details found for the given ID.', function () { });
+            return;
+        }
+
+        // Create an Excel workbook using SheetJS
+        let wb = XLSX.utils.book_new();
+
+        // Create title/metadata data
+        let metadata = [
+            ["Serial No", data.Serial_No],
+            ["Equipment No", data.Equipment_No],
+            ["Equipment Name", data.Equipment_Name],
+            ["Poduct Name", data.Product_name],
+            ["Type", data.Type_MC],
+            ["Maintenance Date", formatDate(dataTopic.Createdate, "1")],
+            ["Plan Name", dataTopic.PlanName],
+            [], // Empty row for spacing
+        ];
+
+        // Convert the metadata into a sheet
+        let metadataWs = XLSX.utils.aoa_to_sheet(metadata);
+
+        // Calculate column widths for the metadata sheet
+        const metadataColWidths = metadata[0].map(function (col, idx) {
+            let maxLength = col.length;  // Start with the length of the header
+            metadata.forEach(function (row) {
+                let cellValue = row[idx] || '';
+                maxLength = Math.max(maxLength, cellValue.length);
+            });
+            // Add extra space for padding (optional)
+            return { wch: maxLength + 2 };
+        });
+
+        // Apply the column widths to the metadata sheet
+        metadataWs['!cols'] = metadataColWidths;
+
+        // Add the metadata sheet to the workbook
+        XLSX.utils.book_append_sheet(wb, metadataWs, "Maintenance Detail");
+
+        // Convert the tableData into a sheet with the correct column headers
+        let ws = XLSX.utils.json_to_sheet(tableData, {
+            header: ["Checklistdetail", "Status", "Problem", "Remark"], // Define the header order explicitly
+        });
+
+        // Calculate column widths for the checklist detail sheet
+        const checklistColWidths = ["Checklistdetail", "Status", "Problem", "Remark"].map(function (col) {
+            let maxLength = 0;
+            tableData.forEach(function (row, index) {
+                let cellValue;
+                if (index == 1) cellValue = 'Status';
+                else cellValue = row[col] || '';
+                maxLength = Math.max(maxLength, cellValue.length);
+            });
+            // Add extra space for padding (optional)
+            return { wch: maxLength + 2 };
+        });
+
+        // Apply the calculated column widths to the checklist detail sheet
+        ws['!cols'] = checklistColWidths;
+
+        // Add the checklist detail sheet to the workbook
+        XLSX.utils.book_append_sheet(wb, ws, "Checklist Detail");
+
+        // Generate the Excel file and trigger download
+        XLSX.writeFile(wb, ("MAFixture_" + data.Equipment_No + "_" + formatDate(dataTopic.Createdate, "2") + '.xlsx'));
+    }
+
+    function renderFile(ID) {
+        window.open('/MATesting/Global/ViewFile?id=' + ID, '_blank');
+    }
+</script>

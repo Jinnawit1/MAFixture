@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "Manage Customer";
+}
+
+<h3 id="topic"></h3>
+<hr />
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Mail To :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <textarea class="form-control" id="MailTo" name="MailTo" placeholder="Mail To" style="height:100px"></textarea> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Mail CC :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <textarea class="form-control" id="MailCC" name="MailCC" placeholder="Mail CC" style="height:100px"></textarea> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Section :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <input type="text" class="form-control" id="Section" name="Section" placeholder="Section" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Acknowledge Overdue :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <textarea type="text" class="form-control" id="Acknowledge_Overdue" name="Acknowledge_Overdue" placeholder="Acknowledge Overdue" style="height:100px"></textarea> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-7 col-sm-8 col-12 mb-3" style="display: flex; justify-content: flex-end; column-gap: 5px; padding-top: 5px;">
+            <button onclick="OnSave()" class="btn btn-filled">Save</button>
+            <button onclick="onCancel()" class="btn btn-transparent">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var data = {};
+    $(document).ready(function () {
+        var topic = document.getElementById("topic");
+        if ("@ViewData["ID"]" != "") {
+            topic.textContent = "Edit Email";
+            onLoad();
+        }
+        else topic.textContent = "Add Email";
+    });
+
+    function onLoad() {
+        var url = '@Url.Action("Load_EmailList_By_ID", "Global")';
+        var dataJson = JSON.stringify({ ID: "@ViewData["ID"]" })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        data = response.data;
+                        document.getElementById("MailTo").value = response.data.MailTo;
+                        document.getElementById("MailCC").value = response.data.MailCC;
+                        document.getElementById("Section").value = response.data.Section;
+                        document.getElementById("Acknowledge_Overdue").value = response.data.Acknowledge_Overdue;
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+
+    function OnSave() {
+        var dateTimeNow = new Date().format('yyyy-mm-dd HH:MM:ss');
+        var MailTo = document.getElementById("MailTo").value;
+        var MailCC = document.getElementById("MailCC").value;
+        var Section = document.getElementById("Section").value;
+        var Acknowledge_Overdue = document.getElementById("Acknowledge_Overdue").value;
+        Acknowledge_Overdue
+        var formData = {};
+
+        if (MailTo == "" || MailCC == "" || Section == "") {
+            return showAlert('error', "Please fill out all fields.", function () { });
+        }
+
+        if ("@ViewData["ID"]" != "") {
+            formData = {
+                ID: data.ID,
+                MailTo: MailTo,
+                MailCC: MailCC,
+                Section: Section,
+                Acknowledge_Overdue : Acknowledge_Overdue
+            }
+        } else {
+            formData = {
+                MailTo: MailTo,
+                MailCC: MailCC,
+                Section: Section,
+                Acknowledge_Overdue: Acknowledge_Overdue
+            }
+        }
+        Record_EmailList(formData);
+    }
+
+    function Record_EmailList(data) {
+        var url = '@Url.Action("Record_EmailList", "Global")';
+        var dataJson = JSON.stringify(data)
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    showAlert('success', response.word, function () { });
+                    onCancel();
+                } else {
+                    showAlert('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function onCancel() {
+        document.location = '@Url.Action("EmailList", "Global")';
+    }
+</script>

@@ -1,0 +1,28 @@
+TABLE.dataTable TR.dtrg-group TD
+{
+    BACKGROUND-COLOR: #e0e0e0
+}
+TABLE.dataTable TR.dtrg-level-0 TD
+{
+    FONT-WEIGHT: bold
+}
+TABLE.dataTable TR.dtrg-level-1 TD
+{
+    FONT-SIZE: 0.9em;
+    PADDING-BOTTOM: 0.25em;
+    PADDING-TOP: 0.25em;
+    PADDING-LEFT: 2em;
+    BACKGROUND-COLOR: #f0f0f0
+}
+TABLE.dataTable TR.dtrg-level-2 TD
+{
+    FONT-SIZE: 0.9em;
+    PADDING-BOTTOM: 0.25em;
+    PADDING-TOP: 0.25em;
+    PADDING-LEFT: 2em;
+    BACKGROUND-COLOR: #f0f0f0
+}
+TABLE.dataTable TR.dtrg-level-2 TD
+{
+    BACKGROUND-COLOR: #f3f3f3
+}

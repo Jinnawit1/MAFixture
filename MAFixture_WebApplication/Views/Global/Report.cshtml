@@ -1,0 +1,538 @@
+﻿@{
+    ViewBag.Title = "Report";
+}
+
+<style>
+    .shown {
+        background-color: #e6f7ff !important;
+    }
+
+    .shown-child {
+        background-color: #e6f7ff !important;
+    }
+</style>
+
+<h3>Report</h3>
+<hr />
+
+<div class="col-custom" id="video-col-custom" style="display: none;">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12 mb-3" style="padding: 0px 0px;">
+            <div id="sourceSelectPanel" style="display:none;">
+                <label for="sourceSelect">Change video source:</label>
+                <select id="sourceSelect" style="max-width:400px" class="ant-select"></select>
+            </div>
+            <video id="video" height="400" style="border: 1px solid gray; width: 100%; margin: 5px 0px;"></video>
+            <div id="video-message" style="width: 100%; text-align: center; background-color: #fffbe6; padding: 5px; border: 1px solid #ffe58f; border-radius: 4px;">
+                Point the camera at the barcode.
+            </div>
+
+            <hr />
+        </div>
+    </div>
+</div>
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 0px 0px;">
+            <a class="btn btn-filled" onclick="toggleVideo()" style="width: 100%;" id="startButton" href="javascript:void(0)"><i style="font-size: 18px;" id="video-icon" class="fas fa-video-slash"></i></a>
+        </div>
+        <div class="col-md-4 col-sm-6 col-12 mb-3">
+            <input type="text" class="form-control" id="Serial_No_Input" name="Serial_No_Input" placeholder="Scan serial here..." onkeydown="checkSerial(event)" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div id="update-form" style="display: none;">
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Serial no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Serial_No"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Equipment no :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Equipment_No"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Equipment name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Equipment_Name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Section :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Section"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Last MA Date :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="LastMA_date"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Product name :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Product_name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-12 mb-3" style="padding: 3px 0px;">
+                <div>Type :</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mb-3" style="padding: 3px 15px;">
+                <span id="Type_MC"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-sm-12 col-12 mb-3" style="padding: 3px 0px;">
+                <hr />
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-md-2 col-sm-3 col-12 mb-3" style="padding: 3px 10px; background-color: whitesmoke; border-bottom-right-radius: 50px; border-top-right-radius: 50px; color: black;">
+                <h4>Update History</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-custom">
+        <div class="row">
+            <div class="col-12 mb-3" style="padding: 3px 0px;">
+                <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+                    @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
+                    <table id="TableFilesMA" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var data = {};
+    var videoStatus = true;
+    var videoInputDevicesStatus = false;
+
+    $(document).ready(function () {
+        if("@ViewData["SERIAL_NO"]" != "") {
+            document.getElementById('Serial_No_Input').value = "@ViewData["SERIAL_NO"]";
+
+            var event = new KeyboardEvent('keydown', {
+                key: 'Enter', // The key that was pressed
+                code: 'Enter', // The code for the Enter key
+                keyCode: 13, // The keycode for Enter key (13)
+                which: 13, // The which value for Enter key (13)
+                bubbles: true, // Make the event bubble up the DOM
+                cancelable: true // Allow the event to be canceled
+            });
+
+            // Dispatch the event on the input field
+            document.getElementById('Serial_No_Input').dispatchEvent(event);
+        }
+    });
+
+    window.onload = function () {
+        var selectedDeviceId;
+        document.getElementById('video').style.display = "none";
+        var codeReader = new ZXing.BrowserMultiFormatReader();
+
+        // List video input devices (cameras)
+        codeReader.listVideoInputDevices()
+            .then(function (videoInputDevices) {
+                var sourceSelect = document.getElementById('sourceSelect');
+                selectedDeviceId = videoInputDevices[0].deviceId;
+
+                // Populate the sourceSelect dropdown with available camera devices
+                if (videoInputDevices.length >= 1) {
+                    videoInputDevicesStatus = true;
+                    videoInputDevices.forEach(function (element) {
+                        var sourceOption = document.createElement('option');
+                        sourceOption.text = element.label;
+                        sourceOption.value = element.deviceId;
+                        sourceSelect.appendChild(sourceOption);
+                    });
+
+                    // Update the selected device when the dropdown changes
+                    sourceSelect.onchange = function () {
+                        selectedDeviceId = sourceSelect.value;
+                    };
+
+                    // Show the source selection dropdown if more than one camera is available
+                    var sourceSelectPanel = document.getElementById('sourceSelectPanel');
+                    sourceSelectPanel.style.display = 'block';
+                }
+
+                // Start scanning when the "Start" button is clicked
+                document.getElementById('startButton').addEventListener('click', function () {
+                    event.preventDefault();
+                    toggleCodeReader(codeReader, selectedDeviceId);
+                });
+
+                document.getElementById('sourceSelect').addEventListener('change', function () {
+                    videoStatus = true;
+                    document.getElementById('startButton').click();
+                });
+
+            })
+            .catch(function (err) {
+                showAlert('error', err, function () { });
+            });
+    };
+
+    function checkSerial(event) {
+        if (event.key === "Enter") {
+            data = {};
+            var form = document.getElementById("update-form");
+            form.style.display = "none";
+            document.getElementById("Serial_No").textContent = '';
+            document.getElementById("Section").textContent = '';
+            document.getElementById("LastMA_date").textContent = '';
+            document.getElementById("Product_name").textContent = '';
+            document.getElementById("Equipment_Name").textContent = '';
+            document.getElementById("Type_MC").textContent = '';
+            document.getElementById("Equipment_No").textContent = '';
+            var url = '@Url.Action("Load_MAFixture_By_ID", "Global")';
+            var dataJson = JSON.stringify({ Serial_No: event.target.value })
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: dataJson,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (response) {
+                    document.getElementById('video-message').textContent = "Point the camera at the barcode.";
+                    document.getElementById('video-message').style.backgroundColor = '#fffbe6';
+                    document.getElementById('video-message').style.borderColor = '#ffe58f';
+                    if (response.success) {
+                        if (response.data) {
+                            videoStatus = false;
+                            document.getElementById('startButton').click();
+                            data = response.data;
+                            form.style.display = "block";
+                            document.getElementById("Serial_No").textContent = response.data.Serial_No;
+                            document.getElementById("Section").textContent = response.data.Section;
+                            document.getElementById("LastMA_date").textContent = formatDate(response.data.LastMA_date, 2);
+                            document.getElementById("Product_name").textContent = response.data.Product_name;
+                            document.getElementById("Equipment_No").textContent = response.data.Equipment_No;
+                            document.getElementById("Equipment_Name").textContent = response.data.Equipment_Name;
+                            document.getElementById("Type_MC").textContent = response.data.Type_MC;
+
+                            document.getElementById("Serial_No_Input").value = '';
+                            OnLoad();
+                        }
+                    } else {
+                        showAlert('error', 'Serial number is not found.', function () { });
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+                }
+            });
+        }
+    }
+
+    function OnLoad() {
+        var dataSet = [];
+        var dataFull = [];
+
+        $(data.FilesMAs).each(function (index, item) {
+            var newItem = [];
+            newItem.push(index + 1);
+            newItem.push(item.PlanName || '');
+            newItem.push(formatDate(item.Createdate, 1));
+            newItem.push(item.File || '');
+            newItem.push(item.FilenameBefore || '');
+            newItem.push(item.FilenameAfter || '');
+            newItem.push(item.ID || '');
+
+            dataSet.push(newItem);
+            dataFull.push(item);
+        });
+
+        // Destroy the existing DataTable if it exists
+        if ($.fn.dataTable.isDataTable('#TableFilesMA')) {
+            $('#TableFilesMA').DataTable().clear().destroy();
+        }
+
+        $('#TableFilesMA').DataTable({
+            order: [[0, "desc"]],
+            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            iDisplayLength: 100,
+            data: dataSet, // This is the array of data that contains your standard packing items
+            dom: 'lBfrtip',
+            fixedHeader: false,
+            autoWidth: true,
+            buttons: [],
+            scrollX: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    autoFilter: true,
+                    exportOptions: {
+                        format: {
+                            body: function (data, row, col, node) {
+                                if (data && /<[^>]+>/g.test(data)) {
+                                    if (data && /<br\s*\/?>/i.test(data)) {
+                                        data = data.replace(/<br\s*\/?>/gi, ' '); // Replace <br> with a space
+                                        return data;
+                                    } else {
+                                        let htmlString = data;
+                                        let parser = new DOMParser();
+                                        let doc = parser.parseFromString(htmlString, 'text/html');
+                                        let item = doc.body.textContent || doc.body.innerText;
+                                        return item;
+                                    }
+                                }
+                                else return data;
+                            }
+                        }
+                    }
+                }
+            ],
+            columns: [
+                 {
+                     title: "No.",
+                     orderable: false,
+                     render: function (data, type, row, meta) {
+                         return '<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i>' + data;
+                     }
+                 },
+                { title: "Plan" },
+                { title: "Date" },
+                {
+                    title: "File",
+                    orderable: false,
+                    render: function (data, type, row) {
+                        if (data) {
+                            return '<div style="text-align: center;">' +
+                                '<a style="color: #1890ff; font-size: 22px; cursor: pointer;" onclick="renderFile(\'' + row[row.length-1] + '\')">' +
+                                '<i class="fas fa-file-pdf"></i>' +
+                                '</a>' +
+                                '</div>';
+                        } else {
+                            return 'No file';
+                        }
+                    }
+                },
+                {
+                    title: "Image Before",
+                    orderable: false,
+                    render: function (data, type, row) {
+                        if (data) {
+                            return '<div style="text-align: center;"><a style="color: #1890ff; font-size: 22px; cursor: pointer;" href="/MATesting/Uploads/' + data + '" target="_blank"><i class="fas fa-file-pdf"></i></a></div>';
+                        } else {
+                            return 'No file';
+                        }
+                    }
+                },
+                {
+                    title: "Image After",
+                    orderable: false,
+                    render: function (data, type, row) {
+                        if (data) {
+                            return '<div style="text-align: center;"><a style="color: #1890ff; font-size: 22px; cursor: pointer;" href="/MATesting/Uploads/' + data + '" target="_blank"><i class="fas fa-file-pdf"></i></a></div>';
+                        } else {
+                            return 'No file';
+                        }
+                    }
+                },
+            ],
+            deferRender: true,
+            destroy: true,
+            createdRow: function (row, data, dataIndex) {
+                // Add a click handler to the first column for expanding/collapsing the row
+                $(row).on('click', 'td', function () {
+                    if ($(this).index() === 0) {
+                        var tr = $(this).closest('tr');
+                        var row = $('#TableFilesMA').DataTable().row(tr);
+
+                        // Toggle the row's child visibility
+                        if (row.child.isShown()) {
+                            // If the row is already expanded, collapse it
+                            row.child.hide();
+                            tr.removeClass('shown');
+                            $(row.child()).removeClass('shown-child');
+                            $(tr).find('td:first').html('<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                        } else {
+                            // If the row is collapsed, expand it
+                            row.child(formatDetails(dataFull[dataIndex], dataFull[dataIndex].MAChecklistdetails)).show();
+
+                            $(row.child()).addClass('shown-child');
+                            tr.addClass('shown');
+                            $(tr).find('td:first').html('<i class="fas fa-caret-down" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
+                        }
+                    }
+               });
+            },
+            rowCallback: function (row, data, index) {
+                // Add an indicator or style to the row to show it's expandable/collapsible
+                $(row).find('td:first').addClass('expandable');
+            }
+        });
+
+    }
+
+    function formatDetails(data, checklistData) {
+        // Add the table HTML
+        var detailsHtml = '<button onclick="exportTableToExcel(\'' + data.ID + '\')" class="btn btn-filled" style="margin-bottom: 3px;">Export to Excel</button>';
+        detailsHtml += '<table id="table_' + data.ID + ' " class="table table-bordered table-hovered table-striped child-table">';
+
+        // Add the table header (thead)
+        detailsHtml += '<thead>' +
+            '<tr>' +
+                '<th>No</th>' +
+                '<th>Checklist Detail</th>' +
+                '<th>Status</th>' +
+                '<th>Problem</th>' +
+                '<th>Remark</th>' +
+            '</tr>' +
+        '</thead>';
+
+        // Add the table body (tbody)
+        detailsHtml += '<tbody>';
+        if (checklistData.length > 0) {
+            checklistData.forEach(function (item, index) {
+                detailsHtml += '<tr>' +
+                    '<td>' + (index + 1) + '</td>' +
+                    '<td>' + item.Checklistdetail.replace(/\n/g, '<br>') + '</td>' +
+                    '<td style="text-align: center;">' + (item.Status == "True" ? '<i class="fas fa-check-circle" style="font-size: 22px;"></i>' : '<i class="fas fa-circle" style="font-size: 22px;"></i>') + '</td>' +
+                    '<td>' + (item.Problem || '') + '</td>' +
+                    '<td>' + (item.Remark || '') + '</td>' +
+                '</tr>';
+            });
+        } else {
+            detailsHtml += '<tr><td colspan="5" style="text-align: center; color: red;">No checklist detail data</td></tr>';
+        }
+
+        detailsHtml += '</tbody>';
+        detailsHtml += '</table>';
+        var tableString = detailsHtml;
+
+        return detailsHtml;
+    }
+
+    function exportTableToExcel(id) {
+        let tableData = [];
+        let dataTopic = {};
+
+        data.FilesMAs.forEach(function (item) {
+            if (item.ID == id) {
+                dataTopic = item;
+                if (Array.isArray(item.MAChecklistdetails)) {
+                    item.MAChecklistdetails.forEach(function (checklistItem) {
+                        tableData.push({
+                            Checklistdetail: checklistItem.Checklistdetail || '',
+                            Status: checklistItem.Status == "True" ? "✓" : "✘",
+                            Problem: checklistItem.Problem || '',
+                            Remark: checklistItem.Remark || '',
+                        });
+                    });
+                }
+            }
+        });
+
+        if (tableData.length === 0) {
+            showAlert('error', 'No checklist details found for the given ID.', function () { });
+            return;
+        }
+
+        // Create an Excel workbook using SheetJS
+        let wb = XLSX.utils.book_new();
+
+        // Create title/metadata data
+        let metadata = [
+            ["Serial No", data.Serial_No],
+            ["Equipment No", data.Equipment_No],
+            ["Equipment Name", data.Equipment_Name],
+            ["Poduct Name", data.Product_name],
+            ["Type", data.Type_MC],
+            ["Maintenance Date", formatDate(dataTopic.Createdate, "1")],
+            ["Plan Name", dataTopic.PlanName],
+            [], // Empty row for spacing
+        ];
+
+        // Convert the metadata into a sheet
+        let metadataWs = XLSX.utils.aoa_to_sheet(metadata);
+
+        // Calculate column widths for the metadata sheet
+        const metadataColWidths = metadata[0].map(function (col, idx) {
+            let maxLength = col.length;  // Start with the length of the header
+            metadata.forEach(function (row) {
+                let cellValue = row[idx] || '';
+                maxLength = Math.max(maxLength, cellValue.length);
+            });
+            // Add extra space for padding (optional)
+            return { wch: maxLength + 2 };
+        });
+
+        // Apply the column widths to the metadata sheet
+        metadataWs['!cols'] = metadataColWidths;
+
+        // Add the metadata sheet to the workbook
+        XLSX.utils.book_append_sheet(wb, metadataWs, "Maintenance Detail");
+
+        // Convert the tableData into a sheet with the correct column headers
+        let ws = XLSX.utils.json_to_sheet(tableData, {
+            header: ["Checklistdetail", "Status", "Problem", "Remark"], // Define the header order explicitly
+        });
+
+        // Calculate column widths for the checklist detail sheet
+        const checklistColWidths = ["Checklistdetail", "Status", "Problem", "Remark"].map(function (col) {
+            let maxLength = 0;
+            tableData.forEach(function (row, index) {
+                let cellValue;
+                if (index == 1) cellValue = 'Status';
+                else cellValue = row[col] || '';
+                maxLength = Math.max(maxLength, cellValue.length);
+            });
+            // Add extra space for padding (optional)
+            return { wch: maxLength + 2 };
+        });
+
+        // Apply the calculated column widths to the checklist detail sheet
+        ws['!cols'] = checklistColWidths;
+
+        // Add the checklist detail sheet to the workbook
+        XLSX.utils.book_append_sheet(wb, ws, "Checklist Detail");
+
+        // Generate the Excel file and trigger download
+        XLSX.writeFile(wb, ("MAFixture_" + data.Equipment_No + "_" + formatDate(dataTopic.Createdate, "2") + '.xlsx'));
+    }
+
+    function renderFile(ID) {
+         window.open('/MATesting/Global/ViewFile?id=' + ID, '_blank');
+    }
+</script>

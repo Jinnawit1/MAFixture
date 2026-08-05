@@ -1,0 +1,333 @@
+﻿
+@{
+    ViewBag.Title = "ManageMasterChecklist List";
+}
+
+<h3 id="topic"></h3>
+<hr />
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Detail ENG:</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <textarea class="form-control" id="DetailEng" name="DetailEng" placeholder="Detail ENG"></textarea> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Detail Thai :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <textarea class="form-control" id="DetailThai" name="DetailThai" placeholder="Detail Thai"></textarea> @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-md-3 col-sm-4 col-12 mb-3">
+            <div>Section :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3" >
+            <select class="form-control" name="Department" id="Department" multiple></select>
+            @*<input type="text" class="form-control" id="Section" name="Section" placeholder="Section" />*@ @*readonly onmouseover="this.removeAttribute('readonly')"*@
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-md-3 col-sm-4 col-12 mb-3">
+            <div>Machine Name:</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3">
+            <select class="ant-select" name="Machinename" id="Machinename" multiple></select>
+        </div>
+    </div>
+</div>
+<div class="col-custom" style="padding-top: 10px;">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3">
+            <div>MA type :</div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 mb-3" style="display: flex;">
+            <label class="container">
+                Machine
+                <input type="radio" checked="checked" value="Equipment/Machine" name="Type_MA">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">
+                SparePart
+                <input type="radio" value="Sparepart" name="Type_MA">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">
+                Tools
+                <input type="radio" value="Tools" name="Type_MA">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-3 col-sm-4 col-12 mb-3" style="padding-top: 10px;">
+            <div>Plan :</div>
+        </div>
+        <div class="col-md-8 col-sm-8 col-12 mb-3" style="padding-top: 10px;">
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" value="Daily" checked> Daily
+                </label>
+                <label>
+                    <input type="checkbox" value="Weekly"> Weekly
+                </label>
+                <label>
+                    <input type="checkbox" value="Monthly"> Monthly
+                </label>
+                <label>
+                    <input type="checkbox" value="Quarterly"> Quarterly
+                </label>
+                <label>
+                    <input type="checkbox" value="Semi_annually"> Semi_annually
+                </label>
+                <label>
+                    <input type="checkbox" value="Yearly"> Yearly
+                </label>
+                <label>
+                    <input type="checkbox" value="Manually"> Manually
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-custom">
+    <div class="row">
+        <div class="col-md-7 col-sm-8 col-12 mb-3" style="display: flex; justify-content: flex-end; column-gap: 5px; padding-top: 5px;">
+            <button onclick="OnSave()" class="btn btn-filled">Save</button>
+            <button onclick="onCancel()" class="btn btn-transparent">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var data = {};
+    var MachinenameData = "";
+    $(document).ready(function () {
+        var topic = document.getElementById("topic");
+        if ("@ViewData["ID"]" != "") {
+            topic.textContent = "Edit MasterChecklist";
+        }
+        else topic.textContent = "Add MasterChecklist";
+        loadAllLists();
+        $("#Machinename").select2();
+        $("#Department").select2();
+        // ✅ Trick เพื่อให้ Machinename พร้อมใช้งาน
+        setTimeout(function () {
+            $("#Machinename").select2("open");
+            $("#Machinename").select2("close");
+            $("#DetailEng").focus(); 
+        }, 100);
+    });
+    $('#Department').on('change', function () {
+        var selectedValues = $(this).val();
+
+        loadMachinebySection(selectedValues);
+    });
+
+    function loadMachinebySection(section) {
+        var sectionString = section.join('/'); // ผลลัพธ์จะเป็น "R&D/TEST" หรือ "Test_Assembly4/R&D"
+        var dataJson = JSON.stringify({ section: sectionString })
+        var url = '@Url.Action("Load_Machine_By_Section", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: dataJson,
+            dataType: "json",
+            async: true,
+            success: function (response) 
+            {
+                if (response.success) 
+                {
+                    if (response.data) 
+                    {
+                        var list = response.data;
+                        $('#Machinename').empty();
+                        list.forEach(function (item, index) {
+                            var option = document.createElement("option");
+                            option.text = item;
+                            option.value = item;
+                            document.getElementById("Machinename").appendChild(option);
+                        });
+                        if (MachinenameData.includes('/')) {
+                            MachinenameData = MachinenameData.replace(/M\/C/g, 'M-C');
+                            MachinenameData = MachinenameData.split('/');
+                            MachinenameData = MachinenameData.map(name => name.replace(/M-C/g, 'M/C'));
+                        } else {
+                            MachinenameData = [MachinenameData];
+                        }
+
+                        console.log(MachinenameData);
+                        $('#Machinename').val(MachinenameData).trigger('change');
+                        MachinenameData = "";
+
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function loadAllLists() {
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        lists = response.data;
+                        lists.Department.forEach(function (item, index) {
+                            var option = document.createElement("option");
+                            option.text = item.Section;
+                            option.value = item.Section;
+                            document.getElementById("Department").appendChild(option);
+                        });
+                        onLoad();
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function onLoad() {
+        var url = '@Url.Action("Load_MasterMAList_By_ID", "Global")';
+        var dataJson = JSON.stringify({ ID: "@ViewData["ID"]" })
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    if (response.data) {
+                        data = response.data;
+                        document.getElementById("DetailEng").value = response.data.DetailEng;
+                        document.getElementById("DetailThai").value = response.data.DetailThai;
+                        var sectionData = response.data.Section;
+                        MachinenameData = response.data.Machinename;
+                        if (sectionData.includes('/')) {
+                            sectionData = sectionData.split('/');
+                        } else {
+                            sectionData = [sectionData];
+                        }
+                        $('#Department').val(sectionData).trigger('change');
+                        if (data.Category) {
+                            var categories = data.Category.split('/'); // Split by '/'
+                            $('.checkbox-group input[type="checkbox"]').prop('checked', false);
+                            categories.forEach(function (category) {
+                                $('.checkbox-group input[type="checkbox"][value="' + category.trim() + '"]').prop('checked', true);
+                            });
+                        }
+                        const radioButtonsTypeMC = document.getElementsByName("Type_MA");
+                        for (let i = 0; i < radioButtonsTypeMC.length; i++) {
+                            if (radioButtonsTypeMC[i].value === response.data.Type_MA) {
+                                radioButtonsTypeMC[i].checked = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnSave() {
+        var DetailEng = document.getElementById("DetailEng").value.trim();
+        var DetailThai = document.getElementById("DetailThai").value.trim();
+        var Section = $('#Department').val() ? $('#Department').val().join('/') : '';
+        var Machinename = $('#Machinename').val() ? $('#Machinename').val().join('/') : '';
+        var Type_MA = document.querySelector('input[name="Type_MA"]:checked').value;
+        var checkedValues = [];
+        $('.checkbox-group input[type="checkbox"]:checked').each(function (index, item) {
+            checkedValues += index == 0 ? $(item).val() : '/' + $(item).val();
+        });
+        var formData = {};
+
+        if (DetailEng == "" || DetailThai == "" || Section == "") {
+            return showAlert('error', "Please fill out all fields.", function () { });
+        }
+
+        if ("@ViewData["ID"]" != "") {
+            formData = {
+                ID: data.ID,
+                DetailEng: DetailEng,
+                DetailThai: DetailThai,
+                Category: checkedValues,
+                Section: Section,
+                Machinename: Machinename,
+                Type_MA: Type_MA
+            }
+        } else {
+            formData = {
+                DetailEng: DetailEng,
+                DetailThai: DetailThai,
+                Category: checkedValues,
+                Section: Section,
+                Machinename: Machinename,
+                Type_MA: Type_MA
+            }
+        }
+        Record_MasterMAList(formData);
+    }
+
+    function Record_MasterMAList(data) {
+        var url = '@Url.Action("Record_MasterMAList", "Global")';
+        var dataJson = JSON.stringify(data)
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success) {
+                    showAlert('success', response.word, function () { });
+                    onCancel();
+                } else {
+
+                    ('error', response.word, function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+    function onCancel() {
+        document.location = '@Url.Action("MasterMAList", "Global")';
+    }
+</script>
+
