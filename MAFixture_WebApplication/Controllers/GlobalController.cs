@@ -15,6 +15,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Drawing.Imaging;
+using Newtonsoft.Json;
 
 namespace MAFixture_WebApplication.Controllers
 {
@@ -396,13 +397,26 @@ namespace MAFixture_WebApplication.Controllers
                         .OrderBy(d => d.Drawing)
                         .ToList();
 
-                    var Serial = EntityMA.MAPlans.AsNoTracking()
-                        .Where(m => !string.IsNullOrEmpty(m.Serial_No))
-                        .Select(m => m.Serial_No) 
-                        .Distinct()
-                        .OrderBy(s => s) 
+                    // 1. ดึงข้อมูล 2 คอลัมน์ที่ต้องการจาก Database แค่รอบเดียว (ลด Database Roundtrip)
+                    var maplanData = EntityMA.MAPlans.AsNoTracking()
+                        .Select(m => new { m.Serial_No, m.Location })
                         .ToList();
-                    var Location = EntityMA.MAPlans.AsNoTracking().Where(x => !string.IsNullOrEmpty(x.Location)).Select(x => x.Location).Distinct().OrderBy(x => x).ToList();
+
+                    // 2. นำข้อมูลใน Memory (RAM) มากรองและจัดเรียง Serial 
+                    var Serial = maplanData
+                        .Where(m => !string.IsNullOrEmpty(m.Serial_No))
+                        .Select(m => m.Serial_No)
+                        .Distinct()
+                        .OrderBy(s => s)
+                        .ToList();
+
+                    // 3. นำข้อมูลใน Memory (RAM) มากรองและจัดเรียง Location
+                    var Location = maplanData
+                        .Where(x => !string.IsNullOrEmpty(x.Location))
+                        .Select(x => x.Location)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
 
                     var lists = new
                     {
@@ -1128,9 +1142,9 @@ namespace MAFixture_WebApplication.Controllers
                     }
 
 
-                    var jsonResult = Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);
-                    jsonResult.MaxJsonLength = int.MaxValue;
-                    return jsonResult;
+                    // แปลง JSON ให้ไวขึ้นด้วย Newtonsoft.Json
+                    string jsonStr = JsonConvert.SerializeObject(new { success = true, data = data });
+                    return Content(jsonStr, "application/json");
                 }
             }
             catch (Exception E)

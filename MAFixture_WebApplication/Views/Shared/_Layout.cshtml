@@ -1,4 +1,4 @@
-﻿@using System.Web.Optimization
+@using System.Web.Optimization
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -948,15 +948,19 @@
 
     function formatDate(item, option) {
         if (item) {
-            // Remove non-numeric characters and parse the timestamp
-            const timestamp = parseInt(item.replace(/[^0-9\.]/g, ''), 10);
+            var date;
+            if (typeof item === 'string' && item.indexOf('/Date(') !== -1) {
+                var timestamp = parseInt(item.replace(/[^0-9]/g, ''), 10);
+                date = new Date(timestamp);
+            } else {
+                date = new Date(item);
+            }
 
-            // Create a new Date object from the parsed timestamp
-            const date = new Date(timestamp);
+            if (isNaN(date.getTime())) return '';
 
             // Format the date and time
-            const formattedDate = date.format('yyyy-mm-dd');
-            const formattedTime = date.format('HH:MM:ss');
+            var formattedDate = date.format('yyyy-mm-dd');
+            var formattedTime = date.format('HH:MM:ss');
 
             // Combine the date and time with a <br> separator
             if (option == 1) {
