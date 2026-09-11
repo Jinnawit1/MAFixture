@@ -217,11 +217,41 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
-                        <div>Description :</div>
+                        <div><span id="req_Description" style="color: red; display: none;">*</span>Description :</div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-12 mb-3">
                         <textarea class="form-control" id="Description" name="Description" placeholder="Description"></textarea>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-custom Toolvisible">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div><span style="color: red;">*</span>Type Tools :</div>
+                </div>
+                <div class="col-md-10 col-sm-10 col-12 mb-3" style="padding-top: 10px;">
+                    <label class="container">
+                        Selective
+                        <input type="radio" value="Selective" name="Type_tools">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        Wave
+                        <input type="radio" value="Wave" name="Type_tools">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        SMT Pallet
+                        <input type="radio" value="SMT_Pallet" name="Type_tools">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        other
+                        <input type="radio" value="other" name="Type_tools">
+                        <span class="checkmark"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -294,7 +324,7 @@
                 </div>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <div class="unit-input">
-                        <input type="text" id="Dimension" class="form-control" placeholder="Width × Length × Height">
+                        <input type="text" id="Dimension" class="form-control" placeholder="Width x Length x Height">
                         <span class="unit">cm</span>
                     </div>
                 </div>
@@ -446,10 +476,26 @@
 
         if (value === "Tools") {
             $(".Toolvisible").show();
+            if ($('input[name="Type_tools"]:checked').val() === "other") {
+                $("#req_Description").show();
+            } else {
+                $("#req_Description").hide();
+            }
         } else {
             $(".Toolvisible").hide();
+            $("#req_Description").hide();
         }
 
+    });
+
+    $('input[name="Type_tools"]').change(function () {
+        var val = $('input[name="Type_tools"]:checked').val();
+        if (val === "other") {
+            $("#req_Description").show();
+            $("#Description").focus();
+        } else {
+            $("#req_Description").hide();
+        }
     });
 
     $('#Drawing').on('change', function () {
@@ -459,7 +505,7 @@
             LoadCustomerByDrawing(Drawing);
         }
         else {
-            $('#Product_name').val($('#Product_name').val() + '/' + Drawing);
+            $('#Product_name').val($('#Product_name').val() + ',' + Drawing);
         }
     });
     function previewImage(event) {
@@ -675,6 +721,17 @@
                         document.getElementById("WithControlTooling").value =  response.data.GPVProcess ? response.data.WithControlTooling : "";
                         document.getElementById("Grade_Status").value =  response.data.GPVProcess ? response.data.Grade_Status : "";
                         document.getElementById("Dimension").value =  response.data.Dimension ? response.data.Dimension : "" ;
+
+                        var toolVal = response.data.Type_Tools ? response.data.Type_Tools : "";
+                        if (toolVal) {
+                            if (toolVal === "Selective" || toolVal === "Wave" || toolVal === "Stencill") {
+                                $('input[name="Type_tools"][value="' + toolVal + '"]').prop('checked', true);
+                            } else {
+                                $('input[name="Type_tools"][value="other"]').prop('checked', true);
+                            }
+                        } else {
+                            $('input[name="Type_tools"]').prop('checked', false);
+                        }
                         var fileName = response.data.Equipment_Picture;
                         console.log(fileName);
                         console.log(basePath + fileName);
@@ -791,6 +848,19 @@
             if ($("#Equipment_No").val() == "" || $("#Equipment_Name").val() == "" || $("#Product_name").val() == "" || !$("#Customer").val() || $("#Serial_No").val() == "") {
                 return showAlert('error', "Please fill out required fields.", function () { });
             }
+            var Type_tools = "";
+            if (Type_MA === "Tools") {
+                var selectedTool = $('input[name="Type_tools"]:checked').val();
+                if (!selectedTool) {
+                    return showAlert('error', "Please select Type Tools.", function () { });
+                }
+                if (selectedTool === "other" && $("#Description").val().trim() === "") {
+                    return showAlert('error', "Please enter Description when 'other' is selected.", function () {
+                        $("#Description").focus();
+                    });
+                }
+                Type_tools = selectedTool;
+            }
             var GPVProcess = $("#GPVProcess").val();
             var ProcessSide = $("#ProcessSide").val();
             var WithTopCover =$("#WithTopCover").val();
@@ -804,6 +874,7 @@
                 WithControlTooling = "";
                 Grade_Status ="";
                 Dimension = "";
+                Type_tools = "";
             }
             var form;
             var replace = $("#Equipment_Name_old").val();
@@ -824,7 +895,7 @@
                     Manufacture: document.getElementById("Manufacture").value,
                     Description: document.getElementById("Description").value,
                     //LastMA_date: dateTimeNow,
-                    UpdateBy: "@ViewData["EMPLOYEE_ID"]",
+                    Modifyby: "@ViewData["EMPLOYEE_ID"]",
                     Startdate: editData.Startdate,
                     GE_ID: department.value,
                     Section: department.options[department.selectedIndex].text,
@@ -849,7 +920,8 @@
                     WithControlTooling: WithControlTooling,
                     Grade_Status: Grade_Status,
                     Dimension: Dimension,
-                    Equipment_Picture: Equipment_Picture
+                    Equipment_Picture: Equipment_Picture,
+                    Type_Tools: Type_tools
 
                 };
 
@@ -869,6 +941,7 @@
                     LastMA_date: dateTimeNow,
                     Startdate: dateTimeNow,
                     CreateBy: "@ViewData["EMPLOYEE_ID"]",
+                    Modifyby: "@ViewData["EMPLOYEE_ID"]",
 
                     GE_ID: department.value,
                     Section: department.options[department.selectedIndex].text,
@@ -894,6 +967,7 @@
                     Grade_Status: Grade_Status,
                     Dimension: Dimension,
                     Equipment_Picture: Equipment_Picture,
+                    Type_Tools: Type_tools,
                     StatusF: '1'
                 };
             }
@@ -909,7 +983,7 @@
     function Record_MAPlan(data, replace)
     {
         var url = '@Url.Action("Record_MAPlan", "Global")';
-        var dataJson = JSON.stringify({ data: data, replace: replace });
+        var dataJson = JSON.stringify({ data: data, replace: replace, source: "NewEquipment" });
         console.log(data);
         $.ajax({
             type: 'POST',

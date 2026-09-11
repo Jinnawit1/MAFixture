@@ -723,9 +723,35 @@
     <Content Include="Scripts\vfs_fonts.js" />
     <Content Include="Scripts\ZeroClipboard.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Service References\WCF227Service\MAFixture_WebApplication.WCF227Service.CompositeType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\WCF227Service\Service1.disco" />
+    <None Include="Service References\WCF227Service\configuration91.svcinfo" />
+    <None Include="Service References\WCF227Service\configuration.svcinfo" />
+    <None Include="Service References\WCF227Service\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Service References\WCFService\MAFixture_WebApplication.WCFService.CompositeType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Service References\WCF227Service\Service1.wsdl" />
+    <None Include="Service References\WCF227Service\Service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCF227Service\Service11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCF227Service\Service12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCF227Service\Service13.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCF227Service\Service14.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\WCFService\Service1.disco" />
     <None Include="Service References\WCFService\configuration91.svcinfo" />
     <None Include="Service References\WCFService\configuration.svcinfo" />
@@ -795,19 +821,28 @@
     <Compile Include="Models\MAPlan.cs">
       <DependentUpon>MAFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>MAFixture.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Tbl_employee.cs">
       <DependentUpon>Tranningdatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Tbl_KPIoverdue.cs">
       <DependentUpon>MAFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Tbl_LogMasterTools.cs">
+      <DependentUpon>MAFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Tbl_MasterMATester.cs">
       <DependentUpon>MAFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Tbl_MasterTools.cs">
+      <DependentUpon>MAFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Tbl_Pindetail.cs">
+      <DependentUpon>MAFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tbl_ProductName.cs">
+      <DependentUpon>MAFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tbl_Summarize_Tools.cs">
       <DependentUpon>MAFixture.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Tranningdatabase.Context.cs">
@@ -844,6 +879,11 @@
       <DependentUpon>WIP.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\WCF227Service\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\WCFService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -950,6 +990,7 @@
     <Content Include="Views\Global\THT_Location.cshtml" />
     <Content Include="Views\Global\Report_Nearly.cshtml" />
     <Content Include="Views\Global\Summary_THT_Pallet.cshtml" />
+    <Content Include="Views\Global\MasterToolsList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -971,6 +1012,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WCF227Service\" />
     <WCFMetadataStorage Include="Service References\WCFService\" />
     <WCFMetadataStorage Include="Service References\WCFService_225\" />
   </ItemGroup>

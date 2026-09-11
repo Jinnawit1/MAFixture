@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Maintenance History";
 }
 
@@ -558,8 +558,8 @@
         document.getElementById("Serial_No").textContent = data.Serial_No;
         document.getElementById("Section").textContent = data.Section;
         document.getElementById("LastMA_date").textContent = formatDate(data.LastMA_date, 2);
-        let productName = data.Product_name ? data.Product_name : "";
-        let items = productName.split(",");
+        var productName = data.Product_name ? data.Product_name : "";
+        var items = productName ? (productName.indexOf(',') > -1 ? productName.split(',') : (productName.indexOf('/') > -1 ? productName.split('/') : [productName])) : [];
 
         if (items.length > 2) {
             document.getElementById("Product_name").textContent = items.slice(0, 2).join(", ") + " And More";

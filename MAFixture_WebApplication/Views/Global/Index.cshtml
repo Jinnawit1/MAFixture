@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Home";
 }
 
@@ -91,6 +91,14 @@
         </div>
         <div class="col-md-3 col-sm-3 col-12 mb-3">
             <div class="form-group">
+                <label for="Type_Tools">Type Tools:</label>
+                <select class="form-control" id="Type_Tools">
+                    <option value="" selected>All</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="form-group">
                 <label for="search-name">Location:</label>
                 <input type="text" class="form-control" id="Location" />
             </div>
@@ -128,6 +136,12 @@
         LoadAll();
     });
 
+    function getUrlParameter(name) {
+        var regex = new RegExp('[?&]' + name + '=([^&#]*)', 'i');
+        var results = regex.exec(window.location.search);
+        return results ? decodeURIComponent(results[1].replace(/\+/g, ' ')) : '';
+    }
+
     function LoadAll() {
         var url = '@Url.Action("Load_All_Lists", "Global")';
 
@@ -144,6 +158,33 @@
                         $.each(response.data.Department, function (index, item) {
                             $('#Section').append('<option value="' + item.Section + '">' + item.Section + '</option>');
                         });
+
+                        if (response.data.ToolTypes) {
+                            $.each(response.data.ToolTypes, function (index, item) {
+                                if (item) {
+                                    $('#Type_Tools').append('<option value="' + item + '">' + item + '</option>');
+                                }
+                            });
+                        }
+
+                        var pName = getUrlParameter('Product_name');
+                        var pSection = getUrlParameter('Section');
+                        var pTypeMA = getUrlParameter('Type_MA');
+                        var pTypeTools = getUrlParameter('Type_Tools') || getUrlParameter('Type');
+
+                        if (pName) {
+                            $('#Product_name').val(pName);
+                        }
+                        if (pSection) {
+                            $('#Section').val(pSection);
+                        }
+                        if (pTypeMA) {
+                            $('#Type_MA').val(pTypeMA);
+                        }
+                        if (pTypeTools) {
+                            $('#Type_Tools').val(pTypeTools);
+                        }
+
                         OnLoad();
                     }
                 }
@@ -163,6 +204,7 @@
         var Section = $('#Section').val();
         var Type_MC = $('#Type_MC').val();
         var Type_MA = $('#Type_MA').val();
+        var Type_Tools = $('#Type_Tools').val();
         var Location = $('#Location').val();
         var Property = $('#Property').val();
         var dataSet = [];
@@ -182,6 +224,7 @@
                 Section: Section,
                 Type_MC: Type_MC,
                 Type_MA: Type_MA,
+                Type_Tools: Type_Tools,
                 Location: Location,
                 Property: Property
             }),
@@ -214,6 +257,7 @@
                         newItem.push(item.Property || '');
                         newItem.push(item.Type_MC || '');
                         newItem.push(item.Type_MA || '');
+                        newItem.push(item.Type_Tools || '');
                         newItem.push(item.Section || '');
                         newItem.push(item.Responsible_Name || '');
                         newItem.push(item.Manufacture || '');
@@ -314,6 +358,7 @@
                             { title: "Property" },
                             { title: "Type MC" },
                             { title: "Type MA" },
+                            { title: "Type Tools" },
                             { title: "Section" },
                             {
                                 title: "Responsible_Name",
@@ -389,7 +434,7 @@
                                         $(rowObj.child()).removeClass('shown-child');
                                         $(tr).find('td:first').html('<i class="fas fa-caret-right" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));
                                     } else {
-                                        rowObj.child(formatDetails(dataFull[dataIndex], data[16])).show();
+                                        rowObj.child(formatDetails(dataFull[dataIndex], dataFull[dataIndex].Section || data[17])).show();
                                         $(rowObj.child()).addClass('shown-child');
                                         tr.addClass('shown');
                                         $(tr).find('td:first').html('<i class="fas fa-caret-down" style="font-size: 16px; margin-right: 8px; cursor: pointer;"></i> ' + (dataIndex + 1));

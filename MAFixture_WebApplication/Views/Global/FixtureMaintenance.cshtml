@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Fixture Maintenance";
 }
 
@@ -631,8 +631,8 @@
         document.getElementById("Serial_No").textContent = dataInfo.Serial_No;
         document.getElementById("Section").textContent = dataInfo.Section;
         document.getElementById("LastMA_date").textContent = formatDate(dataInfo.LastMA_date, 2);
-        let productName = data.Product_name ? data.Product_name : "";
-        let items = productName.split(",");
+        var productName = dataInfo.Product_name ? dataInfo.Product_name : "";
+        var items = productName ? productName.split(",") : [];
 
         if (items.length > 2) {
             document.getElementById("Product_name").textContent = items.slice(0, 2).join(", ") + " And More";
@@ -891,7 +891,7 @@
         data.UpdateBy = "@ViewData["EMPLOYEE_ID"]";
         data.Grade_Status = $("#GradeAfter").val();
         var url = '@Url.Action("Record_MAPlan", "Global")';
-        var dataJson = JSON.stringify({ data: data });
+        var dataJson = JSON.stringify({ data: data, source: "Maintenance" });
 
         $.ajax({
             type: 'POST',

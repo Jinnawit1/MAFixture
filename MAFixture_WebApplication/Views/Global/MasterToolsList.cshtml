@@ -1,0 +1,888 @@
+@{
+    ViewBag.Title = "MasterToolsList";
+}
+
+<style>
+    .btn-step-modal {
+        width: 36px;
+        height: 34px;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ced4da;
+        background-color: #f8f9fa;
+        color: #495057;
+        transition: all 0.2s ease;
+    }
+    .btn-step-modal:hover {
+        background-color: #e2e6ea;
+        color: #212529;
+    }
+    .modal-detail-label {
+        font-weight: 600;
+        color: #555;
+    }
+</style>
+
+<h3>Master Tools List</h3>
+<hr />
+
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-12 mb-3">
+        <div class="form-group">
+            <label for="Product_name">Product Name :</label>
+            <input type="text" class="form-control" id="Product_name" placeholder="Search Product name..." onkeydown="if (event.keyCode === 13) { OnLoad(); }">
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-12 mb-3">
+        <div class="form-group">
+            <label for="Section">Section :</label>
+            <select class="form-control" id="Section" onchange="OnLoad()">
+                <option value="" selected>All</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-12 mb-3">
+        <div class="form-group">
+            <label for="Type">Type :</label>
+            <select class="form-control" id="Type" onchange="OnLoad()">
+                <option value="" selected>All</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-12 mb-3">
+        <div style="margin-top:25px">
+            <button class="btn btn-primary" id="search-button" onclick="OnLoad()"><i class="fas fa-search"></i> Search</button>
+            <button type="button" class="btn btn-success" id="btn-add-tool" onclick="OpenAddModal()" style="margin-left: 5px;"><i class="fas fa-plus"></i> Add Tool</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 mb-3" style="padding: 0px 5px;">
+        <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+            <table id="TableMasterToolsList" class="table table-bordered table-hover" style="width: 100% !important; border-collapse: collapse !important; font-size: 13px !important;"></table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adjusting Amount -->
+<div class="modal fade" id="modalAdjustAmount" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document" style="max-width: 500px; margin: 60px auto;">
+        <div class="modal-content" style="border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+            <div class="modal-header" style="background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; padding: 12px 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; line-height: 1; margin-top: -3px;"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="margin: 0; font-weight: 600; font-size: 16px; color: #333;">Adjust Master Tool Amount</h4>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <input type="hidden" id="modal_Tool_ID" />
+                <input type="hidden" id="modal_Max_Amount" />
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Product Name :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_Product_name" style="font-weight: 600; color: #1890ff;"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Section :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_Section"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Type :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_Type"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Summarize Max :</label>
+                    <div class="col-sm-8" style="padding-top: 5px;">
+                        <span id="modal_Summarize_Amount" class="badge" style="font-size: 13px; background-color: #17a2b8; color: #fff; padding: 4px 10px; border-radius: 4px;">0</span>
+                        <small style="color: #888; margin-left: 5px;">(Max allowed limit)</small>
+                    </div>
+                </div>
+
+                <hr style="margin: 15px 0;" />
+
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_New_Amount" style="padding-top: 7px;">New Amount :</label>
+                    <div class="col-sm-8">
+                        <div style="display: flex; align-items: center; max-width: 220px;">
+                            <button type="button" class="btn-step-modal" onclick="ModalStepChange(-1)" style="border-radius: 4px 0 0 4px;">-</button>
+                            <input type="number" class="form-control text-center" id="modal_New_Amount" min="0" style="font-weight: bold; font-size: 15px; border-radius: 0; text-align: center; height: 34px;" oninput="ValidateModalAmount()">
+                            <button type="button" class="btn-step-modal" onclick="ModalStepChange(1)" style="border-radius: 0 4px 4px 0;">+</button>
+                        </div>
+                        <div id="modal_amount_hint" style="font-size: 12px; margin-top: 6px; color: #666;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-top: 10px; margin-bottom: 5px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_Comment" style="padding-top: 7px;">Comment :</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" id="modal_Comment" rows="2" placeholder="Optional reason or remark..." style="font-size: 13px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: #f8f9fa; border-top: 1px solid #dee2e6; padding: 12px 20px;">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 1px solid #ccc;">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btn-save-modal" onclick="SaveModalAmount()" style="min-width: 80px;">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adjusting Cycle Time (E - Industrial) -->
+<div class="modal fade" id="modalAdjustCycleTime" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document" style="max-width: 500px; margin: 60px auto;">
+        <div class="modal-content" style="border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+            <div class="modal-header" style="background-color: #fffbeb; border-bottom: 1px solid #fef3c7; padding: 12px 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; line-height: 1; margin-top: -3px;"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="margin: 0; font-weight: 600; font-size: 16px; color: #92400e;">
+                    <i class="fas fa-stopwatch" style="margin-right: 6px; color: #d97706;"></i> Adjust Cycle Time (E - Industrial)
+                </h4>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <input type="hidden" id="modal_CT_Tool_ID" />
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Product Name :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_CT_Product_name" style="font-weight: 600; color: #1890ff;"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Section :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_CT_Section"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Type :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_CT_Type"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Current Cycle Time :</label>
+                    <div class="col-sm-8" style="padding-top: 5px;">
+                        <span id="modal_CT_Current" class="badge" style="font-size: 13px; background-color: #f59e0b; color: #fff; padding: 4px 10px; border-radius: 4px;">-</span>
+                        <small style="color: #888; margin-left: 5px;">seconds</small>
+                    </div>
+                </div>
+
+                <hr style="margin: 15px 0;" />
+
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_New_CycleTime" style="padding-top: 7px;">New Cycle Time :</label>
+                    <div class="col-sm-8">
+                        <div style="display: flex; align-items: center; max-width: 220px;">
+                            <input type="number" step="0.01" min="0" class="form-control text-center" id="modal_New_CycleTime" style="font-weight: bold; font-size: 15px; text-align: center; height: 34px;" oninput="ValidateModalCycleTime()">
+                            <span style="margin-left: 8px; color: #555; font-size: 13px;">sec</span>
+                        </div>
+                        <div id="modal_ct_hint" style="font-size: 12px; margin-top: 6px; color: #666;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-top: 10px; margin-bottom: 5px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_CT_Comment" style="padding-top: 7px;">Comment :</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" id="modal_CT_Comment" rows="2" placeholder="Reason or remark for cycle time change..." style="font-size: 13px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: #f8f9fa; border-top: 1px solid #dee2e6; padding: 12px 20px;">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 1px solid #ccc;">Cancel</button>
+                <button type="button" class="btn btn-warning" id="btn-save-ct-modal" onclick="SaveModalCycleTime()" style="min-width: 80px; color: #fff; background-color: #f59e0b; border-color: #d97706;">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Confirming Delete Master Tool -->
+<div class="modal fade" id="modalDeleteMasterTool" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document" style="max-width: 500px; margin: 60px auto;">
+        <div class="modal-content" style="border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+            <div class="modal-header" style="background-color: #fff1f0; border-bottom: 1px solid #ffccc7; padding: 12px 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; line-height: 1; margin-top: -3px;"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="margin: 0; font-weight: 600; font-size: 16px; color: #cf1322;">
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 6px;"></i>Delete Master Tool
+                </h4>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <input type="hidden" id="modal_del_Tool_ID" />
+
+                <div class="alert alert-danger" style="font-size: 13px; margin-bottom: 15px; border-radius: 4px;">
+                    Are you sure you want to delete this Master Tool? It will no longer be displayed in the system.
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Product Name :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_del_Product_name" style="font-weight: 600; color: #cf1322;"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Section :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_del_Section"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Type :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_del_Type"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Amount :</label>
+                    <div class="col-sm-8" style="padding-top: 7px;">
+                        <span id="modal_del_Amount" style="font-weight: bold;"></span>
+                    </div>
+                </div>
+
+                <hr style="margin: 15px 0;" />
+
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_del_Comment" style="padding-top: 7px;">Reason / Remark :</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" id="modal_del_Comment" rows="2" placeholder="Reason for deletion (optional)..." style="font-size: 13px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: #f8f9fa; border-top: 1px solid #dee2e6; padding: 12px 20px;">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 1px solid #ccc;">Cancel</button>
+                <button type="button" class="btn btn-danger" id="btn-delete-modal" onclick="ConfirmDeleteMasterTool()" style="min-width: 80px;"><i class="fas fa-trash-alt" style="margin-right: 4px;"></i>Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adding New Master Tool -->
+<div class="modal fade" id="modalAddMasterTool" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document" style="max-width: 520px; margin: 60px auto;">
+        <div class="modal-content" style="border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+            <div class="modal-header" style="background-color: #f0fdf4; border-bottom: 1px solid #bbf7d0; padding: 12px 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px; line-height: 1; margin-top: -3px;"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="margin: 0; font-weight: 600; font-size: 16px; color: #166534;">
+                    <i class="fas fa-plus-circle" style="margin-right: 6px; color: #15803d;"></i>Add Master Tool
+                </h4>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div class="form-group row" style="margin-bottom: 15px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_add_Product_name" style="padding-top: 7px;">
+                        Product Name <span style="color: red;">*</span> :
+                    </label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="modal_add_Product_name" style="width: 100%;">
+                            <option value="">-- Select Product Name --</option>
+                        </select>
+                        <small style="color: #666; font-size: 11px;">Select product name from Summarize Tools</small>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 15px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_add_Section" style="padding-top: 7px;">
+                        Section <span style="color: red;">*</span> :
+                    </label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="modal_add_Section">
+                            <option value="">-- Select Section --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 15px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_add_Type" style="padding-top: 7px;">
+                        Type <span style="color: red;">*</span> :
+                    </label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="modal_add_Type">
+                            <option value="">-- Select Type --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 15px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_add_Amount" style="padding-top: 7px;">
+                        Amount <span style="color: red;">*</span> :
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="number" min="0" class="form-control text-center" id="modal_add_Amount" value="1" style="font-weight: bold; font-size: 15px; height: 34px; max-width: 150px;">
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label" for="modal_add_Comment" style="padding-top: 7px;">
+                        Comment :
+                    </label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" id="modal_add_Comment" rows="2" placeholder="Optional remark..." style="font-size: 13px;"></textarea>
+                    </div>
+                </div>
+
+                <div id="modal_add_validation_msg" style="margin-top: 10px; display: none;" class="alert alert-danger"></div>
+            </div>
+            <div class="modal-footer" style="background-color: #f8f9fa; border-top: 1px solid #dee2e6; padding: 12px 20px;">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 1px solid #ccc;">Cancel</button>
+                <button type="button" class="btn btn-success" id="btn-save-add-modal" onclick="SaveAddMasterTool()" style="min-width: 90px;">
+                    <i class="fas fa-save" style="margin-right: 4px;"></i>Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var isIndustrialUser = @((ViewData["IsIndustrial"] != null && (bool)ViewData["IsIndustrial"]) ? "true" : "false");
+    var currentMasterTools = [];
+
+    $(document).ready(function () {
+        LoadAll();
+    });
+
+    function getUrlParameter(name) {
+        var regex = new RegExp('[?&]' + name + '=([^&#]*)', 'i');
+        var results = regex.exec(window.location.search);
+        return results ? decodeURIComponent(results[1].replace(/\+/g, ' ')) : '';
+    }
+
+    function LoadAll() {
+        var url = '@Url.Action("Load_All_Lists", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success && response.data) {
+                    if (response.data.Department) {
+                        $('#modal_add_Section').empty().append('<option value="">-- Select Section --</option>');
+                        $.each(response.data.Department, function (index, item) {
+                            if (item && item.Section) {
+                                $('#Section').append('<option value="' + item.Section + '">' + item.Section + '</option>');
+                                $('#modal_add_Section').append('<option value="' + item.Section + '">' + item.Section + '</option>');
+                            }
+                        });
+                    }
+                    if (response.data.ToolTypes) {
+                        $('#modal_add_Type').empty().append('<option value="">-- Select Type --</option>');
+                        $.each(response.data.ToolTypes, function (index, item) {
+                            if (item) {
+                                $('#Type').append('<option value="' + item + '">' + item + '</option>');
+                                $('#modal_add_Type').append('<option value="' + item + '">' + item + '</option>');
+                            }
+                        });
+                    }
+                    if (response.data.SummarizeProductNames) {
+                        $('#modal_add_Product_name').empty().append('<option value="">-- Select Product Name --</option>');
+                        $.each(response.data.SummarizeProductNames, function (index, item) {
+                            if (item) {
+                                $('#modal_add_Product_name').append('<option value="' + item + '">' + item + '</option>');
+                            }
+                        });
+                    }
+
+                    $('#modal_add_Product_name').select2({
+                        placeholder: '-- Select Product Name --',
+                        allowClear: true,
+                        width: '100%',
+                        dropdownParent: $('#modalAddMasterTool')
+                    });
+
+                    var pName = getUrlParameter('Product_name');
+                    var pSection = getUrlParameter('Section');
+                    var pType = getUrlParameter('Type');
+
+                    if (pName) {
+                        $('#Product_name').val(pName);
+                    }
+                    if (pSection) {
+                        $('#Section').val(pSection);
+                    } else {
+                        $('#Section').val('THT_HM');
+                    }
+                    if (pType) {
+                        $('#Type').val(pType);
+                    }
+
+                    OnLoad();
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnLoad() {
+        var Product_name = $('#Product_name').val();
+        var Section = $('#Section').val();
+        var Type = $('#Type').val();
+        var dataSet = [];
+        var url = '@Url.Action("Load_MasterToolsList", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                Product_name: Product_name,
+                Section: Section,
+                Type: Type
+            }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success && response.data) {
+                    currentMasterTools = response.data;
+
+                    $(currentMasterTools).each(function (index, item) {
+                        var newItem = [];
+                        newItem.push(index + 1); // 0: No.
+                        newItem.push(index); // 1: Row index
+                        newItem.push(item.Product_name || ''); // 2: Product Name
+                        newItem.push(item.Section || ''); // 3: Section
+                        newItem.push(item.Type || ''); // 4: Type
+                        newItem.push(item.Cycle_Time !== null && item.Cycle_Time !== undefined ? item.Cycle_Time : '-'); // 5: Cycle Time
+                        newItem.push(item.Amount !== null && item.Amount !== undefined ? item.Amount : 0); // 6: Master Amount
+                        newItem.push(item.SummarizeAmount !== null && item.SummarizeAmount !== undefined ? item.SummarizeAmount : 0); // 7: Summarize Amount
+                        dataSet.push(newItem);
+                    });
+
+                    if ($.fn.dataTable.isDataTable('#TableMasterToolsList')) {
+                        $('#TableMasterToolsList').DataTable().clear().destroy();
+                    }
+
+                    $('#TableMasterToolsList').DataTable({
+                        order: [[2, "asc"]],
+                        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                        iDisplayLength: 100,
+                        data: dataSet,
+                        dom: 'lBfrtip',
+                        autoWidth: false,
+                        scrollX: false,
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                autoFilter: true,
+                                exportOptions: {
+                                    columns: [0, 2, 3, 4, 5, 6, 7],
+                                    format: {
+                                        body: function (data, row, col, node) {
+                                            if (data && /<[^>]+>/g.test(data)) {
+                                                if (/<br\s*\/?>/i.test(data)) {
+                                                    return data.replace(/<br\s*\/?>/gi, ' ');
+                                                } else {
+                                                    var parser = new DOMParser();
+                                                    var doc = parser.parseFromString(data, 'text/html');
+                                                    return doc.body.textContent || doc.body.innerText;
+                                                }
+                                            }
+                                            return data;
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        columns: [
+                            { title: "No.", width: "5%", className: "text-center" },
+                            {
+                                title: "Action",
+                                width: isIndustrialUser ? "12%" : "9%",
+                                orderable: false,
+                                className: "text-center",
+                                render: function (data, type, row) {
+                                    var rowIndex = row[1];
+                                    var html = '<button type="button" class="btn btn-default btn-sm" onclick="OpenAdjustModal(' + rowIndex + ')" title="Adjust Amount" style="padding: 4px 8px; margin-right: 4px; border: 1px solid #1890ff; color: #1890ff; border-radius: 4px;"><i class="fas fa-edit"></i></button>';
+                                    if (isIndustrialUser) {
+                                        html += '<button type="button" class="btn btn-default btn-sm" onclick="OpenCycleTimeModal(' + rowIndex + ')" title="Adjust Cycle Time (E - Industrial)" style="padding: 4px 8px; margin-right: 4px; border: 1px solid #f59e0b; color: #d97706; border-radius: 4px;"><i class="fas fa-stopwatch"></i></button>';
+                                    }
+                                    html += '<button type="button" class="btn btn-default btn-sm" onclick="OpenDeleteModal(' + rowIndex + ')" title="Delete Master Tool" style="padding: 4px 8px; border: 1px solid #ff4d4f; color: #ff4d4f; border-radius: 4px;"><i class="fas fa-trash-alt"></i></button>';
+                                    return html;
+                                }
+                            },
+                            {
+                                title: "Product Name",
+                                width: isIndustrialUser ? "29%" : "32%"
+                            },
+                            {
+                                title: "Section",
+                                width: "12%"
+                            },
+                            {
+                                title: "Type",
+                                width: "13%"
+                            },
+                            {
+                                title: "Cycle Time (s)",
+                                width: "10%",
+                                className: "text-center",
+                                render: function (data, type, row) {
+                                    if (data !== '-' && data !== null && data !== undefined) {
+                                        return '<span style="font-weight: 600; color: #b45309;">' + data + '</span>';
+                                    }
+                                    return '<span style="color: #999;">-</span>';
+                                }
+                            },
+                            {
+                                title: "Master Amount",
+                                width: "9%",
+                                className: "text-center",
+                                render: function (data, type, row) {
+                                    return '<span style="font-weight: bold; font-size: 13px;">' + data + '</span>';
+                                }
+                            },
+                            {
+                                title: "Summarize Max",
+                                width: "9%",
+                                className: "text-center",
+                                render: function (data, type, row) {
+                                    return '<span style="color: #666; font-size: 12px;">' + data + '</span>';
+                                }
+                            }
+                        ],
+                        deferRender: true,
+                        destroy: true
+                    });
+                } else {
+                    showAlert('error', response.word || 'Failed to load data.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OpenAdjustModal(rowIndex) {
+        var item = currentMasterTools[rowIndex];
+        if (!item) {
+            return;
+        }
+
+        var maxLimit = item.SummarizeAmount !== null && item.SummarizeAmount !== undefined ? item.SummarizeAmount : 0;
+        var currentAmt = item.Amount !== null && item.Amount !== undefined ? item.Amount : 0;
+
+        $('#modal_Tool_ID').val(item.ID);
+        $('#modal_Max_Amount').val(maxLimit);
+        $('#modal_Product_name').text(item.Product_name || '-');
+        $('#modal_Section').text(item.Section || '-');
+        $('#modal_Type').text(item.Type || '-');
+        $('#modal_Summarize_Amount').text(maxLimit);
+        $('#modal_New_Amount').val(currentAmt);
+        $('#modal_Comment').val('');
+
+        ValidateModalAmount();
+        $('#modalAdjustAmount').modal('show');
+    }
+
+    function ModalStepChange(step) {
+        var maxLimit = parseInt($('#modal_Max_Amount').val(), 10) || 0;
+        var currentVal = parseInt($('#modal_New_Amount').val(), 10) || 0;
+        var newVal = currentVal + step;
+
+        if (newVal < 0) {
+            newVal = 0;
+        }
+        if (newVal > maxLimit) {
+            newVal = maxLimit;
+        }
+
+        $('#modal_New_Amount').val(newVal);
+        ValidateModalAmount();
+    }
+
+    function ValidateModalAmount() {
+        var maxLimit = parseInt($('#modal_Max_Amount').val(), 10) || 0;
+        var enteredVal = parseInt($('#modal_New_Amount').val(), 10);
+        var hint = $('#modal_amount_hint');
+        var btnSave = $('#btn-save-modal');
+
+        if (isNaN(enteredVal) || enteredVal < 0) {
+            hint.html('<span style="color: #d9534f;">Amount must be 0 or greater.</span>');
+            btnSave.prop('disabled', true);
+            return false;
+        }
+
+        if (enteredVal > maxLimit) {
+            hint.html('<span style="color: #d9534f;">Cannot exceed Summarize Max (' + maxLimit + ').</span>');
+            btnSave.prop('disabled', true);
+            return false;
+        }
+
+        hint.html('<span style="color: #28a745;">Valid amount (Max: ' + maxLimit + ')</span>');
+        btnSave.prop('disabled', false);
+        return true;
+    }
+
+    function SaveModalAmount() {
+        if (!ValidateModalAmount()) {
+            return;
+        }
+
+        var id = parseInt($('#modal_Tool_ID').val(), 10);
+        var newAmount = parseInt($('#modal_New_Amount').val(), 10);
+        var comment = $('#modal_Comment').val() || '';
+        var updateBy = '@(ViewData["EMPLOYEE_ID"] != null ? ViewData["EMPLOYEE_ID"].ToString() : "")';
+        var url = '@Url.Action("Update_MasterTools_Amount", "Global")';
+
+        var btnSave = $('#btn-save-modal');
+        btnSave.prop('disabled', true).text('Saving...');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                ID: id,
+                NewAmount: newAmount,
+                Comment: comment,
+                UpdateBy: updateBy
+            }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                btnSave.prop('disabled', false).text('Save');
+                if (response.success) {
+                    $('#modalAdjustAmount').modal('hide');
+                    showAlert('success', response.word || 'Amount updated successfully.', function () { });
+                    OnLoad();
+                } else {
+                    showAlert('warning', response.word || 'Cannot update amount.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                btnSave.prop('disabled', false).text('Save');
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OpenCycleTimeModal(rowIndex) {
+        var item = currentMasterTools[rowIndex];
+        if (!item) {
+            return;
+        }
+
+        var currentCT = item.Cycle_Time !== null && item.Cycle_Time !== undefined && item.Cycle_Time !== '-' ? item.Cycle_Time : '';
+
+        $('#modal_CT_Tool_ID').val(item.ID);
+        $('#modal_CT_Product_name').text(item.Product_name || '-');
+        $('#modal_CT_Section').text(item.Section || '-');
+        $('#modal_CT_Type').text(item.Type || '-');
+        $('#modal_CT_Current').text(currentCT !== '' ? currentCT : '-');
+        $('#modal_New_CycleTime').val(currentCT);
+        $('#modal_CT_Comment').val('');
+
+        ValidateModalCycleTime();
+        $('#modalAdjustCycleTime').modal('show');
+    }
+
+    function ValidateModalCycleTime() {
+        var val = parseFloat($('#modal_New_CycleTime').val());
+        var hint = $('#modal_ct_hint');
+        var btnSave = $('#btn-save-ct-modal');
+
+        if (isNaN(val) || val < 0) {
+            hint.html('<span style="color: #d9534f;">Cycle Time must be a number &gt;= 0.</span>');
+            btnSave.prop('disabled', true);
+            return false;
+        }
+
+        hint.html('<span style="color: #28a745;">Valid cycle time</span>');
+        btnSave.prop('disabled', false);
+        return true;
+    }
+
+    function SaveModalCycleTime() {
+        if (!ValidateModalCycleTime()) {
+            return;
+        }
+
+        var id = parseInt($('#modal_CT_Tool_ID').val(), 10);
+        var newCT = parseFloat($('#modal_New_CycleTime').val());
+        var comment = $('#modal_CT_Comment').val() || '';
+        var updateBy = '@(ViewData["EMPLOYEE_ID"] != null ? ViewData["EMPLOYEE_ID"].ToString() : "")';
+        var url = '@Url.Action("Update_MasterTools_CycleTime", "Global")';
+
+        var btnSave = $('#btn-save-ct-modal');
+        btnSave.prop('disabled', true).text('Saving...');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                ID: id,
+                NewCycleTime: newCT,
+                Comment: comment,
+                UpdateBy: updateBy
+            }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                btnSave.prop('disabled', false).text('Save');
+                if (response.success) {
+                    $('#modalAdjustCycleTime').modal('hide');
+                    showAlert('success', response.word || 'Cycle Time updated successfully.', function () { });
+                    OnLoad();
+                } else {
+                    showAlert('warning', response.word || 'Cannot update cycle time.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                btnSave.prop('disabled', false).text('Save');
+                showAlert('error', 'An error occurred. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OpenDeleteModal(rowIndex) {
+        if (!currentMasterTools || !currentMasterTools[rowIndex]) {
+            return;
+        }
+        var item = currentMasterTools[rowIndex];
+        $('#modal_del_Tool_ID').val(item.ID);
+        $('#modal_del_Product_name').text(item.Product_name || '-');
+        $('#modal_del_Section').text(item.Section || '-');
+        $('#modal_del_Type').text(item.Type || '-');
+        $('#modal_del_Amount').text(item.Amount !== null && item.Amount !== undefined ? item.Amount : 0);
+        $('#modal_del_Comment').val('');
+        $('#btn-delete-modal').prop('disabled', false).html('<i class="fas fa-trash-alt" style="margin-right: 4px;"></i>Delete');
+        $('#modalDeleteMasterTool').modal('show');
+    }
+
+    function ConfirmDeleteMasterTool() {
+        var toolId = $('#modal_del_Tool_ID').val();
+        var comment = $('#modal_del_Comment').val();
+        if (!toolId) {
+            showAlert('error', 'Invalid tool selected.', function () { });
+            return;
+        }
+
+        var btn = $('#btn-delete-modal');
+        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin" style="margin-right: 4px;"></i>Deleting...');
+
+        var url = '@Url.Action("Delete_MasterTool", "Global")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                ID: parseInt(toolId, 10),
+                Comment: comment
+            }),
+            dataType: 'json',
+            success: function (response) {
+                btn.prop('disabled', false).html('<i class="fas fa-trash-alt" style="margin-right: 4px;"></i>Delete');
+                if (response.success) {
+                    $('#modalDeleteMasterTool').modal('hide');
+                    showAlert('success', response.word || 'Tool deleted successfully.', function () {
+                        OnLoad();
+                    });
+                } else {
+                    showAlert('error', response.word || 'Delete failed.', function () { });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                btn.prop('disabled', false).html('<i class="fas fa-trash-alt" style="margin-right: 4px;"></i>Delete');
+                showAlert('error', 'Error: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OpenAddModal() {
+        $('#modal_add_Product_name').val('').trigger('change');
+        $('#modal_add_Section').val('');
+        $('#modal_add_Type').val('');
+        $('#modal_add_Amount').val(1);
+        $('#modal_add_Comment').val('');
+        $('#modal_add_validation_msg').hide().text('');
+        $('#btn-save-add-modal').prop('disabled', false).html('<i class="fas fa-save" style="margin-right: 4px;"></i>Save');
+        $('#modalAddMasterTool').modal('show');
+    }
+
+    function SaveAddMasterTool() {
+        var pName = $('#modal_add_Product_name').val();
+        var section = $('#modal_add_Section').val();
+        var type = $('#modal_add_Type').val();
+        var amountStr = $('#modal_add_Amount').val();
+        var comment = $('#modal_add_Comment').val() || '';
+        var errorDiv = $('#modal_add_validation_msg');
+
+        if (!pName || $.trim(pName) === '') {
+            errorDiv.text('Please select a Product Name.').show();
+            return;
+        }
+        if (!section || $.trim(section) === '') {
+            errorDiv.text('Please select a Section.').show();
+            return;
+        }
+        if (!type || $.trim(type) === '') {
+            errorDiv.text('Please select a Type.').show();
+            return;
+        }
+        var amount = parseInt(amountStr, 10);
+        if (isNaN(amount) || amount < 0) {
+            errorDiv.text('Amount must be 0 or greater.').show();
+            return;
+        }
+
+        errorDiv.hide().text('');
+        var btn = $('#btn-save-add-modal');
+        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin" style="margin-right: 4px;"></i>Saving...');
+
+        var createBy = '@(ViewData["EMPLOYEE_ID"] != null ? ViewData["EMPLOYEE_ID"].ToString() : "")';
+        var url = '@Url.Action("Add_MasterTool", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                Product_name: $.trim(pName),
+                Section: $.trim(section),
+                Type: $.trim(type),
+                Amount: amount,
+                Comment: comment,
+                CreateBy: createBy
+            }),
+            dataType: 'json',
+            success: function (response) {
+                btn.prop('disabled', false).html('<i class="fas fa-save" style="margin-right: 4px;"></i>Save');
+                if (response.success) {
+                    $('#modalAddMasterTool').modal('hide');
+                    showAlert('success', response.word || 'Master Tool added successfully.', function () {
+                        $('#Product_name').val($.trim(pName));
+                        $('#Section').val($.trim(section));
+                        $('#Type').val($.trim(type));
+                        OnLoad();
+                    });
+                } else {
+                    errorDiv.text(response.word || 'Cannot add Master Tool.').show();
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                btn.prop('disabled', false).html('<i class="fas fa-save" style="margin-right: 4px;"></i>Save');
+                errorDiv.text('An error occurred: ' + textStatus + ', ' + errorThrown).show();
+            }
+        });
+    }
+</script>

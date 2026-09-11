@@ -17,6 +17,7 @@ namespace MAFixture_WebApplication.Models
         public MAPlan()
         {
             this.FilesMAs = new HashSet<FilesMA>();
+            this.Tbl_ProductName = new HashSet<Tbl_ProductName>();
         }
     
         public long MA_ID { get; set; }
@@ -59,10 +60,14 @@ namespace MAFixture_WebApplication.Models
         public string Grade_Status { get; set; }
         public string Dimension { get; set; }
         public string Equipment_Picture { get; set; }
+        public string Type_Tools { get; set; }
+        public string Modifyby { get; set; }
+        public Nullable<System.DateTime> Modifydate { get; set; }
     
         public virtual Customer Customer1 { get; set; }
         public virtual ICollection<FilesMA> FilesMAs { get; set; }
         public virtual GroupEmail GroupEmail { get; set; }
         public virtual Tbl_Pindetail Tbl_Pindetail { get; set; }
+        public virtual ICollection<Tbl_ProductName> Tbl_ProductName { get; set; }
     }
 }

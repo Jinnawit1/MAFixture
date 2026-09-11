@@ -30,12 +30,15 @@ namespace MAFixture_WebApplication.Models
         public virtual DbSet<GroupEmail> GroupEmails { get; set; }
         public virtual DbSet<MAChecklistdetail> MAChecklistdetails { get; set; }
         public virtual DbSet<MAPlan> MAPlans { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Tbl_MasterMATester> Tbl_MasterMATester { get; set; }
         public virtual DbSet<ImageAfter> ImageAfters { get; set; }
         public virtual DbSet<ImageBefore> ImageBefores { get; set; }
         public virtual DbSet<Tbl_Pindetail> Tbl_Pindetail { get; set; }
         public virtual DbSet<Machine> Machines { get; set; }
         public virtual DbSet<Tbl_KPIoverdue> Tbl_KPIoverdue { get; set; }
+        public virtual DbSet<Tbl_ProductName> Tbl_ProductName { get; set; }
+        public virtual DbSet<Tbl_Summarize_Tools> Tbl_Summarize_Tools { get; set; }
+        public virtual DbSet<Tbl_LogMasterTools> Tbl_LogMasterTools { get; set; }
+        public virtual DbSet<Tbl_MasterTools> Tbl_MasterTools { get; set; }
     }
 }

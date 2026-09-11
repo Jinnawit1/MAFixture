@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "ManageMasterChecklist List";
 }
@@ -139,8 +139,42 @@
     });
 
     function loadMachinebySection(section) {
-        var sectionString = section.join('/'); // ผลลัพธ์จะเป็น "R&D/TEST" หรือ "Test_Assembly4/R&D"
-        var dataJson = JSON.stringify({ section: sectionString })
+        // 1. ดึงค่า Machine Name ที่ถูกเลือกอยู่ในปัจจุบัน เพื่อคงค่าไว้ ไม่ให้หายเมื่อเลือก Section เพิ่ม
+        var currentSelected = $('#Machinename').val() || [];
+        if (!$.isArray(currentSelected)) {
+            currentSelected = currentSelected ? [currentSelected] : [];
+        }
+
+        // 2. หากมีข้อมูล MachinenameData จากฐานข้อมูล (ตอนโหลดหน้า Edit ครั้งแรก) ให้นำมารวมเข้ากับ currentSelected
+        var savedFromDb = [];
+        if (MachinenameData) {
+            if (MachinenameData.indexOf(',') > -1) {
+                savedFromDb = MachinenameData.split(',');
+            } else if (MachinenameData.indexOf('/') > -1) {
+                var tempStr = MachinenameData.replace(/M\/C/g, 'M-C');
+                savedFromDb = tempStr.split('/');
+                savedFromDb = savedFromDb.map(function (name) {
+                    return name.replace(/M-C/g, 'M/C');
+                });
+            } else {
+                savedFromDb = [MachinenameData];
+            }
+
+            savedFromDb = savedFromDb.map(function (name) {
+                return name.trim();
+            });
+
+            savedFromDb.forEach(function (name) {
+                if (name !== "" && currentSelected.indexOf(name) === -1) {
+                    currentSelected.push(name);
+                }
+            });
+
+            MachinenameData = ""; // เคลียร์ค่าหลังจากนำมารวมแล้ว
+        }
+
+        var sectionString = (section && section.length > 0) ? section.join(',') : '';
+        var dataJson = JSON.stringify({ section: sectionString });
         var url = '@Url.Action("Load_Machine_By_Section", "Global")';
 
         $.ajax({
@@ -150,33 +184,45 @@
             data: dataJson,
             dataType: "json",
             async: true,
-            success: function (response) 
-            {
-                if (response.success) 
-                {
-                    if (response.data) 
-                    {
-                        var list = response.data;
-                        $('#Machinename').empty();
-                        list.forEach(function (item, index) {
+            success: function (response) {
+                if (response.success && response.data) {
+                    var list = response.data;
+                    var machineSelect = document.getElementById("Machinename");
+                    $('#Machinename').empty();
+
+                    var addedMap = {};
+
+                    // เพิ่มตัวเลือก Machine Name ที่ได้จาก Section ที่เลือก
+                    list.forEach(function (item) {
+                        if (item && !addedMap[item]) {
+                            addedMap[item] = true;
                             var option = document.createElement("option");
                             option.text = item;
                             option.value = item;
-                            document.getElementById("Machinename").appendChild(option);
-                        });
-                        if (MachinenameData.includes('/')) {
-                            MachinenameData = MachinenameData.replace(/M\/C/g, 'M-C');
-                            MachinenameData = MachinenameData.split('/');
-                            MachinenameData = MachinenameData.map(name => name.replace(/M-C/g, 'M/C'));
-                        } else {
-                            MachinenameData = [MachinenameData];
+                            machineSelect.appendChild(option);
                         }
+                    });
 
-                        console.log(MachinenameData);
-                        $('#Machinename').val(MachinenameData).trigger('change');
-                        MachinenameData = "";
+                    // หากมีเครื่องจักรจากฐานข้อมูลที่ไม่มีใน list ของ Section ให้คง option ไว้เพื่อไม่ให้ค่าหลุดหาย
+                    savedFromDb.forEach(function (item) {
+                        if (item && !addedMap[item]) {
+                            addedMap[item] = true;
+                            var option = document.createElement("option");
+                            option.text = item;
+                            option.value = item;
+                            machineSelect.appendChild(option);
+                        }
+                    });
 
-                    }
+                    // คัดกรองเฉพาะรายการที่ยังมีอยู่ใน option เพื่อกำหนดเป็นค่าที่เลือก
+                    var toSelect = [];
+                    currentSelected.forEach(function (name) {
+                        if (addedMap[name]) {
+                            toSelect.push(name);
+                        }
+                    });
+
+                    $('#Machinename').val(toSelect).trigger('change');
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -231,23 +277,28 @@
                         data = response.data;
                         document.getElementById("DetailEng").value = response.data.DetailEng;
                         document.getElementById("DetailThai").value = response.data.DetailThai;
-                        var sectionData = response.data.Section;
-                        MachinenameData = response.data.Machinename;
-                        if (sectionData.includes('/')) {
+                        var sectionData = response.data.Section || '';
+                        MachinenameData = response.data.Machinename || '';
+                        if (sectionData.indexOf(',') > -1) {
+                            sectionData = sectionData.split(',');
+                        } else if (sectionData.indexOf('/') > -1) {
                             sectionData = sectionData.split('/');
-                        } else {
+                        } else if (sectionData !== '') {
                             sectionData = [sectionData];
+                        } else {
+                            sectionData = [];
                         }
+                        sectionData = sectionData.map(function (item) { return item.trim(); });
                         $('#Department').val(sectionData).trigger('change');
                         if (data.Category) {
-                            var categories = data.Category.split('/'); // Split by '/'
+                            var categories = data.Category.indexOf(',') > -1 ? data.Category.split(',') : data.Category.split('/');
                             $('.checkbox-group input[type="checkbox"]').prop('checked', false);
                             categories.forEach(function (category) {
                                 $('.checkbox-group input[type="checkbox"][value="' + category.trim() + '"]').prop('checked', true);
                             });
                         }
-                        const radioButtonsTypeMC = document.getElementsByName("Type_MA");
-                        for (let i = 0; i < radioButtonsTypeMC.length; i++) {
+                        var radioButtonsTypeMC = document.getElementsByName("Type_MA");
+                        for (var i = 0; i < radioButtonsTypeMC.length; i++) {
                             if (radioButtonsTypeMC[i].value === response.data.Type_MA) {
                                 radioButtonsTypeMC[i].checked = true;
                                 break;
@@ -265,13 +316,14 @@
     function OnSave() {
         var DetailEng = document.getElementById("DetailEng").value.trim();
         var DetailThai = document.getElementById("DetailThai").value.trim();
-        var Section = $('#Department').val() ? $('#Department').val().join('/') : '';
-        var Machinename = $('#Machinename').val() ? $('#Machinename').val().join('/') : '';
+        var Section = $('#Department').val() ? $('#Department').val().join(',') : '';
+        var Machinename = $('#Machinename').val() ? $('#Machinename').val().join(',') : '';
         var Type_MA = document.querySelector('input[name="Type_MA"]:checked').value;
         var checkedValues = [];
-        $('.checkbox-group input[type="checkbox"]:checked').each(function (index, item) {
-            checkedValues += index == 0 ? $(item).val() : '/' + $(item).val();
+        $('.checkbox-group input[type="checkbox"]:checked').each(function () {
+            checkedValues.push($(this).val());
         });
+        var Category = checkedValues.join(',');
         var formData = {};
 
         if (DetailEng == "" || DetailThai == "" || Section == "") {
@@ -283,20 +335,20 @@
                 ID: data.ID,
                 DetailEng: DetailEng,
                 DetailThai: DetailThai,
-                Category: checkedValues,
+                Category: Category,
                 Section: Section,
                 Machinename: Machinename,
                 Type_MA: Type_MA
-            }
+            };
         } else {
             formData = {
                 DetailEng: DetailEng,
                 DetailThai: DetailThai,
-                Category: checkedValues,
+                Category: Category,
                 Section: Section,
                 Machinename: Machinename,
                 Type_MA: Type_MA
-            }
+            };
         }
         Record_MasterMAList(formData);
     }

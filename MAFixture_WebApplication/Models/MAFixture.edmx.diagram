@@ -5,25 +5,30 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="5ef3c2204e5443eda9529515eb895636" Name="Diagram1" ZoomLevel="72">
-        <EntityTypeShape EntityType="MAFixtureModel.Customer" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MAFixtureModel.Customer" Width="1.5" PointX="5.375" PointY="11.875" IsExpanded="true" />
         <EntityTypeShape EntityType="MAFixtureModel.FilesMA" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MAFixtureModel.GroupEmail" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MAFixtureModel.MAChecklistdetail" Width="1.5" PointX="7.5" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MAFixtureModel.MAChecklistdetail" Width="1.5" PointX="7.5" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MAFixtureModel.MAPlan" Width="1.75" PointX="3" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MAFixtureModel.sysdiagram" Width="1.5" PointX="11.125" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="MAFixtureModel.Tbl_MasterMATester" Width="1.5" PointX="7.5" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="MAFixtureModel.FK_MAPlan_Customer" ManuallyRouted="false" />
         <AssociationConnector Association="MAFixtureModel.FK_FilesMA_MAPlan" ManuallyRouted="false" />
         <AssociationConnector Association="MAFixtureModel.FK_MAChecklistdetail_MAChecklistdetail" ManuallyRouted="false" />
         <AssociationConnector Association="MAFixtureModel.FK_MAPlan_GroupEmail" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MAFixtureModel.ImageAfter" Width="1.5" PointX="7.5" PointY="13.25" />
-        <EntityTypeShape EntityType="MAFixtureModel.ImageBefore" Width="1.5" PointX="7.5" PointY="10.5" />
+        <EntityTypeShape EntityType="MAFixtureModel.ImageAfter" Width="1.5" PointX="7.5" PointY="15.625" />
+        <EntityTypeShape EntityType="MAFixtureModel.ImageBefore" Width="1.5" PointX="5.25" PointY="0.75" />
         <AssociationConnector Association="MAFixtureModel.FK_ImageAfter_FilesMA1" />
         <AssociationConnector Association="MAFixtureModel.FK_ImageBefore_FilesMA" />
-        <EntityTypeShape EntityType="MAFixtureModel.Tbl_Pindetail" Width="1.5" PointX="0.75" PointY="6.875" />
+        <EntityTypeShape EntityType="MAFixtureModel.Tbl_Pindetail" Width="1.5" PointX="10.375" PointY="10.875" />
         <AssociationConnector Association="MAFixtureModel.FK_MAPlan_Tbl_Pindetail" />
-        <EntityTypeShape EntityType="MAFixtureModel.Machine" Width="1.5" PointX="8.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MAFixtureModel.Machine" Width="1.5" PointX="7.5" PointY="6.75" />
         <EntityTypeShape EntityType="MAFixtureModel.Tbl_KPIoverdue" Width="1.5" PointX="10.125" PointY="1.125" />
+        <EntityTypeShape EntityType="MAFixtureModel.Tbl_ProductName" Width="1.5" PointX="12.625" PointY="6.875" />
+        <EntityTypeShape EntityType="MAFixtureModel.Tbl_Summarize_Tools" Width="1.5" PointX="7.375" PointY="10" />
+        <AssociationConnector Association="MAFixtureModel.FK_tbl_ProductName_MAPlan" />
+        <AssociationConnector Association="MAFixtureModel.FK_tbl_ProductName_Tbl_Summarize_Tools" />
+        <EntityTypeShape EntityType="MAFixtureModel.Tbl_LogMasterTools" Width="1.5" PointX="10.125" PointY="5.75" />
+        <EntityTypeShape EntityType="MAFixtureModel.Tbl_MasterTools" Width="1.5" PointX="10.125" PointY="3.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -258,6 +258,56 @@ namespace MAFixture_WebApplication.Controllers
         {
             return View();
         }
+        public ActionResult MasterToolsList()
+        {
+            try
+            {
+                ViewData["EMPLOYEE_ID"] = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID").Value;
+            }
+            catch
+            {
+                ViewData["EMPLOYEE_ID"] = "";
+            }
+
+            bool isIndustrial = false;
+            string dept = "";
+            string userEmail = "";
+
+            try
+            {
+                var emailClaim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_EMAIL");
+                if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
+                {
+                    userEmail = emailClaim.Value.Trim();
+                }
+            }
+            catch { }
+
+            try
+            {
+                var deptClaim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_DEPARTMENT");
+                if (deptClaim != null && !string.IsNullOrEmpty(deptClaim.Value))
+                {
+                    dept = deptClaim.Value;
+                    if (dept.IndexOf("Industrial", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        isIndustrial = true;
+                    }
+                }
+            }
+            catch { }
+
+            // ข้อยกเว้นสำหรับ Jinnawit.Ananpatiwet@gpv-group.com ให้แสดงปุ่มได้เสมอ
+            if (!string.IsNullOrEmpty(userEmail) && userEmail.IndexOf("Jinnawit.Ananpatiwet", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                isIndustrial = true;
+            }
+
+            ViewData["EMPLOYEE_DEPARTMENT"] = dept;
+            ViewData["IsIndustrial"] = isIndustrial;
+
+            return View();
+        }
         public ActionResult ManageMasterMAList(string id)
         {
             try
@@ -418,6 +468,30 @@ namespace MAFixture_WebApplication.Controllers
                         .OrderBy(x => x)
                         .ToList();
 
+                    var summarizeTypes = EntityMA.Tbl_Summarize_Tools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type))
+                        .Select(x => x.Type);
+
+                    var masterTypes = EntityMA.Tbl_MasterTools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type))
+                        .Select(x => x.Type);
+
+                    var maplanTypes = EntityMA.MAPlans.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type_Tools))
+                        .Select(x => x.Type_Tools);
+
+                    var toolTypes = summarizeTypes.Union(masterTypes).Union(maplanTypes)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
+
+                    var summarizeProductNames = EntityMA.Tbl_Summarize_Tools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Product_name))
+                        .Select(x => x.Product_name)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
+
                     var lists = new
                     {
                         Customer = customer,
@@ -428,6 +502,8 @@ namespace MAFixture_WebApplication.Controllers
                         Serial = Serial,
                         Machine = Machine,
                         Location = Location,
+                        ToolTypes = toolTypes,
+                        SummarizeProductNames = summarizeProductNames
                     };
 
                     return Json(new { success = true, data = lists }, JsonRequestBehavior.AllowGet);
@@ -572,8 +648,8 @@ namespace MAFixture_WebApplication.Controllers
                 {
                     Entity.Configuration.ProxyCreationEnabled = false;
 
-                    // แยกคำค้นหาด้วยเครื่องหมาย /
-                    var keywords = section.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                    // แยกคำค้นหาด้วยเครื่องหมาย , หรือ / เพื่อรองรับทั้งข้อมูลใหม่และข้อมูลเดิม
+                    var keywords = (section ?? "").Split(new[] { ',', '/' }, StringSplitOptions.RemoveEmptyEntries);
                     int sectionCount = keywords.Length; // Store the length in a variable
                     List<string> data;
                     data = Entity.MAPlans.AsNoTracking()
@@ -1053,7 +1129,7 @@ namespace MAFixture_WebApplication.Controllers
                 return Json(new { success = false, word = "Error, " + E.Message });
             }
         }
-        public ActionResult Load_MAPlan(string Serial_No, string From, string To, string Customer, string Product_name, string Section, string Type_MC, string Type_MA, string Location, string Property)
+        public ActionResult Load_MAPlan(string Serial_No, string From, string To, string Customer, string Product_name, string Section, string Type_MC, string Type_MA, string Location, string Property, string Type_Tools = "")
         {
             try
             {
@@ -1123,6 +1199,10 @@ namespace MAFixture_WebApplication.Controllers
                         {
                             query = query.Where(x => x.Type_MA == "Tools");
                         }
+                    }
+                    if (!String.IsNullOrEmpty(Type_Tools))
+                    {
+                        query = query.Where(x => x.Type_Tools == Type_Tools);
                     }
                     if (!String.IsNullOrEmpty(Location))
                     {
@@ -1314,6 +1394,7 @@ namespace MAFixture_WebApplication.Controllers
                         Grade_Status = data.Grade_Status,
                         Dimension = data.Dimension,
                         Equipment_Picture = data.Equipment_Picture,
+                        Type_Tools = data.Type_Tools,
                     };
 
                     mappedData.FilesMAs = new List<FilesMA>();
@@ -1868,7 +1949,7 @@ namespace MAFixture_WebApplication.Controllers
             return Json(new { success = false });
         }
         [HttpPost]
-        public ActionResult Record_MAPlan(MAPlan data,string replace)
+        public ActionResult Record_MAPlan(MAPlan data, string replace, string source = "")
         {
             try
             {
@@ -1912,13 +1993,15 @@ namespace MAFixture_WebApplication.Controllers
                             Responsible_Name = data.Responsible_Name,
                             Manufacture = data.Manufacture,
                             Description = data.Description,
-                            LastMA_date = DateTime.Now,
+                            LastMA_date = data.Startdate ?? DateTime.Now,
 
                             GE_ID = data.GE_ID,
                             Section = data.Section,
                             Type_MA = data.Type_MA,
                             Startdate = data.Startdate,
                             CreateBy = data.CreateBy,
+                            Modifyby = !string.IsNullOrEmpty(data.Modifyby) ? data.Modifyby : data.CreateBy,
+                            Modifydate = DateTime.Now,
                             Customer = data.Customer,
                             Customer_Name = data.Customer_Name,
                             Plan_Daily = data.Plan_Daily,
@@ -1934,13 +2017,14 @@ namespace MAFixture_WebApplication.Controllers
                             Lifetime = data.Lifetime,
                             Location = data.Location,
 
-                            GPVProcess= data.GPVProcess,
-                            ProcessSide= data.ProcessSide,
+                            GPVProcess = data.GPVProcess,
+                            ProcessSide = data.ProcessSide,
                             WithTopCover = data.WithTopCover,
                             WithControlTooling = data.WithControlTooling,
                             Grade_Status = data.Grade_Status,
                             Dimension = data.Dimension,
                             Equipment_Picture = data.Equipment_Picture,
+                            Type_Tools = data.Type_Tools,
                             StatusF = 1
                         };
 
@@ -1948,47 +2032,94 @@ namespace MAFixture_WebApplication.Controllers
                     }
                     else
                     {
-                        _MAPlan.Equipment_No = data.Equipment_No;
-                        _MAPlan.Equipment_Name = data.Equipment_Name;
-                        _MAPlan.Product_name = data.Product_name;
-                        _MAPlan.Type_MC = data.Type_MC;
-                        _MAPlan.Model = data.Model;
-                        _MAPlan.Serial_No = data.Serial_No;
-                        _MAPlan.Property = data.Property;
-                        _MAPlan.Referrence_No = data.Referrence_No;
-                        _MAPlan.Responsible_Name = data.Responsible_Name;
-                        _MAPlan.Manufacture = data.Manufacture;
-                        _MAPlan.Description = data.Description;
-                        _MAPlan.LastMA_date = DateTime.Now;
+                        if (source == "Maintenance" || (!string.IsNullOrEmpty(data.UpdateBy) && string.IsNullOrEmpty(data.Modifyby)))
+                        {
+                            // Action มาจาก FixtureMaintenance: บันทึกเฉพาะ LastMA_date และ UpdateBy (รวมถึงแผนงานที่คำนวณใหม่)
+                            _MAPlan.LastMA_date = DateTime.Now;
+                            _MAPlan.UpdateBy = data.UpdateBy;
 
-                        _MAPlan.GE_ID = data.GE_ID;
-                        _MAPlan.Section = data.Section;
-                        _MAPlan.Type_MA = data.Type_MA;
-                        _MAPlan.Startdate = data.Startdate;
-                        _MAPlan.UpdateBy = data.UpdateBy;
-                        _MAPlan.Customer = data.Customer;
-                        _MAPlan.Customer_Name = data.Customer_Name;
-                        _MAPlan.Plan_Daily = data.Plan_Daily;
-                        _MAPlan.Plan_Weekly = data.Plan_Weekly;
-                        _MAPlan.Plan_Monthly = data.Plan_Monthly;
-                        _MAPlan.Plan_Semi_annually = data.Plan_Semi_annually;
-                        _MAPlan.Plan_Quarterly = data.Plan_Quarterly;
-                        _MAPlan.Plan_Yearly = data.Plan_Yearly;
-                        _MAPlan.Plan_Manually = data.Plan_Manually; 
-                        _MAPlan.P_ID = data.P_ID;
-                        _MAPlan.Pinnumber = data.Pinnumber;
+                            _MAPlan.Plan_Daily = data.Plan_Daily;
+                            _MAPlan.Plan_Weekly = data.Plan_Weekly;
+                            _MAPlan.Plan_Monthly = data.Plan_Monthly;
+                            _MAPlan.Plan_Semi_annually = data.Plan_Semi_annually;
+                            _MAPlan.Plan_Quarterly = data.Plan_Quarterly;
+                            _MAPlan.Plan_Yearly = data.Plan_Yearly;
+                            _MAPlan.Plan_Manually = data.Plan_Manually;
+                            _MAPlan.Grade_Status = data.Grade_Status;
+                        }
+                        else
+                        {
+                            // Action มาจาก NewEquipment (Edit): บันทึก Modifyby และ Modifydate (ไม่แตะ LastMA_date และ UpdateBy)
+                            _MAPlan.Modifyby = data.Modifyby;
+                            _MAPlan.Modifydate = DateTime.Now;
 
-                        _MAPlan.Lifetime = data.Lifetime;
-                        _MAPlan.Location = data.Location;
-                        _MAPlan.StatusF = data.StatusF;
+                            _MAPlan.Equipment_No = data.Equipment_No;
+                            _MAPlan.Equipment_Name = data.Equipment_Name;
+                            _MAPlan.Product_name = data.Product_name;
+                            _MAPlan.Type_MC = data.Type_MC;
+                            _MAPlan.Model = data.Model;
+                            _MAPlan.Serial_No = data.Serial_No;
+                            _MAPlan.Property = data.Property;
+                            _MAPlan.Referrence_No = data.Referrence_No;
+                            _MAPlan.Responsible_Name = data.Responsible_Name;
+                            _MAPlan.Manufacture = data.Manufacture;
+                            _MAPlan.Description = data.Description;
 
-                        _MAPlan.GPVProcess= data.GPVProcess;
-                        _MAPlan.ProcessSide= data.ProcessSide;
-                        _MAPlan.WithTopCover = data.WithTopCover;
-                        _MAPlan.WithControlTooling = data.WithControlTooling;
-                        _MAPlan.Grade_Status = data.Grade_Status;
-                        _MAPlan.Dimension = data.Dimension;
-                        _MAPlan.Equipment_Picture = data.Equipment_Picture;
+                            _MAPlan.GE_ID = data.GE_ID;
+                            _MAPlan.Section = data.Section;
+                            _MAPlan.Type_MA = data.Type_MA;
+                            _MAPlan.Startdate = data.Startdate;
+                            _MAPlan.Customer = data.Customer;
+                            _MAPlan.Customer_Name = data.Customer_Name;
+                            _MAPlan.Plan_Daily = data.Plan_Daily;
+                            _MAPlan.Plan_Weekly = data.Plan_Weekly;
+                            _MAPlan.Plan_Monthly = data.Plan_Monthly;
+                            _MAPlan.Plan_Semi_annually = data.Plan_Semi_annually;
+                            _MAPlan.Plan_Quarterly = data.Plan_Quarterly;
+                            _MAPlan.Plan_Yearly = data.Plan_Yearly;
+                            _MAPlan.Plan_Manually = data.Plan_Manually; 
+                            _MAPlan.P_ID = data.P_ID;
+                            _MAPlan.Pinnumber = data.Pinnumber;
+
+                            _MAPlan.Lifetime = data.Lifetime;
+                            _MAPlan.Location = data.Location;
+                            _MAPlan.StatusF = data.StatusF;
+
+                            _MAPlan.GPVProcess = data.GPVProcess;
+                            _MAPlan.ProcessSide = data.ProcessSide;
+                            _MAPlan.WithTopCover = data.WithTopCover;
+                            _MAPlan.WithControlTooling = data.WithControlTooling;
+                            _MAPlan.Grade_Status = data.Grade_Status;
+                            _MAPlan.Dimension = data.Dimension;
+                            _MAPlan.Equipment_Picture = data.Equipment_Picture;
+                            _MAPlan.Type_Tools = data.Type_Tools;
+
+                            // Edit: ลบรายการเดิมทั้งหมดของ MA_ID นี้ออก
+                            var existingProducts = Entity.Tbl_ProductName.Where(x => x.MA_ID == _MAPlan.MA_ID).ToList();
+                            if (existingProducts.Any())
+                            {
+                                Entity.Tbl_ProductName.RemoveRange(existingProducts);
+                            }
+
+                            // Edit: เพิ่มรายการใหม่ที่ split ด้วย comma
+                            if (!string.IsNullOrEmpty(data.Product_name))
+                            {
+                                var productNames = data.Product_name
+                                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(p => p.Trim())
+                                    .Where(p => !string.IsNullOrEmpty(p))
+                                    .Distinct();
+
+                                foreach (var pName in productNames)
+                                {
+                                    Entity.Tbl_ProductName.Add(new Tbl_ProductName
+                                    {
+                                        MA_ID = _MAPlan.MA_ID,
+                                        Product_name = pName
+                                    });
+                                }
+                            }
+                        }
 
                         Mode_Add = false;
                     }
@@ -1996,11 +2127,38 @@ namespace MAFixture_WebApplication.Controllers
                     if (Mode_Add)
                     {
                         Entity.MAPlans.Add(_MAPlan);
+
+                        // Add: เพิ่มรายการที่ split ด้วย comma ลงใน Tbl_ProductName
+                        if (!string.IsNullOrEmpty(_MAPlan.Product_name))
+                        {
+                            var productNames = _MAPlan.Product_name
+                                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(p => p.Trim())
+                                .Where(p => !string.IsNullOrEmpty(p))
+                                .Distinct();
+
+                            foreach (var pName in productNames)
+                            {
+                                Entity.Tbl_ProductName.Add(new Tbl_ProductName
+                                {
+                                    MA_ID = _MAPlan.MA_ID,
+                                    Product_name = pName
+                                });
+                            }
+                        }
                     }
 
                     Entity.SaveChanges();
                 }
-                return Json(new { success = true, word = "Saved successfully!", data = _MAPlan });
+                return Json(new { 
+                    success = true, 
+                    word = "Saved successfully!", 
+                    data = new { 
+                        MA_ID = _MAPlan.MA_ID,
+                        Equipment_No = _MAPlan.Equipment_No,
+                        Equipment_Name = _MAPlan.Equipment_Name
+                    } 
+                });
             }
             catch (Exception E)
             {
@@ -2244,6 +2402,62 @@ namespace MAFixture_WebApplication.Controllers
                 return Json(new { success = false, word = "Error, " + E.Message });
             }
         }
+        private void CleanMachineNameFromMasterChecklist(string equipmentName, long currentMaId, MAFixtureEntities entity)
+        {
+            if (string.IsNullOrWhiteSpace(equipmentName))
+            {
+                return;
+            }
+
+            equipmentName = equipmentName.Trim();
+
+            // ตรวจสอบว่ายังมี Fixture ตัวอื่นที่ Active (StatusF == 1) และใช้ Equipment_Name นี้อยู่อีกหรือไม่
+            bool hasOtherActive = entity.MAPlans.Any(x => x.MA_ID != currentMaId && x.StatusF == 1 && x.Equipment_Name == equipmentName);
+            if (hasOtherActive)
+            {
+                // หากยังมี Fixture อื่นที่ Active และใช้ชื่อเดียวกัน ห้ามลบชื่อเครื่องออกจาก Master Checklist
+                return;
+            }
+
+            // ค้นหา Tbl_MasterMATester ทั้งหมดที่มีชื่อเครื่องนี้อยู่ใน Machinename
+            var relatedMasters = entity.Tbl_MasterMATester
+                                       .Where(x => x.Machinename != null && x.Machinename.Contains(equipmentName))
+                                       .ToList();
+
+            if (relatedMasters == null || !relatedMasters.Any())
+            {
+                return;
+            }
+
+            char[] delimiters = new char[] { ',', '/' };
+            foreach (var master in relatedMasters)
+            {
+                if (string.IsNullOrEmpty(master.Machinename))
+                {
+                    continue;
+                }
+
+                // แยกรายการชื่อเครื่องด้วย comma หรือ slash
+                var machineList = master.Machinename
+                    .Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(m => m.Trim())
+                    .Where(m => !string.IsNullOrEmpty(m))
+                    .ToList();
+
+                // กรองเอาชื่อเครื่องที่ตรงกันออก (Exact match, Case-insensitive)
+                var updatedList = machineList
+                    .Where(m => !m.Equals(equipmentName, StringComparison.OrdinalIgnoreCase))
+                    .Distinct()
+                    .ToList();
+
+                // ปรับปรุงเฉพาะเมื่อมีการเปลี่ยนแปลงจริง
+                if (updatedList.Count != machineList.Count)
+                {
+                    string newMachineName = string.Join(",", updatedList);
+                    master.Machinename = string.IsNullOrEmpty(newMachineName) ? null : newMachineName;
+                }
+            }
+        }
         [HttpPost]
         public ActionResult Obsolete_Fixture_By_MA_ID(string MA_ID)
         {
@@ -2254,11 +2468,33 @@ namespace MAFixture_WebApplication.Controllers
                     double maIdAsDouble;
                     if (double.TryParse(MA_ID, out maIdAsDouble))
                     {
-                        string query = "UPDATE MAPlan SET StatusF = @p0 WHERE MA_ID = @p1";
-                        int rowsAffected = Entity.Database.ExecuteSqlCommand(query, "2", maIdAsDouble);
-
-                        if (rowsAffected > 0)
+                        var employeeId = "";
+                        try
                         {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null) employeeId = claim.Value;
+                        }
+                        catch { }
+
+                        long maId = (long)maIdAsDouble;
+                        var maplan = Entity.MAPlans.FirstOrDefault(x => x.MA_ID == maId);
+                        if (maplan != null)
+                        {
+                            maplan.StatusF = 2;
+                            maplan.Modifyby = employeeId;
+                            maplan.Modifydate = DateTime.Now;
+
+                            // ลบ Tbl_ProductName ของ MA_ID นี้ออก
+                            var existingProducts = Entity.Tbl_ProductName.Where(x => x.MA_ID == maId).ToList();
+                            if (existingProducts.Any())
+                            {
+                                Entity.Tbl_ProductName.RemoveRange(existingProducts);
+                            }
+
+                            // นำชื่อเครื่องออกจาก Master Checklist (Tbl_MasterMATester) หากไม่มีเครื่องอื่นที่ Active ใช้งานชื่อนี้แล้ว
+                            CleanMachineNameFromMasterChecklist(maplan.Equipment_Name, maId, Entity);
+
+                            Entity.SaveChanges();
                             return Json(new { success = true, word = "Obsoleted successfully!" });
                         }
                         else return Json(new { success = false, word = "Couldn't obsolete fixture" });
@@ -2284,12 +2520,49 @@ namespace MAFixture_WebApplication.Controllers
                     double maIdAsDouble;
                     if (double.TryParse(MA_ID, out maIdAsDouble))
                     {
-                        var Email =  HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_EMAIL").Value;
-                        string query = "UPDATE MAPlan SET StatusF = @p0  ,LastMA_date = @p1 , UpdateBy = @p2 WHERE MA_ID = @p3";
-                        int rowsAffected = Entity.Database.ExecuteSqlCommand(query, "1", DateTime.Now, Email, maIdAsDouble);
-
-                        if (rowsAffected > 0)
+                        var employeeId = "";
+                        try
                         {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null) employeeId = claim.Value;
+                        }
+                        catch { }
+
+                        long maId = (long)maIdAsDouble;
+                        var maplan = Entity.MAPlans.FirstOrDefault(x => x.MA_ID == maId);
+                        if (maplan != null)
+                        {
+                            maplan.StatusF = 1;
+                            maplan.Modifyby = employeeId;
+                            maplan.Modifydate = DateTime.Now;
+
+                            // ลบของเดิมออกก่อนกันซ้ำ (ถ้ามี)
+                            var existingProducts = Entity.Tbl_ProductName.Where(x => x.MA_ID == maId).ToList();
+                            if (existingProducts.Any())
+                            {
+                                Entity.Tbl_ProductName.RemoveRange(existingProducts);
+                            }
+
+                            // เพิ่ม product_name กลับเข้าไปใหม่โดย split ด้วย comma
+                            if (!string.IsNullOrEmpty(maplan.Product_name))
+                            {
+                                var productNames = maplan.Product_name
+                                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(p => p.Trim())
+                                    .Where(p => !string.IsNullOrEmpty(p))
+                                    .Distinct();
+
+                                foreach (var pName in productNames)
+                                {
+                                    Entity.Tbl_ProductName.Add(new Tbl_ProductName
+                                    {
+                                        MA_ID = maplan.MA_ID,
+                                        Product_name = pName
+                                    });
+                                }
+                            }
+
+                            Entity.SaveChanges();
                             return Json(new { success = true, word = "Recovered successfully!" });
                         }
                         else return Json(new { success = false, word = "Couldn't recover fixture" });
@@ -2315,11 +2588,33 @@ namespace MAFixture_WebApplication.Controllers
                     double maIdAsDouble;
                     if (double.TryParse(MA_ID, out maIdAsDouble))
                     {
-                        string query = "UPDATE MAPlan SET StatusF = @p0 WHERE MA_ID = @p1";
-                        int rowsAffected = Entity.Database.ExecuteSqlCommand(query, "0", maIdAsDouble);
-
-                        if (rowsAffected > 0)
+                        var employeeId = "";
+                        try
                         {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null) employeeId = claim.Value;
+                        }
+                        catch { }
+
+                        long maId = (long)maIdAsDouble;
+                        var maplan = Entity.MAPlans.FirstOrDefault(x => x.MA_ID == maId);
+                        if (maplan != null)
+                        {
+                            maplan.StatusF = 0;
+                            maplan.Modifyby = employeeId;
+                            maplan.Modifydate = DateTime.Now;
+
+                            // ลบ Tbl_ProductName ของ MA_ID นี้ออก
+                            var existingProducts = Entity.Tbl_ProductName.Where(x => x.MA_ID == maId).ToList();
+                            if (existingProducts.Any())
+                            {
+                                Entity.Tbl_ProductName.RemoveRange(existingProducts);
+                            }
+
+                            // นำชื่อเครื่องออกจาก Master Checklist (Tbl_MasterMATester) หากไม่มีเครื่องอื่นที่ Active ใช้งานชื่อนี้แล้ว
+                            CleanMachineNameFromMasterChecklist(maplan.Equipment_Name, maId, Entity);
+
+                            Entity.SaveChanges();
                             return Json(new { success = true, word = "Deleted successfully!" });
                         }
                         else return Json(new { success = false, word = "Couldn't delete fixture" });
@@ -2892,30 +3187,81 @@ namespace MAFixture_WebApplication.Controllers
                 return File(file, "application/pdf");
             }
         }
-        public ActionResult Load_SummaryTHTPallet(string Product_name)
+        [HttpPost]
+        public ActionResult Load_SummaryTHTPallet(string Product_name, string Section, string Type = "", string Type_MA = "")
         {
             try
             {
                 using (MAFixtureEntities Entity = SettingAccountMAFixture())
                 {
                     Entity.Configuration.ProxyCreationEnabled = false; // Disable proxy creation for lazy loading
-                    var data = Entity.MAPlans
-                                .Where(x => x.Section == "THT_HM" && x.Product_name.Contains(Product_name))
-                                .GroupBy(x => new { x.Product_name })
-                                .Select(g => new
+
+                    var query = from s in Entity.Tbl_Summarize_Tools
+                                join m in Entity.Tbl_MasterTools.Where(x => x.Status != "0" || x.Status == null)
+                                    on new { s.Product_name, s.Section, s.Type } equals new { m.Product_name, m.Section, m.Type } into sm
+                                from m in sm.DefaultIfEmpty()
+                                select new
                                 {
-                                    Product_name = g.Key.Product_name,
-                                    Count = g.Count()
-                                })
-                                .ToList();
+                                    ID = s.ID,
+                                    MasterToolID = (int?)m.ID,
+                                    Product_name = s.Product_name,
+                                    Section = s.Section,
+                                    Type = s.Type,
+                                    SummarizeAmount = s.Amount ?? 0,
+                                    MasterAmount = m.Amount ?? 0
+                                };
+
+                    if (!string.IsNullOrEmpty(Product_name))
+                    {
+                        Product_name = Product_name.Trim();
+                        query = query.Where(x => x.Product_name.Contains(Product_name));
+                    }
+
+                    if (!string.IsNullOrEmpty(Section))
+                    {
+                        Section = Section.Trim();
+                        query = query.Where(x => x.Section == Section || x.Section.Contains(Section));
+                    }
+
+                    var typeFilter = !string.IsNullOrEmpty(Type) ? Type : Type_MA;
+                    if (!string.IsNullOrEmpty(typeFilter))
+                    {
+                        typeFilter = typeFilter.Trim();
+                        query = query.Where(x => x.Type == typeFilter || x.Type.Contains(typeFilter));
+                    }
+
+                    var data = query.OrderBy(x => x.Product_name).ToList();
 
                     if (data == null)
                     {
                         return Json(new { success = false, word = "Could not load data." }, JsonRequestBehavior.AllowGet);
                     }
 
+                    // ดึง Cycle_Time ล่าสุดของแต่ละ MT_ID จาก Tbl_LogMasterTools โดยจัดกลุ่มป้องกันแถวซ้ำ
+                    var latestCycleTimes = Entity.Tbl_LogMasterTools.AsNoTracking()
+                        .Where(l => l.MT_ID.HasValue && l.Cycle_Time.HasValue)
+                        .GroupBy(l => l.MT_ID.Value)
+                        .Select(g => new
+                        {
+                            MT_ID = g.Key,
+                            Cycle_Time = g.OrderByDescending(x => x.ID).Select(x => x.Cycle_Time).FirstOrDefault()
+                        })
+                        .ToList();
 
-                    var jsonResult = Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);
+                    var cycleMap = latestCycleTimes.ToDictionary(x => x.MT_ID, x => x.Cycle_Time);
+
+                    var resultData = data.Select(x => new
+                    {
+                        ID = x.ID,
+                        Product_name = x.Product_name,
+                        Section = x.Section,
+                        Type = x.Type,
+                        SummarizeAmount = x.SummarizeAmount,
+                        MasterAmount = x.MasterAmount,
+                        Cycle_Time = (x.MasterToolID.HasValue && cycleMap.ContainsKey(x.MasterToolID.Value)) ? cycleMap[x.MasterToolID.Value] : null
+                    }).ToList();
+
+                    var jsonResult = Json(new { success = true, data = resultData }, JsonRequestBehavior.AllowGet);
                     jsonResult.MaxJsonLength = int.MaxValue;
                     return jsonResult;
                 }
@@ -2923,6 +3269,932 @@ namespace MAFixture_WebApplication.Controllers
             catch (Exception E)
             {
                 return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+        [HttpPost]
+        public ActionResult Load_MasterToolsList(string Product_name = "", string Section = "", string Type = "")
+        {
+            try
+            {
+                using (MAFixtureEntities Entity = SettingAccountMAFixture())
+                {
+                    Entity.Configuration.ProxyCreationEnabled = false; // Disable proxy creation for lazy loading
+
+                    var query = from m in Entity.Tbl_MasterTools.AsNoTracking()
+                                where m.Status != "0" || m.Status == null
+                                join s in Entity.Tbl_Summarize_Tools.AsNoTracking()
+                                    on new { m.Product_name, m.Section, m.Type } equals new { s.Product_name, s.Section, s.Type } into ms
+                                from s in ms.DefaultIfEmpty()
+                                select new
+                                {
+                                    ID = m.ID,
+                                    Product_name = m.Product_name,
+                                    Section = m.Section,
+                                    Type = m.Type,
+                                    Amount = m.Amount ?? 0,
+                                    SummarizeAmount = s.Amount ?? 0
+                                };
+
+                    if (!string.IsNullOrEmpty(Product_name))
+                    {
+                        Product_name = Product_name.Trim();
+                        query = query.Where(x => x.Product_name.Contains(Product_name));
+                    }
+
+                    if (!string.IsNullOrEmpty(Section))
+                    {
+                        Section = Section.Trim();
+                        query = query.Where(x => x.Section == Section || x.Section.Contains(Section));
+                    }
+
+                    if (!string.IsNullOrEmpty(Type))
+                    {
+                        Type = Type.Trim();
+                        query = query.Where(x => x.Type == Type || x.Type.Contains(Type));
+                    }
+
+                    var data = query.OrderBy(x => x.Product_name).ToList();
+
+                    if (data == null)
+                    {
+                        return Json(new { success = false, word = "Could not load data." }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    // ดึง Cycle_Time ล่าสุดของแต่ละ MT_ID จาก Tbl_LogMasterTools
+                    var latestCycleTimes = Entity.Tbl_LogMasterTools.AsNoTracking()
+                        .Where(l => l.MT_ID.HasValue && l.Cycle_Time.HasValue)
+                        .GroupBy(l => l.MT_ID.Value)
+                        .Select(g => new
+                        {
+                            MT_ID = g.Key,
+                            Cycle_Time = g.OrderByDescending(x => x.ID).Select(x => x.Cycle_Time).FirstOrDefault()
+                        })
+                        .ToList();
+
+                    var cycleMap = latestCycleTimes.ToDictionary(x => x.MT_ID, x => x.Cycle_Time);
+
+                    var resultData = data.Select(x => new
+                    {
+                        ID = x.ID,
+                        Product_name = x.Product_name,
+                        Section = x.Section,
+                        Type = x.Type,
+                        Amount = x.Amount,
+                        SummarizeAmount = x.SummarizeAmount,
+                        Cycle_Time = cycleMap.ContainsKey(x.ID) ? cycleMap[x.ID] : null
+                    }).ToList();
+
+                    var jsonResult = Json(new { success = true, data = resultData }, JsonRequestBehavior.AllowGet);
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                    return jsonResult;
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+        [HttpPost]
+        public ActionResult Adjust_MasterTools_Amount(int ID, int Step, string Comment = "", string UpdateBy = "")
+        {
+            try
+            {
+                using (MAFixtureEntities Entity = SettingAccountMAFixture())
+                {
+                    var masterTool = Entity.Tbl_MasterTools.FirstOrDefault(x => x.ID == ID);
+                    if (masterTool == null)
+                    {
+                        return Json(new { success = false, word = "Master Tool record not found." });
+                    }
+
+                    string employeeId = UpdateBy;
+                    if (string.IsNullOrEmpty(employeeId))
+                    {
+                        try
+                        {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null)
+                            {
+                                employeeId = claim.Value;
+                            }
+                        }
+                        catch { }
+                    }
+                    if (!string.IsNullOrEmpty(employeeId) && employeeId.Length > 10)
+                    {
+                        employeeId = employeeId.Substring(0, 10);
+                    }
+
+                    // ค้นหาข้อมูล Summarize ที่ตรงกัน (Product_name, Section, Type)
+                    var summarizeTool = Entity.Tbl_Summarize_Tools.FirstOrDefault(s =>
+                        s.Product_name == masterTool.Product_name &&
+                        s.Section == masterTool.Section &&
+                        s.Type == masterTool.Type);
+
+                    int maxLimit = summarizeTool != null && summarizeTool.Amount.HasValue ? summarizeTool.Amount.Value : 0;
+                    int oldAmount = masterTool.Amount ?? 0;
+                    int newAmount = oldAmount + Step;
+
+                    if (newAmount < 0)
+                    {
+                        return Json(new { success = false, word = "Amount cannot be less than 0." });
+                    }
+
+                    if (newAmount > maxLimit)
+                    {
+                        return Json(new { success = false, word = "Amount cannot exceed Summarize Amount (" + maxLimit + ")." });
+                    }
+
+                    string diffText = (newAmount >= oldAmount ? "+" : "") + (newAmount - oldAmount);
+
+                    // สร้างข้อความบันทึกรายละเอียดครบถ้วนลงใน Update_Log (varchar(500))
+                    string userComment = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
+                    string detailedLog = string.Format(
+                        "Amount: {0} -> {1} ({2}) | Product: {3} | Section: {4} | Type: {5} | Summarize Max: {6}{7}",
+                        oldAmount,
+                        newAmount,
+                        diffText,
+                        masterTool.Product_name,
+                        masterTool.Section,
+                        masterTool.Type,
+                        maxLimit,
+                        !string.IsNullOrEmpty(userComment) ? " | Comment: " + userComment : ""
+                    );
+                    if (detailedLog.Length > 500)
+                    {
+                        detailedLog = detailedLog.Substring(0, 500);
+                    }
+
+                    // บันทึกความเห็นหรือหมายเหตุลงใน Update_Comment (nvarchar(500) รองรับ Unicode)
+                    string logComment = !string.IsNullOrEmpty(userComment)
+                        ? userComment
+                        : string.Format("Amount changed: {0} -> {1} ({2})", oldAmount, newAmount, diffText);
+                    if (logComment.Length > 500)
+                    {
+                        logComment = logComment.Substring(0, 500);
+                    }
+
+                    var log = new Tbl_LogMasterTools
+                    {
+                        MT_ID = masterTool.ID,
+                        Updateby = employeeId,
+                        Updatedate = DateTime.Now,
+                        Update_Comment = logComment,
+                        Update_Log = detailedLog
+                    };
+                    Entity.Tbl_LogMasterTools.Add(log);
+
+                    masterTool.Amount = newAmount;
+                    Entity.SaveChanges();
+
+                    // ส่งอีเมลแจ้งเตือน E - Industrial Engineering
+                    try
+                    {
+                        string userEmail = "";
+                        try
+                        {
+                            var emailClaim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_EMAIL");
+                            if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
+                            {
+                                userEmail = emailClaim.Value.Trim();
+                            }
+                        }
+                        catch { }
+
+                        SendEmail(log, masterTool, oldAmount, maxLimit, userEmail);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("SendEmail Trigger Error: " + ex.Message);
+                    }
+
+                    return Json(new { success = true, newAmount = newAmount, word = "Amount updated successfully." });
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                var errorMessages = new List<string>();
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        errorMessages.Add(validationError.PropertyName + ": " + validationError.ErrorMessage);
+                    }
+                }
+                return Json(new { success = false, word = "Validation Error: " + string.Join("; ", errorMessages) });
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + (E.InnerException != null ? E.InnerException.Message : E.Message) });
+            }
+        }
+        [HttpPost]
+        public ActionResult Update_MasterTools_Amount(int ID, int NewAmount, string Comment = "", string UpdateBy = "")
+        {
+            try
+            {
+                using (MAFixtureEntities Entity = SettingAccountMAFixture())
+                {
+                    var masterTool = Entity.Tbl_MasterTools.FirstOrDefault(x => x.ID == ID);
+                    if (masterTool == null)
+                    {
+                        return Json(new { success = false, word = "Master Tool record not found." });
+                    }
+
+                    string employeeId = UpdateBy;
+                    if (string.IsNullOrEmpty(employeeId))
+                    {
+                        try
+                        {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null)
+                            {
+                                employeeId = claim.Value;
+                            }
+                        }
+                        catch { }
+                    }
+                    if (!string.IsNullOrEmpty(employeeId) && employeeId.Length > 10)
+                    {
+                        employeeId = employeeId.Substring(0, 10);
+                    }
+
+                    // ค้นหาข้อมูล Summarize ที่ตรงกัน (Product_name, Section, Type)
+                    var summarizeTool = Entity.Tbl_Summarize_Tools.FirstOrDefault(s =>
+                        s.Product_name == masterTool.Product_name &&
+                        s.Section == masterTool.Section &&
+                        s.Type == masterTool.Type);
+
+                    int maxLimit = summarizeTool != null && summarizeTool.Amount.HasValue ? summarizeTool.Amount.Value : 0;
+                    int oldAmount = masterTool.Amount ?? 0;
+
+                    if (NewAmount < 0)
+                    {
+                        return Json(new { success = false, word = "Amount cannot be less than 0." });
+                    }
+
+                    if (NewAmount > maxLimit)
+                    {
+                        return Json(new { success = false, word = "Cannot save: Amount cannot exceed Summarize Amount (" + maxLimit + ")." });
+                    }
+
+                    string diffText = (NewAmount >= oldAmount ? "+" : "") + (NewAmount - oldAmount);
+
+                    // สร้างข้อความบันทึกรายละเอียดครบถ้วนลงใน Update_Log (varchar(500))
+                    string userComment = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
+                    string detailedLog = string.Format(
+                        "Amount: {0} -> {1} ({2}) | Product: {3} | Section: {4} | Type: {5} | Summarize Max: {6}{7}",
+                        oldAmount,
+                        NewAmount,
+                        diffText,
+                        masterTool.Product_name,
+                        masterTool.Section,
+                        masterTool.Type,
+                        maxLimit,
+                        !string.IsNullOrEmpty(userComment) ? " | Comment: " + userComment : ""
+                    );
+                    if (detailedLog.Length > 500)
+                    {
+                        detailedLog = detailedLog.Substring(0, 500);
+                    }
+
+                    // บันทึกความเห็นหรือหมายเหตุลงใน Update_Comment (nvarchar(500) รองรับ Unicode)
+                    string logComment = !string.IsNullOrEmpty(userComment)
+                        ? userComment
+                        : string.Format("Amount changed: {0} -> {1} ({2})", oldAmount, NewAmount, diffText);
+                    if (logComment.Length > 500)
+                    {
+                        logComment = logComment.Substring(0, 500);
+                    }
+
+                    var log = new Tbl_LogMasterTools
+                    {
+                        MT_ID = masterTool.ID,
+                        Updateby = employeeId,
+                        Updatedate = DateTime.Now,
+                        Update_Comment = logComment,
+                        Update_Log = detailedLog
+                    };
+                    Entity.Tbl_LogMasterTools.Add(log);
+
+                    masterTool.Amount = NewAmount;
+                    Entity.SaveChanges();
+
+                    // ส่งอีเมลแจ้งเตือน E - Industrial Engineering
+                    try
+                    {
+                        string userEmail = "";
+                        try
+                        {
+                            var emailClaim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_EMAIL");
+                            if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
+                            {
+                                userEmail = emailClaim.Value.Trim();
+                            }
+                        }
+                        catch { }
+
+                        SendEmail(log, masterTool, oldAmount, maxLimit, userEmail);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("SendEmail Trigger Error: " + ex.Message);
+                    }
+
+                    return Json(new { success = true, newAmount = NewAmount, word = "Amount updated successfully." });
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                var errorMessages = new List<string>();
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        errorMessages.Add(validationError.PropertyName + ": " + validationError.ErrorMessage);
+                    }
+                }
+                return Json(new { success = false, word = "Validation Error: " + string.Join("; ", errorMessages) });
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + (E.InnerException != null ? E.InnerException.Message : E.Message) });
+            }
+        }
+        [HttpPost]
+        public ActionResult Update_MasterTools_CycleTime(int ID, double NewCycleTime, string Comment = "", string UpdateBy = "")
+        {
+            try
+            {
+                using (MAFixtureEntities Entity = SettingAccountMAFixture())
+                {
+                    var masterTool = Entity.Tbl_MasterTools.FirstOrDefault(x => x.ID == ID);
+                    if (masterTool == null)
+                    {
+                        return Json(new { success = false, word = "Master Tool record not found." });
+                    }
+
+                    bool isIndustrial = false;
+                    string userEmail = "";
+                    try
+                    {
+                        var emailClaim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_EMAIL");
+                        if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
+                        {
+                            userEmail = emailClaim.Value.Trim();
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        var deptClaim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_DEPARTMENT");
+                        if (deptClaim != null && !string.IsNullOrEmpty(deptClaim.Value))
+                        {
+                            if (deptClaim.Value.IndexOf("Industrial", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                isIndustrial = true;
+                            }
+                        }
+                    }
+                    catch { }
+
+                    // ข้อยกเว้นสำหรับ Jinnawit.Ananpatiwet@gpv-group.com ให้มีสิทธิ์บันทึกได้เสมอ
+                    if (!string.IsNullOrEmpty(userEmail) && userEmail.IndexOf("Jinnawit.Ananpatiwet", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        isIndustrial = true;
+                    }
+
+                    if (!isIndustrial)
+                    {
+                        return Json(new { success = false, word = "Permission denied: Only E - Industrial can modify Cycle Time." });
+                    }
+
+                    if (NewCycleTime < 0)
+                    {
+                        return Json(new { success = false, word = "Cycle Time cannot be less than 0." });
+                    }
+
+                    string employeeId = UpdateBy;
+                    if (string.IsNullOrEmpty(employeeId))
+                    {
+                        try
+                        {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null)
+                            {
+                                employeeId = claim.Value;
+                            }
+                        }
+                        catch { }
+                    }
+                    if (!string.IsNullOrEmpty(employeeId) && employeeId.Length > 10)
+                    {
+                        employeeId = employeeId.Substring(0, 10);
+                    }
+
+                    // ค้นหา Cycle_Time ล่าสุดเดิม
+                    var lastLog = Entity.Tbl_LogMasterTools
+                        .Where(l => l.MT_ID == masterTool.ID && l.Cycle_Time.HasValue)
+                        .OrderByDescending(l => l.ID)
+                        .FirstOrDefault();
+
+                    double oldCycleTime = lastLog != null && lastLog.Cycle_Time.HasValue ? lastLog.Cycle_Time.Value : 0.0;
+                    double diff = NewCycleTime - oldCycleTime;
+                    string diffText = (diff >= 0 ? "+" : "") + diff.ToString("0.##");
+
+                    string userComment = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
+                    string detailedLog = string.Format(
+                        "Cycle Time: {0:0.##} -> {1:0.##} ({2}) | Product: {3} | Section: {4} | Type: {5} | By: {6}{7}",
+                        oldCycleTime,
+                        NewCycleTime,
+                        diffText,
+                        masterTool.Product_name,
+                        masterTool.Section,
+                        masterTool.Type,
+                        employeeId,
+                        !string.IsNullOrEmpty(userComment) ? " | Comment: " + userComment : ""
+                    );
+                    if (detailedLog.Length > 500)
+                    {
+                        detailedLog = detailedLog.Substring(0, 500);
+                    }
+
+                    string logComment = !string.IsNullOrEmpty(userComment)
+                        ? userComment
+                        : string.Format("Cycle Time changed: {0:0.##} -> {1:0.##} ({2})", oldCycleTime, NewCycleTime, diffText);
+                    if (logComment.Length > 500)
+                    {
+                        logComment = logComment.Substring(0, 500);
+                    }
+
+                    var log = new Tbl_LogMasterTools
+                    {
+                        MT_ID = masterTool.ID,
+                        Cycle_Time = NewCycleTime,
+                        Updateby = employeeId,
+                        Updatedate = DateTime.Now,
+                        Update_Comment = logComment,
+                        Update_Log = detailedLog
+                    };
+                    Entity.Tbl_LogMasterTools.Add(log);
+                    Entity.SaveChanges();
+
+                    return Json(new { success = true, newCycleTime = NewCycleTime, word = "Cycle Time updated successfully." });
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                var errorMessages = new List<string>();
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        errorMessages.Add(validationError.PropertyName + ": " + validationError.ErrorMessage);
+                    }
+                }
+                return Json(new { success = false, word = "Validation Error: " + string.Join("; ", errorMessages) });
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + (E.InnerException != null ? E.InnerException.Message : E.Message) });
+            }
+        }
+        [HttpPost]
+        public ActionResult Delete_MasterTool(int ID, string Comment = "", string UpdateBy = "")
+        {
+            try
+            {
+                using (MAFixtureEntities Entity = SettingAccountMAFixture())
+                {
+                    var masterTool = Entity.Tbl_MasterTools.FirstOrDefault(x => x.ID == ID);
+                    if (masterTool == null)
+                    {
+                        return Json(new { success = false, word = "Master Tool not found." });
+                    }
+
+                    if (masterTool.Status == "0")
+                    {
+                        return Json(new { success = false, word = "This Master Tool has already been deleted." });
+                    }
+
+                    string employeeId = UpdateBy;
+                    if (string.IsNullOrEmpty(employeeId))
+                    {
+                        try
+                        {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null)
+                            {
+                                employeeId = claim.Value;
+                            }
+                        }
+                        catch { }
+                    }
+                    if (!string.IsNullOrEmpty(employeeId) && employeeId.Length > 10)
+                    {
+                        employeeId = employeeId.Substring(0, 10);
+                    }
+
+                    // ค้นหา Cycle_Time ล่าสุดเดิม เพื่อบันทึกเก็บไว้ใน Log
+                    var lastLog = Entity.Tbl_LogMasterTools
+                        .Where(l => l.MT_ID == masterTool.ID && l.Cycle_Time.HasValue)
+                        .OrderByDescending(l => l.ID)
+                        .FirstOrDefault();
+                    double? lastCycleTime = lastLog != null ? lastLog.Cycle_Time : null;
+
+                    string userComment = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
+                    string detailedLog = string.Format(
+                        "Deleted Master Tool: Product: {0} | Section: {1} | Type: {2} | Amount: {3} | By: {4}{5}",
+                        masterTool.Product_name,
+                        masterTool.Section,
+                        masterTool.Type,
+                        masterTool.Amount,
+                        employeeId,
+                        !string.IsNullOrEmpty(userComment) ? " | Reason: " + userComment : ""
+                    );
+                    if (detailedLog.Length > 500)
+                    {
+                        detailedLog = detailedLog.Substring(0, 500);
+                    }
+
+                    string logComment = !string.IsNullOrEmpty(userComment)
+                        ? userComment
+                        : string.Format("Deleted tool (ID: {0}, Product: {1})", masterTool.ID, masterTool.Product_name);
+                    if (logComment.Length > 500)
+                    {
+                        logComment = logComment.Substring(0, 500);
+                    }
+
+                    // ปรับ Status เป็น 0 (ลบ)
+                    masterTool.Status = "0";
+
+                    // บันทึกประวัติลง Tbl_LogMasterTools
+                    var log = new Tbl_LogMasterTools
+                    {
+                        MT_ID = masterTool.ID,
+                        Cycle_Time = lastCycleTime,
+                        Updateby = employeeId,
+                        Updatedate = DateTime.Now,
+                        Update_Comment = logComment,
+                        Update_Log = detailedLog
+                    };
+                    Entity.Tbl_LogMasterTools.Add(log);
+                    Entity.SaveChanges();
+
+                    return Json(new { success = true, word = "Master Tool deleted successfully." });
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                var errorMessages = new List<string>();
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        errorMessages.Add(validationError.PropertyName + ": " + validationError.ErrorMessage);
+                    }
+                }
+                return Json(new { success = false, word = "Validation Error: " + string.Join("; ", errorMessages) });
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + (E.InnerException != null ? E.InnerException.Message : E.Message) });
+            }
+        }
+        [HttpPost]
+        public ActionResult Add_MasterTool(string Product_name, string Section, string Type, int Amount, string Comment = "", string CreateBy = "")
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Product_name) || string.IsNullOrWhiteSpace(Section) || string.IsNullOrWhiteSpace(Type))
+                {
+                    return Json(new { success = false, word = "Please fill in all required fields (Product Name, Section, Type)." });
+                }
+
+                if (Amount < 0)
+                {
+                    return Json(new { success = false, word = "Amount cannot be less than 0." });
+                }
+
+                Product_name = Product_name.Trim();
+                Section = Section.Trim();
+                Type = Type.Trim();
+
+                using (MAFixtureEntities Entity = SettingAccountMAFixture())
+                {
+                    string employeeId = CreateBy;
+                    if (string.IsNullOrEmpty(employeeId))
+                    {
+                        try
+                        {
+                            var claim = HttpContext.GetOwinContext().Authentication.User.FindFirst("EMPLOYEE_ID");
+                            if (claim != null)
+                            {
+                                employeeId = claim.Value;
+                            }
+                        }
+                        catch { }
+                    }
+                    if (!string.IsNullOrEmpty(employeeId) && employeeId.Length > 6)
+                    {
+                        employeeId = employeeId.Substring(0, 6);
+                    }
+
+                    // ตรวจสอบข้อมูลซ้ำตาม Product_name, Section, Type
+                    var existingTool = Entity.Tbl_MasterTools.FirstOrDefault(x =>
+                        x.Product_name == Product_name &&
+                        x.Section == Section &&
+                        x.Type == Type);
+
+                    if (existingTool != null)
+                    {
+                        // ถ้ามีข้อมูลอยู่และยังไม่ได้ถูกลบ (Status != "0")
+                        if (existingTool.Status != "0")
+                        {
+                            return Json(new { success = false, word = "This Master Tool already exists for this Section and Type." });
+                        }
+
+                        // ถ้าเคยถูกลบไว้ (Status == "0") ให้ทำการ Restore กลับมาใช้งานใหม่
+                        int oldAmount = existingTool.Amount ?? 0;
+                        existingTool.Status = "1";
+                        existingTool.Amount = Amount;
+                        existingTool.Createby = employeeId;
+                        existingTool.Createdate = DateTime.Now;
+
+                        string userComment = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
+                        string detailedLog = string.Format(
+                            "Restored Master Tool: Product: {0} | Section: {1} | Type: {2} | Amount: {3} (was {4}) | By: {5}{6}",
+                            Product_name,
+                            Section,
+                            Type,
+                            Amount,
+                            oldAmount,
+                            employeeId,
+                            !string.IsNullOrEmpty(userComment) ? " | Comment: " + userComment : ""
+                        );
+                        if (detailedLog.Length > 500)
+                        {
+                            detailedLog = detailedLog.Substring(0, 500);
+                        }
+
+                        string logComment = !string.IsNullOrEmpty(userComment)
+                            ? userComment
+                            : string.Format("Restored & added Master Tool (ID: {0}, Amount: {1})", existingTool.ID, Amount);
+                        if (logComment.Length > 500)
+                        {
+                            logComment = logComment.Substring(0, 500);
+                        }
+
+                        var restoreLog = new Tbl_LogMasterTools
+                        {
+                            MT_ID = existingTool.ID,
+                            Updateby = employeeId,
+                            Updatedate = DateTime.Now,
+                            Update_Comment = logComment,
+                            Update_Log = detailedLog
+                        };
+                        Entity.Tbl_LogMasterTools.Add(restoreLog);
+                        Entity.SaveChanges();
+
+                        return Json(new { success = true, word = "Master Tool restored and updated successfully." });
+                    }
+
+                    // กรณีเพิ่มรายการใหม่
+                    var newTool = new Tbl_MasterTools
+                    {
+                        Product_name = Product_name,
+                        Section = Section,
+                        Type = Type,
+                        Amount = Amount,
+                        Status = "1",
+                        Createby = employeeId,
+                        Createdate = DateTime.Now
+                    };
+                    Entity.Tbl_MasterTools.Add(newTool);
+                    Entity.SaveChanges();
+
+                    string remark = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
+                    string createDetailedLog = string.Format(
+                        "Created Master Tool: Product: {0} | Section: {1} | Type: {2} | Amount: {3} | By: {4}{5}",
+                        Product_name,
+                        Section,
+                        Type,
+                        Amount,
+                        employeeId,
+                        !string.IsNullOrEmpty(remark) ? " | Comment: " + remark : ""
+                    );
+                    if (createDetailedLog.Length > 500)
+                    {
+                        createDetailedLog = createDetailedLog.Substring(0, 500);
+                    }
+
+                    string createLogComment = !string.IsNullOrEmpty(remark)
+                        ? remark
+                        : string.Format("Created Master Tool (ID: {0}, Amount: {1})", newTool.ID, Amount);
+                    if (createLogComment.Length > 500)
+                    {
+                        createLogComment = createLogComment.Substring(0, 500);
+                    }
+
+                    var log = new Tbl_LogMasterTools
+                    {
+                        MT_ID = newTool.ID,
+                        Updateby = employeeId,
+                        Updatedate = DateTime.Now,
+                        Update_Comment = createLogComment,
+                        Update_Log = createDetailedLog
+                    };
+                    Entity.Tbl_LogMasterTools.Add(log);
+                    Entity.SaveChanges();
+
+                    return Json(new { success = true, word = "Master Tool added successfully." });
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                var errorMessages = new List<string>();
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        errorMessages.Add(validationError.PropertyName + ": " + validationError.ErrorMessage);
+                    }
+                }
+                return Json(new { success = false, word = "Validation Error: " + string.Join("; ", errorMessages) });
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + (E.InnerException != null ? E.InnerException.Message : E.Message) });
+            }
+        }
+        private void SendEmail(Tbl_LogMasterTools data, Tbl_MasterTools masterTool, int oldAmount, int maxLimit, string userEmail)
+        {
+            try
+            {
+                using (WCF227Service.Service1Client WCF227 = new WCF227Service.Service1Client())
+                using (TraningdatabaseEntities Entity = SettingAccountTraningdatabase())
+                {
+                    string greeting = "Dear All,";
+                    string introMessage = "";
+
+                    List<string> mailToList = new List<string>();
+                    List<string> mailCcList = new List<string>();
+
+                    string prodName = masterTool != null && masterTool.Product_name != null ? masterTool.Product_name : "-";
+                    string section = masterTool != null && masterTool.Section != null ? masterTool.Section : "-";
+                    string toolType = masterTool != null && masterTool.Type != null ? masterTool.Type : "-";
+                    int newAmount = masterTool != null && masterTool.Amount.HasValue ? masterTool.Amount.Value : 0;
+                    string diffText = (newAmount >= oldAmount ? "+" : "") + (newAmount - oldAmount);
+                    string diffColor = newAmount >= oldAmount ? "#16a34a" : "#dc2626";
+
+                    string subject = string.Format("[MA Fixture] Master Tool Amount Updated - {0} ({1} / {2})", prodName, section, toolType);
+                    greeting = "Dear All,";
+                    introMessage = "Master Tool amount has been updated in the MA Fixture System.<br>Please find the update details below:";
+
+                    // ดึงรายชื่ออีเมลของแผนก E - Industrial Engineering จาก Tbl_employee
+                    try
+                    {
+                        var employees = Entity.Tbl_employee
+                            .Where(x => (x.Depart == "E - Industrial Engineering" || x.Depart.Contains("Industrial")) && x.Status == "A")
+                            .ToList();
+
+                        foreach (var emp in employees)
+                        {
+                            if (!string.IsNullOrEmpty(emp.Email))
+                            {
+                                mailToList.Add(emp.Email.Trim());
+                            }
+                        }
+                    }
+                    catch { }
+
+                    // ดึงรายชื่ออีเมลกลุ่มจาก WCF227 (ถ้ามี)
+                    try
+                    {
+                        string convertedMailTo = WCF227.Convertemailfromstring("E - Industrial Engineering");
+                        if (!string.IsNullOrEmpty(convertedMailTo))
+                        {
+                            var splitEmails = convertedMailTo.Split(new[] { ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(x => x.Trim())
+                                .Where(x => !string.IsNullOrEmpty(x));
+                            mailToList.AddRange(splitEmails);
+                        }
+                    }
+                    catch { }
+
+                    if (!string.IsNullOrEmpty(userEmail))
+                    {
+                        mailCcList.Add(userEmail.Trim());
+                    }
+
+                    mailToList = mailToList.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                    mailCcList = mailCcList.Where(c => !mailToList.Contains(c, StringComparer.OrdinalIgnoreCase)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+
+                    if (!mailToList.Any() && !mailCcList.Any())
+                    {
+                        return; // No recipients
+                    }
+
+                    string mailBody = "";
+                    mailBody += "<p style='font-size: 14px; color: #333;'>" + greeting + "</p>";
+                    mailBody += "<p style='font-size: 14px; color: #333;'>" + introMessage + "</p>";
+
+                    mailBody += "<table style='border-collapse: collapse; width: 100%; font-size: 13px; text-align: left; margin-top: 15px; font-family: Arial, sans-serif;'>";
+                    mailBody += "<thead style='background-color: #1e293b; color: white;'>";
+                    mailBody += "<tr>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px;'>Product Name</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px;'>Section</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px;'>Type</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px; text-align: center;'>Old Amount</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px; text-align: center;'>New Amount</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px; text-align: center;'>Change</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px; text-align: center;'>Summarize Max</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px; text-align: center;'>Updated By</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px; text-align: center;'>Date</th>";
+                    mailBody += "<th style='border: 1px solid #cbd5e1; padding: 10px;'>Comment / Remark</th>";
+                    mailBody += "</tr>";
+                    mailBody += "</thead>";
+                    mailBody += "<tbody>";
+                    mailBody += "<tr style='background-color: #f8fafc;'>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; font-weight: bold; color: #1e40af;'>" + System.Web.HttpUtility.HtmlEncode(prodName) + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px;'>" + System.Web.HttpUtility.HtmlEncode(section) + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px;'>" + System.Web.HttpUtility.HtmlEncode(toolType) + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; text-align: center; color: #64748b;'>" + oldAmount + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; text-align: center; font-weight: bold; font-size: 14px;'>" + newAmount + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; text-align: center; font-weight: bold; color: " + diffColor + ";'>" + diffText + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; text-align: center; color: #64748b;'>" + maxLimit + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; text-align: center;'>" + System.Web.HttpUtility.HtmlEncode(data != null && data.Updateby != null ? data.Updateby : "") + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; text-align: center; font-size: 12px; color: #64748b;'>" + (data != null && data.Updatedate.HasValue ? data.Updatedate.Value.ToString("yyyy-MM-dd HH:mm:ss") : DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) + "</td>";
+                    mailBody += "<td style='border: 1px solid #cbd5e1; padding: 10px; color: #334155;'>" + System.Web.HttpUtility.HtmlEncode(data != null && !string.IsNullOrEmpty(data.Update_Comment) ? data.Update_Comment : "-") + "</td>";
+                    mailBody += "</tr>";
+                    mailBody += "</tbody>";
+                    mailBody += "</table>";
+
+                    mailBody += "<div style='margin-top: 25px; font-size: 13px; color: #333;'>";
+                    mailBody += "<p>Please visit the system to check details: <a href='https://rdreporters/MATesting/Global/MasterToolsList' style='color: #2563eb; text-decoration: none; font-weight: bold;'>MA Fixture System - Master Tools List</a></p>";
+                    mailBody += "<p style='color: #64748b;'>Best regards,<br>MA Fixture System</p>";
+                    mailBody += "</div>";
+
+                    string mailHost = "10.52.60.227";
+                    try
+                    {
+                        string host = WCF227.GetHostemail();
+                        if (!string.IsNullOrEmpty(host))
+                        {
+                            mailHost = host;
+                        }
+                    }
+                    catch { }
+
+                    int mailPort = 25;
+                    string mailForm = "sw-rd@gpv-group.com";
+                    string mailDisplay = "MA Fixture System";
+
+                    using (System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient(mailHost, mailPort))
+                    using (System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage())
+                    {
+                        message.From = new System.Net.Mail.MailAddress(mailForm, mailDisplay);
+
+                        // BCC
+                        try
+                        {
+                            string[] emaillist = WCF227.Getemailall("IndirectSW");
+                            if (emaillist != null && emaillist.Length > 0 && !string.IsNullOrEmpty(emaillist[0]))
+                            {
+                                message.Bcc.Add(emaillist[0]);
+                            }
+                        }
+                        catch { }
+
+                        foreach (var email in mailToList)
+                        {
+                            message.To.Add(email);
+                        }
+
+                        foreach (var email in mailCcList)
+                        {
+                            message.CC.Add(email);
+                        }
+
+                        message.Subject = subject;
+                        message.Body = mailBody;
+                        message.IsBodyHtml = true;
+
+                        if (!string.IsNullOrEmpty(userEmail) && userEmail.Equals("Jinnawit.Ananpatiwet@gpv-group.com", StringComparison.OrdinalIgnoreCase))
+                        {
+                            message.To.Clear();
+                            message.CC.Clear();
+                            message.To.Add("Jinnawit.Ananpatiwet@gpv-group.com");
+                        }
+
+                        smtpClient.Send(message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("SendEmail Error: " + ex.Message);
             }
         }
     }

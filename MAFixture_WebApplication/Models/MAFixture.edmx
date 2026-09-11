@@ -128,16 +128,9 @@
           <Property Name="Grade_Status" Type="varchar" MaxLength="5" />
           <Property Name="Dimension" Type="varchar" MaxLength="50" />
           <Property Name="Equipment_Picture" Type="nvarchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
+          <Property Name="Type_Tools" Type="varchar" MaxLength="50" />
+          <Property Name="Modifyby" Type="varchar" MaxLength="10" />
+          <Property Name="Modifydate" Type="datetime" />
         </EntityType>
         <EntityType Name="Tbl_KPIoverdue">
           <Key>
@@ -149,6 +142,18 @@
           <Property Name="QtyEquipment" Type="int" />
           <Property Name="QtyTools" Type="int" />
           <Property Name="Year" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="Tbl_LogMasterTools">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MT_ID" Type="int" />
+          <Property Name="Cycle_Time" Type="float" />
+          <Property Name="Updateby" Type="varchar" MaxLength="10" />
+          <Property Name="Updatedate" Type="datetime" />
+          <Property Name="Update_Comment" Type="nvarchar" MaxLength="500" />
+          <Property Name="Update_Log" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Tbl_MasterMATester">
           <Key>
@@ -167,6 +172,19 @@
           <Property Name="Updatedate" Type="datetime" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
         </EntityType>
+        <EntityType Name="Tbl_MasterTools">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Product_name" Type="varchar" MaxLength="100" />
+          <Property Name="Section" Type="varchar" MaxLength="50" />
+          <Property Name="Type" Type="varchar" MaxLength="30" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="1" />
+          <Property Name="Createby" Type="varchar" MaxLength="6" />
+          <Property Name="Createdate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Tbl_Pindetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -176,6 +194,26 @@
           <Property Name="Pinnumber" Type="varchar" MaxLength="150" />
           <Property Name="Product" Type="varchar" MaxLength="150" />
           <Property Name="Lifetime" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Tbl_ProductName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MA_ID" Type="bigint" />
+          <Property Name="S_ID" Type="int" />
+          <Property Name="Product_name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Tbl_Summarize_Tools">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Product_name" Type="varchar" MaxLength="100" />
+          <Property Name="Section" Type="varchar" MaxLength="50" />
+          <Property Name="Type" Type="varchar" MaxLength="30" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="Last_Update" Type="datetime" />
         </EntityType>
         <Association Name="FK_ImageAfter_FilesMA1">
           <End Role="FilesMA" Type="Self.FilesMA" Multiplicity="0..1" />
@@ -249,6 +287,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tbl_ProductName_MAPlan">
+          <End Role="MAPlan" Type="Self.MAPlan" Multiplicity="0..1" />
+          <End Role="Tbl_ProductName" Type="Self.Tbl_ProductName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MAPlan">
+              <PropertyRef Name="MA_ID" />
+            </Principal>
+            <Dependent Role="Tbl_ProductName">
+              <PropertyRef Name="MA_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_ProductName_Tbl_Summarize_Tools">
+          <End Role="Tbl_Summarize_Tools" Type="Self.Tbl_Summarize_Tools" Multiplicity="0..1" />
+          <End Role="Tbl_ProductName" Type="Self.Tbl_ProductName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Summarize_Tools">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tbl_ProductName">
+              <PropertyRef Name="S_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MAFixtureModelStoreContainer">
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FilesMA" EntityType="Self.FilesMA" Schema="dbo" store:Type="Tables" />
@@ -258,10 +320,13 @@
           <EntitySet Name="MAChecklistdetail" EntityType="Self.MAChecklistdetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Machine" EntityType="Self.Machine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAPlan" EntityType="Self.MAPlan" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_KPIoverdue" EntityType="Self.Tbl_KPIoverdue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_LogMasterTools" EntityType="Self.Tbl_LogMasterTools" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_MasterMATester" EntityType="Self.Tbl_MasterMATester" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_MasterTools" EntityType="Self.Tbl_MasterTools" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_Pindetail" EntityType="Self.Tbl_Pindetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_ProductName" EntityType="Self.Tbl_ProductName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Summarize_Tools" EntityType="Self.Tbl_Summarize_Tools" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ImageAfter_FilesMA1" Association="Self.FK_ImageAfter_FilesMA1">
             <End Role="FilesMA" EntitySet="FilesMA" />
             <End Role="ImageAfter" EntitySet="ImageAfter" />
@@ -285,6 +350,14 @@
           <AssociationSet Name="FK_MAPlan_Tbl_Pindetail" Association="Self.FK_MAPlan_Tbl_Pindetail">
             <End Role="Tbl_Pindetail" EntitySet="Tbl_Pindetail" />
             <End Role="MAPlan" EntitySet="MAPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_ProductName_MAPlan" Association="Self.FK_tbl_ProductName_MAPlan">
+            <End Role="MAPlan" EntitySet="MAPlan" />
+            <End Role="Tbl_ProductName" EntitySet="Tbl_ProductName" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_ProductName_Tbl_Summarize_Tools" Association="Self.FK_tbl_ProductName_Tbl_Summarize_Tools">
+            <End Role="Tbl_Summarize_Tools" EntitySet="Tbl_Summarize_Tools" />
+            <End Role="Tbl_ProductName" EntitySet="Tbl_ProductName" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -399,16 +472,10 @@
           <Property Name="Grade_Status" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="Dimension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Equipment_Picture" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Type_Tools" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tbl_ProductName" Relationship="MAFixtureModel.FK_tbl_ProductName_MAPlan" FromRole="MAPlan" ToRole="Tbl_ProductName" />
+          <Property Name="Modifyby" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Modifydate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Tbl_MasterMATester">
           <Key>
@@ -481,7 +548,6 @@
           <EntitySet Name="GroupEmails" EntityType="Self.GroupEmail" />
           <EntitySet Name="MAChecklistdetails" EntityType="Self.MAChecklistdetail" />
           <EntitySet Name="MAPlans" EntityType="Self.MAPlan" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="Tbl_MasterMATester" EntityType="Self.Tbl_MasterMATester" />
           <AssociationSet Name="FK_MAPlan_Customer" Association="Self.FK_MAPlan_Customer">
             <End Role="Customer" EntitySet="Customers" />
@@ -516,6 +582,18 @@
           </AssociationSet>
           <EntitySet Name="Machines" EntityType="MAFixtureModel.Machine" />
           <EntitySet Name="Tbl_KPIoverdue" EntityType="MAFixtureModel.Tbl_KPIoverdue" />
+          <EntitySet Name="Tbl_ProductName" EntityType="MAFixtureModel.Tbl_ProductName" />
+          <EntitySet Name="Tbl_Summarize_Tools" EntityType="MAFixtureModel.Tbl_Summarize_Tools" />
+          <AssociationSet Name="FK_tbl_ProductName_MAPlan" Association="MAFixtureModel.FK_tbl_ProductName_MAPlan">
+            <End Role="MAPlan" EntitySet="MAPlans" />
+            <End Role="Tbl_ProductName" EntitySet="Tbl_ProductName" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_ProductName_Tbl_Summarize_Tools" Association="MAFixtureModel.FK_tbl_ProductName_Tbl_Summarize_Tools">
+            <End Role="Tbl_Summarize_Tools" EntitySet="Tbl_Summarize_Tools" />
+            <End Role="Tbl_ProductName" EntitySet="Tbl_ProductName" />
+          </AssociationSet>
+          <EntitySet Name="Tbl_LogMasterTools" EntityType="MAFixtureModel.Tbl_LogMasterTools" />
+          <EntitySet Name="Tbl_MasterTools" EntityType="MAFixtureModel.Tbl_MasterTools" />
         </EntityContainer>
         <EntityType Name="ImageAfter">
           <Key>
@@ -603,6 +681,78 @@
           <Property Name="QtyTools" Type="Int32" />
           <Property Name="Year" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Tbl_ProductName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MA_ID" Type="Int64" />
+          <Property Name="S_ID" Type="Int32" />
+          <Property Name="Product_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MAPlan" Relationship="MAFixtureModel.FK_tbl_ProductName_MAPlan" FromRole="Tbl_ProductName" ToRole="MAPlan" />
+          <NavigationProperty Name="Tbl_Summarize_Tools" Relationship="MAFixtureModel.FK_tbl_ProductName_Tbl_Summarize_Tools" FromRole="Tbl_ProductName" ToRole="Tbl_Summarize_Tools" />
+        </EntityType>
+        <EntityType Name="Tbl_Summarize_Tools">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Product_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Section" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="Last_Update" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Tbl_ProductName" Relationship="MAFixtureModel.FK_tbl_ProductName_Tbl_Summarize_Tools" FromRole="Tbl_Summarize_Tools" ToRole="Tbl_ProductName" />
+        </EntityType>
+        <Association Name="FK_tbl_ProductName_MAPlan">
+          <End Type="MAFixtureModel.MAPlan" Role="MAPlan" Multiplicity="0..1" />
+          <End Type="MAFixtureModel.Tbl_ProductName" Role="Tbl_ProductName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MAPlan">
+              <PropertyRef Name="MA_ID" />
+            </Principal>
+            <Dependent Role="Tbl_ProductName">
+              <PropertyRef Name="MA_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_ProductName_Tbl_Summarize_Tools">
+          <End Type="MAFixtureModel.Tbl_Summarize_Tools" Role="Tbl_Summarize_Tools" Multiplicity="0..1" />
+          <End Type="MAFixtureModel.Tbl_ProductName" Role="Tbl_ProductName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Summarize_Tools">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tbl_ProductName">
+              <PropertyRef Name="S_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Tbl_LogMasterTools">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MT_ID" Type="Int32" />
+          <Property Name="Cycle_Time" Type="Double" />
+          <Property Name="Updateby" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Updatedate" Type="DateTime" Precision="3" />
+          <Property Name="Update_Comment" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Update_Log" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Tbl_MasterTools">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Product_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Section" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Createby" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="Createdate" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -669,6 +819,9 @@
           <EntitySetMapping Name="MAPlans">
             <EntityTypeMapping TypeName="MAFixtureModel.MAPlan">
               <MappingFragment StoreEntitySet="MAPlan">
+                <ScalarProperty Name="Modifydate" ColumnName="Modifydate" />
+                <ScalarProperty Name="Modifyby" ColumnName="Modifyby" />
+                <ScalarProperty Name="Type_Tools" ColumnName="Type_Tools" />
                 <ScalarProperty Name="Equipment_Picture" ColumnName="Equipment_Picture" />
                 <ScalarProperty Name="Dimension" ColumnName="Dimension" />
                 <ScalarProperty Name="Grade_Status" ColumnName="Grade_Status" />
@@ -709,17 +862,6 @@
                 <ScalarProperty Name="Plan_Quarterly" ColumnName="Plan_Quarterly" />
                 <ScalarProperty Name="Plan_Yearly" ColumnName="Plan_Yearly" />
                 <ScalarProperty Name="StatusF" ColumnName="StatusF" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="MAFixtureModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -789,6 +931,55 @@
                 <ScalarProperty Name="QtyEquipment" ColumnName="QtyEquipment" />
                 <ScalarProperty Name="WorkWeek" ColumnName="WorkWeek" />
                 <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_ProductName">
+            <EntityTypeMapping TypeName="MAFixtureModel.Tbl_ProductName">
+              <MappingFragment StoreEntitySet="Tbl_ProductName">
+                <ScalarProperty Name="Product_name" ColumnName="Product_name" />
+                <ScalarProperty Name="S_ID" ColumnName="S_ID" />
+                <ScalarProperty Name="MA_ID" ColumnName="MA_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Summarize_Tools">
+            <EntityTypeMapping TypeName="MAFixtureModel.Tbl_Summarize_Tools">
+              <MappingFragment StoreEntitySet="Tbl_Summarize_Tools">
+                <ScalarProperty Name="Last_Update" ColumnName="Last_Update" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Product_name" ColumnName="Product_name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_LogMasterTools">
+            <EntityTypeMapping TypeName="MAFixtureModel.Tbl_LogMasterTools">
+              <MappingFragment StoreEntitySet="Tbl_LogMasterTools">
+                <ScalarProperty Name="Update_Log" ColumnName="Update_Log" />
+                <ScalarProperty Name="Update_Comment" ColumnName="Update_Comment" />
+                <ScalarProperty Name="Updatedate" ColumnName="Updatedate" />
+                <ScalarProperty Name="Updateby" ColumnName="Updateby" />
+                <ScalarProperty Name="Cycle_Time" ColumnName="Cycle_Time" />
+                <ScalarProperty Name="MT_ID" ColumnName="MT_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_MasterTools">
+            <EntityTypeMapping TypeName="MAFixtureModel.Tbl_MasterTools">
+              <MappingFragment StoreEntitySet="Tbl_MasterTools">
+                <ScalarProperty Name="Createdate" ColumnName="Createdate" />
+                <ScalarProperty Name="Createby" ColumnName="Createby" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Product_name" ColumnName="Product_name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
