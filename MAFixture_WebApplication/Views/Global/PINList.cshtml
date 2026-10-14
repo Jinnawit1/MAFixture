@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "PinList";
 }
@@ -33,7 +33,7 @@
         var dataSet = [];
         var dataFull = [];
 
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_Pin_List", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -45,7 +45,7 @@
             success: function (response) {
                 if (response.success) {
                     if (response.data) {
-                        var emailList = response.data.Pinnumber;
+                        var emailList = response.data.Pinnumber || response.data;
                         $(emailList).each(function (index, item) {
                             var newItem = [];
                             newItem.push(index + 1);

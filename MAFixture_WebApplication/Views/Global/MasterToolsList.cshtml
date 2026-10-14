@@ -31,34 +31,46 @@
 <h3>Master Tools List</h3>
 <hr />
 
-<div class="row">
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div class="form-group">
-            <label for="Product_name">Product Name :</label>
-            <input type="text" class="form-control" id="Product_name" placeholder="Search Product name..." onkeydown="if (event.keyCode === 13) { OnLoad(); }">
+<div class="filter-card">
+    <div class="filter-card-header">
+        <div>
+            <i class="fas fa-filter" style="color: #1890ff; margin-right: 6px;"></i> Search Filters
+        </div>
+        <div>
+            <button type="button" class="btn btn-success btn-sm" id="btn-add-tool" onclick="OpenAddModal()">
+                <i class="fas fa-plus"></i> Add Tool
+            </button>
         </div>
     </div>
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div class="form-group">
-            <label for="Section">Section :</label>
-            <select class="form-control" id="Section" onchange="OnLoad()">
-                <option value="" selected>All</option>
-            </select>
+    <div class="filter-card-body">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Product_name">Product Name :</label>
+                    <input type="text" class="form-control" id="Product_name" placeholder="Search Product name..." onkeydown="if (event.keyCode === 13) { OnLoad(); }">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Section">Section :</label>
+                    <select class="form-control" id="Section" onchange="OnLoad()">
+                        <option value="" selected>All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Type">Type :</label>
+                    <select class="form-control" id="Type" onchange="OnLoad()">
+                        <option value="" selected>All</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div class="form-group">
-            <label for="Type">Type :</label>
-            <select class="form-control" id="Type" onchange="OnLoad()">
-                <option value="" selected>All</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div style="margin-top:25px">
-            <button class="btn btn-primary" id="search-button" onclick="OnLoad()"><i class="fas fa-search"></i> Search</button>
-            <button type="button" class="btn btn-success" id="btn-add-tool" onclick="OpenAddModal()" style="margin-left: 5px;"><i class="fas fa-plus"></i> Add Tool</button>
-        </div>
+    <div class="filter-card-footer">
+        <button type="button" class="btn-filter-reset" onclick="OnReset()"><i class="fas fa-undo"></i> Reset</button>
+        <button type="button" class="btn-filter-search" id="search-button" onclick="OnLoad()"><i class="fas fa-search"></i> Search</button>
     </div>
 </div>
 
@@ -80,7 +92,8 @@
             </div>
             <div class="modal-body" style="padding: 20px;">
                 <input type="hidden" id="modal_Tool_ID" />
-                <input type="hidden" id="modal_Max_Amount" />
+                <input type="hidden" id="modal_Current_Master" />
+                <input type="hidden" id="modal_Summarize_Amount_Val" />
 
                 <div class="form-group row" style="margin-bottom: 12px;">
                     <label class="col-sm-4 col-form-label modal-detail-label">Product Name :</label>
@@ -104,12 +117,20 @@
                 </div>
 
                 <div class="form-group row" style="margin-bottom: 12px;">
-                    <label class="col-sm-4 col-form-label modal-detail-label">Summarize Max :</label>
+                    <label class="col-sm-4 col-form-label modal-detail-label">Current Master :</label>
                     <div class="col-sm-8" style="padding-top: 5px;">
-                        <span id="modal_Summarize_Amount" class="badge" style="font-size: 13px; background-color: #17a2b8; color: #fff; padding: 4px 10px; border-radius: 4px;">0</span>
-                        <small style="color: #888; margin-left: 5px;">(Max allowed limit)</small>
+                        <span id="modal_Current_Master_Display" class="badge" style="font-size: 13px; background-color: #e6f4ff; color: #0958d9; border: 1px solid #91caff; padding: 4px 10px; border-radius: 4px;">0</span>
                     </div>
                 </div>
+
+                <div class="form-group row" style="margin-bottom: 12px;">
+                    <label class="col-sm-4 col-form-label modal-detail-label">Summarize Amount :</label>
+                    <div class="col-sm-8" style="padding-top: 5px;">
+                        <span id="modal_Summarize_Amount" class="badge" style="font-size: 13px; background-color: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; padding: 4px 10px; border-radius: 4px;">0</span>
+                    </div>
+                </div>
+
+                <div id="modal_status_banner" style="margin-bottom: 12px; padding: 8px 12px; border-radius: 6px; font-size: 12px; display: none;"></div>
 
                 <hr style="margin: 15px 0;" />
 
@@ -355,6 +376,13 @@
         LoadAll();
     });
 
+    function OnReset() {
+        $('#Product_name').val('');
+        $('#Section').val('');
+        $('#Type').val('');
+        OnLoad();
+    }
+
     function getUrlParameter(name) {
         var regex = new RegExp('[?&]' + name + '=([^&#]*)', 'i');
         var results = regex.exec(window.location.search);
@@ -362,7 +390,7 @@
     }
 
     function LoadAll() {
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_MasterTools_Lists", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -471,7 +499,7 @@
                     }
 
                     $('#TableMasterToolsList').DataTable({
-                        order: [[2, "asc"]],
+                        order: [[0, "asc"]],
                         aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
                         iDisplayLength: 100,
                         data: dataSet,
@@ -550,7 +578,7 @@
                                 }
                             },
                             {
-                                title: "Summarize Max",
+                                title: "Summarize Amount",
                                 width: "9%",
                                 className: "text-center",
                                 render: function (data, type, row) {
@@ -577,32 +605,57 @@
             return;
         }
 
-        var maxLimit = item.SummarizeAmount !== null && item.SummarizeAmount !== undefined ? item.SummarizeAmount : 0;
+        var summarizeAmt = item.SummarizeAmount !== null && item.SummarizeAmount !== undefined ? item.SummarizeAmount : 0;
         var currentAmt = item.Amount !== null && item.Amount !== undefined ? item.Amount : 0;
 
         $('#modal_Tool_ID').val(item.ID);
-        $('#modal_Max_Amount').val(maxLimit);
+        $('#modal_Current_Master').val(currentAmt);
+        $('#modal_Summarize_Amount_Val').val(summarizeAmt);
         $('#modal_Product_name').text(item.Product_name || '-');
         $('#modal_Section').text(item.Section || '-');
         $('#modal_Type').text(item.Type || '-');
-        $('#modal_Summarize_Amount').text(maxLimit);
+        $('#modal_Current_Master_Display').text(currentAmt);
+        $('#modal_Summarize_Amount').text(summarizeAmt);
         $('#modal_New_Amount').val(currentAmt);
         $('#modal_Comment').val('');
+
+        var banner = $('#modal_status_banner');
+        if (currentAmt === summarizeAmt) {
+            banner.css({ 'background-color': '#f6ffed', 'border': '1px solid #b7eb8f', 'color': '#389e0d' })
+                .html('<i class="fas fa-check-circle"></i> Master matches Summarize (' + currentAmt + '). Adjustment is locked.')
+                .show();
+        } else if (summarizeAmt > currentAmt) {
+            banner.css({ 'background-color': '#e6f7ff', 'border': '1px solid #91d5ff', 'color': '#096dd9' })
+                .html('<i class="fas fa-arrow-up"></i> Summarize (' + summarizeAmt + ') > Master (' + currentAmt + '): Can only increase towards Summarize (Range: ' + currentAmt + ' - ' + summarizeAmt + ')')
+                .show();
+        } else {
+            banner.css({ 'background-color': '#fffbe6', 'border': '1px solid #ffe58f', 'color': '#d46b08' })
+                .html('<i class="fas fa-arrow-down"></i> Summarize (' + summarizeAmt + ') < Master (' + currentAmt + '): Can only decrease towards Summarize (Range: ' + summarizeAmt + ' - ' + currentAmt + ')')
+                .show();
+        }
 
         ValidateModalAmount();
         $('#modalAdjustAmount').modal('show');
     }
 
     function ModalStepChange(step) {
-        var maxLimit = parseInt($('#modal_Max_Amount').val(), 10) || 0;
+        var currentM = parseInt($('#modal_Current_Master').val(), 10) || 0;
+        var currentS = parseInt($('#modal_Summarize_Amount_Val').val(), 10) || 0;
+        var minAllowed = Math.min(currentM, currentS);
+        var maxAllowed = Math.max(currentM, currentS);
+
+        if (minAllowed === maxAllowed) {
+            return;
+        }
+
         var currentVal = parseInt($('#modal_New_Amount').val(), 10) || 0;
         var newVal = currentVal + step;
 
-        if (newVal < 0) {
-            newVal = 0;
+        if (newVal < minAllowed) {
+            newVal = minAllowed;
         }
-        if (newVal > maxLimit) {
-            newVal = maxLimit;
+        if (newVal > maxAllowed) {
+            newVal = maxAllowed;
         }
 
         $('#modal_New_Amount').val(newVal);
@@ -610,10 +663,24 @@
     }
 
     function ValidateModalAmount() {
-        var maxLimit = parseInt($('#modal_Max_Amount').val(), 10) || 0;
+        var currentM = parseInt($('#modal_Current_Master').val(), 10) || 0;
+        var currentS = parseInt($('#modal_Summarize_Amount_Val').val(), 10) || 0;
         var enteredVal = parseInt($('#modal_New_Amount').val(), 10);
         var hint = $('#modal_amount_hint');
         var btnSave = $('#btn-save-modal');
+        var inputField = $('#modal_New_Amount');
+        var btnSteps = $('.btn-step-modal');
+
+        if (currentM === currentS) {
+            hint.html('<span style="color: #666;">Locked: Master and Summarize are equal.</span>');
+            btnSave.prop('disabled', true);
+            inputField.prop('readonly', true);
+            btnSteps.prop('disabled', true);
+            return false;
+        }
+
+        inputField.prop('readonly', false);
+        btnSteps.prop('disabled', false);
 
         if (isNaN(enteredVal) || enteredVal < 0) {
             hint.html('<span style="color: #d9534f;">Amount must be 0 or greater.</span>');
@@ -621,15 +688,35 @@
             return false;
         }
 
-        if (enteredVal > maxLimit) {
-            hint.html('<span style="color: #d9534f;">Cannot exceed Summarize Max (' + maxLimit + ').</span>');
-            btnSave.prop('disabled', true);
-            return false;
+        if (currentS > currentM) {
+            if (enteredVal < currentM) {
+                hint.html('<span style="color: #d9534f;">Cannot decrease below current Master (' + currentM + ').</span>');
+                btnSave.prop('disabled', true);
+                return false;
+            }
+            if (enteredVal > currentS) {
+                hint.html('<span style="color: #d9534f;">Cannot exceed Summarize Amount (' + currentS + ').</span>');
+                btnSave.prop('disabled', true);
+                return false;
+            }
+            hint.html('<span style="color: #28a745;">Valid amount (Allowed: ' + currentM + ' - ' + currentS + ')</span>');
+            btnSave.prop('disabled', false);
+            return true;
+        } else {
+            if (enteredVal < currentS) {
+                hint.html('<span style="color: #d9534f;">Cannot decrease below Summarize Amount (' + currentS + ').</span>');
+                btnSave.prop('disabled', true);
+                return false;
+            }
+            if (enteredVal > currentM) {
+                hint.html('<span style="color: #d9534f;">Cannot increase above current Master (' + currentM + ').</span>');
+                btnSave.prop('disabled', true);
+                return false;
+            }
+            hint.html('<span style="color: #28a745;">Valid amount (Allowed: ' + currentS + ' - ' + currentM + ')</span>');
+            btnSave.prop('disabled', false);
+            return true;
         }
-
-        hint.html('<span style="color: #28a745;">Valid amount (Max: ' + maxLimit + ')</span>');
-        btnSave.prop('disabled', false);
-        return true;
     }
 
     function SaveModalAmount() {
@@ -665,7 +752,7 @@
                     showAlert('success', response.word || 'Amount updated successfully.', function () { });
                     OnLoad();
                 } else {
-                    showAlert('warning', response.word || 'Cannot update amount.', function () { });
+                    showAlert('error', response.word || 'Cannot update amount.', function () { });
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -744,7 +831,7 @@
                     showAlert('success', response.word || 'Cycle Time updated successfully.', function () { });
                     OnLoad();
                 } else {
-                    showAlert('warning', response.word || 'Cannot update cycle time.', function () { });
+                    showAlert('error', response.word || 'Cannot update cycle time.', function () { });
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {

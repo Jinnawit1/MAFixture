@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Drawing.Imaging;
 using Newtonsoft.Json;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace MAFixture_WebApplication.Controllers
 {
@@ -398,6 +401,10 @@ namespace MAFixture_WebApplication.Controllers
         {
             return View();
         }
+        public ActionResult Report_Sparepart()
+        {
+            return View();
+        }
         public ActionResult THT_Location()
         {
             return View();
@@ -410,6 +417,8 @@ namespace MAFixture_WebApplication.Controllers
         {
             public string Customer { get; set; }
         }
+        /*
+        [Obsolete("Load_All_Lists ถูกแยกออกเป็นฟังก์ชันเฉพาะทางแล้ว (Load_Machine_List, Load_Pin_List, Load_Email_List, Load_Customer_List, Load_Common_Filters, Load_MasterTools_Lists, Load_NewEquipment_Lists)")]
         public ActionResult Load_All_Lists()
         {
             try
@@ -515,6 +524,234 @@ namespace MAFixture_WebApplication.Controllers
                 return Json(new { success = false, word = "Error, " + E.Message });
             }
         }
+        */
+
+        public ActionResult Load_Machine_List()
+        {
+            try
+            {
+                using (MAFixtureEntities EntityMA = SettingAccountMAFixture())
+                {
+                    EntityMA.Configuration.ProxyCreationEnabled = false;
+                    var machines = EntityMA.Machines.AsNoTracking().ToList();
+                    return Json(new { success = true, data = machines }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
+        public ActionResult Load_Pin_List()
+        {
+            try
+            {
+                using (MAFixtureEntities EntityMA = SettingAccountMAFixture())
+                {
+                    EntityMA.Configuration.ProxyCreationEnabled = false;
+                    var pinnumber = EntityMA.Tbl_Pindetail.AsNoTracking().ToList();
+                    return Json(new { success = true, data = pinnumber }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
+        public ActionResult Load_Email_List()
+        {
+            try
+            {
+                using (MAFixtureEntities EntityMA = SettingAccountMAFixture())
+                {
+                    EntityMA.Configuration.ProxyCreationEnabled = false;
+                    var emails = EntityMA.GroupEmails.AsNoTracking().OrderBy(x => x.Section).ToList();
+                    return Json(new { success = true, data = emails }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
+        public ActionResult Load_Customer_List()
+        {
+            try
+            {
+                using (WipEntities EntityWIP = SettingAccountWIPstatus())
+                {
+                    EntityWIP.Configuration.ProxyCreationEnabled = false;
+                    var customer = EntityWIP.Database.SqlQuery<string>(@"
+                                    SELECT Customer COLLATE Latin1_General_CS_AS AS Customer
+                                    FROM WIP_status
+                                    GROUP BY Customer COLLATE Latin1_General_CS_AS
+                                    ORDER BY Customer;")
+                                    .ToList();
+                    return Json(new { success = true, data = customer }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
+        public ActionResult Load_Common_Filters()
+        {
+            try
+            {
+                using (MAFixtureEntities EntityMA = SettingAccountMAFixture())
+                {
+                    EntityMA.Configuration.ProxyCreationEnabled = false;
+
+                    var department = EntityMA.GroupEmails.AsNoTracking().OrderBy(x => x.Section).ToList();
+
+                    var summarizeTypes = EntityMA.Tbl_Summarize_Tools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type))
+                        .Select(x => x.Type);
+
+                    var masterTypes = EntityMA.Tbl_MasterTools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type))
+                        .Select(x => x.Type);
+
+                    var maplanTypes = EntityMA.MAPlans.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type_Tools))
+                        .Select(x => x.Type_Tools);
+
+                    var toolTypes = summarizeTypes.Union(masterTypes).Union(maplanTypes)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
+
+                    var filterData = new
+                    {
+                        Department = department,
+                        ToolTypes = toolTypes
+                    };
+
+                    return Json(new { success = true, data = filterData }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
+        public ActionResult Load_MasterTools_Lists()
+        {
+            try
+            {
+                using (MAFixtureEntities EntityMA = SettingAccountMAFixture())
+                {
+                    EntityMA.Configuration.ProxyCreationEnabled = false;
+
+                    var department = EntityMA.GroupEmails.AsNoTracking().OrderBy(x => x.Section).ToList();
+
+                    var summarizeTypes = EntityMA.Tbl_Summarize_Tools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type))
+                        .Select(x => x.Type);
+
+                    var masterTypes = EntityMA.Tbl_MasterTools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type))
+                        .Select(x => x.Type);
+
+                    var maplanTypes = EntityMA.MAPlans.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Type_Tools))
+                        .Select(x => x.Type_Tools);
+
+                    var toolTypes = summarizeTypes.Union(masterTypes).Union(maplanTypes)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
+
+                    var summarizeProductNames = EntityMA.Tbl_Summarize_Tools.AsNoTracking()
+                        .Where(x => !string.IsNullOrEmpty(x.Product_name))
+                        .Select(x => x.Product_name)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
+
+                    var lists = new
+                    {
+                        Department = department,
+                        ToolTypes = toolTypes,
+                        SummarizeProductNames = summarizeProductNames
+                    };
+
+                    return Json(new { success = true, data = lists }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
+        public ActionResult Load_NewEquipment_Lists()
+        {
+            try
+            {
+                using (MAFixtureEntities EntityMA = SettingAccountMAFixture())
+                using (WipEntities EntityWIP = SettingAccountWIPstatus())
+                {
+                    EntityMA.Configuration.ProxyCreationEnabled = false;
+                    EntityWIP.Configuration.ProxyCreationEnabled = false;
+
+                    var customer = EntityWIP.Database.SqlQuery<string>(@"
+                                    SELECT Customer COLLATE Latin1_General_CS_AS AS Customer
+                                    FROM WIP_status
+                                    GROUP BY Customer COLLATE Latin1_General_CS_AS
+                                    ORDER BY Customer;")
+                                    .ToList();
+
+                    List<GroupEmail> department = EntityMA.GroupEmails.AsNoTracking().OrderBy(x => x.Section).ToList();
+                    List<Tbl_Pindetail> pinnumber = EntityMA.Tbl_Pindetail.AsNoTracking().ToList();
+
+                    DateTime twoYearsAgo = DateTime.Now.AddYears(-2);
+                    var rawDrawings = EntityWIP.WIP_status.AsNoTracking()
+                        .Where(w => w.StartDate > twoYearsAgo && !string.IsNullOrEmpty(w.Drawing))
+                        .Select(w => w.Drawing)
+                        .Distinct()
+                        .ToList();
+
+                    var drawing = rawDrawings
+                        .Select(d => new
+                        {
+                            Drawing = d.Contains(" ") ? d.Substring(0, d.IndexOf(" ")) : d
+                        })
+                        .Distinct()
+                        .OrderBy(d => d.Drawing)
+                        .ToList();
+
+                    var serial = EntityMA.MAPlans.AsNoTracking()
+                        .Where(m => !string.IsNullOrEmpty(m.Serial_No))
+                        .Select(m => m.Serial_No)
+                        .Distinct()
+                        .OrderBy(s => s)
+                        .ToList();
+
+                    var lists = new
+                    {
+                        Customer = customer,
+                        Department = department,
+                        Pinnumber = pinnumber,
+                        Drawing = drawing,
+                        Serial = serial
+                    };
+
+                    return Json(new { success = true, data = lists }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
         public ActionResult Load_Dateinfo()
         {
             try
@@ -925,6 +1162,626 @@ namespace MAFixture_WebApplication.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Load_Report_Sparepart(string Serial_No, string Equipment_Name, string Section, string Customer, string Product_name, bool onlyWithSpareparts = true)
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                using (var Entity = SettingAccountMAFixture())
+                {
+                    Entity.Configuration.ProxyCreationEnabled = false;
+
+                    // 1. Query Spareparts (StatusF == 1 && Type_MA == "Sparepart")
+                    var sparepartQuery = Entity.MAPlans.AsNoTracking()
+                        .Where(x => x.StatusF == 1 && x.Type_MA == "Sparepart");
+
+                    if (!string.IsNullOrEmpty(Section))
+                    {
+                        sparepartQuery = sparepartQuery.Where(x => x.Section == Section);
+                    }
+                    if (!string.IsNullOrEmpty(Customer))
+                    {
+                        sparepartQuery = sparepartQuery.Where(x => x.Customer_Name.Contains(Customer));
+                    }
+                    if (!string.IsNullOrEmpty(Product_name))
+                    {
+                        sparepartQuery = sparepartQuery.Where(x => x.Product_name.Contains(Product_name));
+                    }
+
+                    var allSpareparts = sparepartQuery.ToList();
+
+                    // 2. Query Equipment (StatusF == 1 && Type_MA != "Sparepart")
+                    var equipQuery = Entity.MAPlans.AsNoTracking()
+                        .Where(x => x.StatusF == 1 && x.Type_MA != "Sparepart");
+
+                    if (!string.IsNullOrEmpty(Serial_No))
+                    {
+                        equipQuery = equipQuery.Where(x => x.Serial_No.Contains(Serial_No) || x.Equipment_No.Contains(Serial_No));
+                    }
+                    if (!string.IsNullOrEmpty(Equipment_Name))
+                    {
+                        equipQuery = equipQuery.Where(x => x.Equipment_Name.Contains(Equipment_Name));
+                    }
+                    if (!string.IsNullOrEmpty(Section))
+                    {
+                        equipQuery = equipQuery.Where(x => x.Section == Section);
+                    }
+                    if (!string.IsNullOrEmpty(Customer))
+                    {
+                        equipQuery = equipQuery.Where(x => x.Customer_Name.Contains(Customer));
+                    }
+                    if (!string.IsNullOrEmpty(Product_name))
+                    {
+                        equipQuery = equipQuery.Where(x => x.Product_name.Contains(Product_name));
+                    }
+
+                    var allEquipments = equipQuery.ToList();
+
+                    // ถ้าค้นหา Serial_No แล้วไม่เจอใน Equipment ให้ลองหา Sparepart ที่มี Serial_No ตรงกัน แล้วดึง Equipment แม่ขึ้นมา
+                    if (!string.IsNullOrEmpty(Serial_No) && allEquipments.Count == 0)
+                    {
+                        var matchingSpRefNos = allSpareparts
+                            .Where(s => (s.Serial_No != null && s.Serial_No.IndexOf(Serial_No, StringComparison.OrdinalIgnoreCase) >= 0)
+                                     || (s.Referrence_No != null && s.Referrence_No.IndexOf(Serial_No, StringComparison.OrdinalIgnoreCase) >= 0))
+                            .Select(s => s.Referrence_No)
+                            .Where(r => !string.IsNullOrEmpty(r))
+                            .Distinct()
+                            .ToList();
+
+                        if (matchingSpRefNos.Any())
+                        {
+                            allEquipments = Entity.MAPlans.AsNoTracking()
+                                .Where(x => x.StatusF == 1 && x.Type_MA != "Sparepart" &&
+                                           (matchingSpRefNos.Contains(x.Serial_No) || matchingSpRefNos.Contains(x.Equipment_No)))
+                                .ToList();
+                        }
+                    }
+                    // 3. รวบรวมเฉพาะ Spareparts ที่ผูกอยู่กับ Equipment ในรอบนี้ (ตัดตัวที่ไม่เกี่ยวข้องออกเพื่อความรวดเร็ว)
+                    var activeEquipmentSerials = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var eq in allEquipments)
+                    {
+                        if (!string.IsNullOrEmpty(eq.Serial_No)) activeEquipmentSerials.Add(eq.Serial_No.Trim());
+                        if (!string.IsNullOrEmpty(eq.Equipment_No)) activeEquipmentSerials.Add(eq.Equipment_No.Trim());
+                    }
+
+                    var relevantSpareparts = allSpareparts.Where(s =>
+                        !string.IsNullOrEmpty(s.Referrence_No) && activeEquipmentSerials.Contains(s.Referrence_No.Trim())
+                    ).ToList();
+
+                    // 4. หาวันที่เปลี่ยน Pin ล่าสุดของ relevantSpareparts
+                    var relevantSpMaIds = relevantSpareparts.Select(x => x.MA_ID).ToList();
+                    Dictionary<long, DateTime> latestPinChangeDates = new Dictionary<long, DateTime>();
+
+                    if (relevantSpMaIds.Any())
+                    {
+                        try
+                        {
+                            string idList = string.Join(",", relevantSpMaIds);
+                            string pinSql = string.Format(@"
+                                SELECT Ranked.MA_ID, Ranked.Createdate
+                                FROM (
+                                    SELECT MAPlan.MA_ID, FilesMA.Createdate,
+                                           ROW_NUMBER() OVER (PARTITION BY MAPlan.MA_ID ORDER BY FilesMA.Createdate DESC) AS rn
+                                FROM MAPlan
+                                JOIN FilesMA ON MAPlan.MA_ID = FilesMA.MA_ID
+                                JOIN MAChecklistdetail ON FilesMA.ID = MAChecklistdetail.FID
+                                WHERE MAPlan.StatusF = 1 AND MAChecklistdetail.Checklistdetail LIKE 'Change Pin%' AND MAChecklistdetail.Status = 'True'
+                                  AND MAPlan.MA_ID IN ({0})
+                            ) AS Ranked
+                            WHERE Ranked.rn = 1", idList);
+
+                            using (var cmd = Entity.Database.Connection.CreateCommand())
+                            {
+                                cmd.CommandText = pinSql;
+                                if (Entity.Database.Connection.State != ConnectionState.Open)
+                                    Entity.Database.Connection.Open();
+                                using (var reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        long mId = Convert.ToInt64(reader["MA_ID"]);
+                                        DateTime cDate = Convert.ToDateTime(reader["Createdate"]);
+                                        latestPinChangeDates[mId] = cDate;
+                                    }
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+
+                    // 5. คำนวณ Pin Usage แบบขนาน (Parallel Multi-threading) ร่วมกับ Caching 5 นาที
+                    // ทำให้รู้สถานะ Over Pin ของทุกเครื่องล่วงหน้าทันทีเพื่อ Alert Filter โดยใช้เวลาเพียง ~1-3 วินาที
+                    string testLogConnStr = "";
+                    try
+                    {
+                        using (var wcf = new WCF227Service.Service1Client())
+                        {
+                            testLogConnStr = wcf.ConnectTestLogfiles();
+                        }
+                    }
+                    catch { }
+
+                    var pinUsageCounts = new System.Collections.Concurrent.ConcurrentDictionary<long, int>();
+
+                    if (!string.IsNullOrEmpty(testLogConnStr) && relevantSpareparts.Any())
+                    {
+                        var sparepartsToQuery = new List<MAPlan>();
+                        foreach (var sp in relevantSpareparts)
+                        {
+                            string cacheKey = "PinUsage_" + sp.MA_ID;
+                            object cachedVal = System.Web.HttpRuntime.Cache[cacheKey];
+                            if (cachedVal != null)
+                            {
+                                pinUsageCounts[sp.MA_ID] = (int)cachedVal;
+                            }
+                            else
+                            {
+                                sparepartsToQuery.Add(sp);
+                            }
+                        }
+
+                        if (sparepartsToQuery.Any())
+                        {
+                            var parallelOptions = new System.Threading.Tasks.ParallelOptions
+                            {
+                                MaxDegreeOfParallelism = 10
+                            };
+
+                            System.Threading.Tasks.Parallel.ForEach(sparepartsToQuery, parallelOptions, sp =>
+                            {
+                                if (string.IsNullOrEmpty(sp.Pinnumber))
+                                {
+                                    pinUsageCounts[sp.MA_ID] = 0;
+                                    return;
+                                }
+
+                                string[] products = (sp.Product_name ?? "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (products.Length == 0)
+                                {
+                                    pinUsageCounts[sp.MA_ID] = 0;
+                                    return;
+                                }
+
+                                DateTime startDate = latestPinChangeDates.ContainsKey(sp.MA_ID)
+                                    ? latestPinChangeDates[sp.MA_ID]
+                                    : (sp.Startdate.HasValue ? sp.Startdate.Value : DateTime.Today.AddYears(-1));
+
+                                string eqna = (!string.IsNullOrEmpty(sp.Referrence_No) ? sp.Referrence_No : (sp.Equipment_Name ?? "")).ToUpper();
+                                string tableName = "Log_FCTserial";
+                                if (eqna.Contains("FUN") || eqna.Contains("FCT")) tableName = "Log_FCTserial";
+                                else if (eqna.Contains("FNT") || eqna.Contains("FINAL")) tableName = "Log_Finalserial";
+                                else if (eqna.Contains("ICT"))
+                                {
+                                    bool isBelimo = false;
+                                    for (int p = 0; p < products.Length; p++)
+                                    {
+                                        string pTrim = products[p].Trim();
+                                        if (pTrim.StartsWith("7.BE", StringComparison.OrdinalIgnoreCase) || pTrim.StartsWith("BE.", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            isBelimo = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (isBelimo || eqna.Contains("BE.") || eqna.Contains("7.BE"))
+                                    {
+                                        tableName = "Log_ICTBelimo";
+                                    }
+                                    else
+                                    {
+                                        tableName = "Log_ICTresult";
+                                    }
+                                }
+                                else if (eqna.Contains("HIPOT")) tableName = "Log_ICHipot";
+
+                                List<string> conds = new List<string>();
+                                for (int p = 0; p < products.Length; p++)
+                                {
+                                    conds.Add(string.Format("Drawing LIKE '{0}%'", products[p].Trim().Replace("'", "''")));
+                                }
+                                string combinedDrawing = string.Join(" OR ", conds);
+
+                                string countSql = string.Format(@"
+                                    SELECT COUNT(*) AS count
+                                    FROM {0}
+                                    WHERE ({1}) AND (TestDate BETWEEN '{2:yyyy-MM-dd HH:mm:ss}' AND GETDATE())",
+                                    tableName, combinedDrawing, startDate);
+
+                                try
+                                {
+                                    using (SqlConnection conTest = new SqlConnection(testLogConnStr))
+                                    {
+                                        conTest.Open();
+                                        using (SqlCommand cmdCount = new SqlCommand(countSql, conTest))
+                                        {
+                                            cmdCount.CommandTimeout = 5;
+                                            object res = cmdCount.ExecuteScalar();
+                                            int countVal = res != null && res != DBNull.Value ? Convert.ToInt32(res) : 0;
+                                            pinUsageCounts[sp.MA_ID] = countVal;
+                                            System.Web.HttpRuntime.Cache.Insert(
+                                                "PinUsage_" + sp.MA_ID,
+                                                countVal,
+                                                null,
+                                                DateTime.Now.AddMinutes(5),
+                                                System.Web.Caching.Cache.NoSlidingExpiration
+                                            );
+                                        }
+                                    }
+                                }
+                                catch
+                                {
+                                    pinUsageCounts[sp.MA_ID] = 0;
+                                }
+                            });
+                        }
+                    }
+
+                    // 6. รวมและจัดกลุ่มข้อมูล Equipment กับ Spareparts พร้อมสถานะ Alert ทั้ง Over Pin และ Overdue Plan
+                    var resultList = new List<object>();
+
+                    foreach (var eq in allEquipments)
+                    {
+                        // หา Spareparts ที่ผูกกับ Equipment ตัวนี้
+                        string eqSerial = (eq.Serial_No ?? "").Trim();
+                        string eqNo = (eq.Equipment_No ?? "").Trim();
+
+                        var linkedSpareparts = allSpareparts.Where(s =>
+                            (!string.IsNullOrEmpty(eqSerial) && s.Referrence_No != null && s.Referrence_No.Trim().Equals(eqSerial, StringComparison.OrdinalIgnoreCase)) ||
+                            (!string.IsNullOrEmpty(eqNo) && s.Referrence_No != null && s.Referrence_No.Trim().Equals(eqNo, StringComparison.OrdinalIgnoreCase))
+                        ).ToList();
+
+                        if (onlyWithSpareparts && linkedSpareparts.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        bool eqHasAlert = false;
+                        var spDetails = new List<object>();
+
+                        foreach (var sp in linkedSpareparts)
+                        {
+                            int usage = pinUsageCounts.ContainsKey(sp.MA_ID) ? pinUsageCounts[sp.MA_ID] : 0;
+                            int lifetime = 0;
+                            int.TryParse(sp.Lifetime, out lifetime);
+
+                            string pinStatus = "Normal";
+                            if (lifetime > 0)
+                            {
+                                if (usage >= lifetime)
+                                {
+                                    pinStatus = "Exceed";
+                                    eqHasAlert = true;
+                                }
+                                else if (usage + 5000 >= lifetime)
+                                {
+                                    pinStatus = "Warning";
+                                }
+                            }
+
+                            // คำนวณวันคงเหลือ / เลยกำหนดของแผน MA
+                            string planW_str, remainW_str; bool isOverW;
+                            CalculatePlanDiff(sp.Plan_Weekly, 3, out planW_str, out remainW_str, out isOverW);
+
+                            string planM_str, remainM_str; bool isOverM;
+                            CalculatePlanDiff(sp.Plan_Monthly, 7, out planM_str, out remainM_str, out isOverM);
+
+                            string planQ_str, remainQ_str; bool isOverQ;
+                            CalculatePlanDiff(sp.Plan_Quarterly, 14, out planQ_str, out remainQ_str, out isOverQ);
+
+                            string planS_str, remainS_str; bool isOverS;
+                            CalculatePlanDiff(sp.Plan_Semi_annually, 14, out planS_str, out remainS_str, out isOverS);
+
+                            string planY_str, remainY_str; bool isOverY;
+                            CalculatePlanDiff(sp.Plan_Yearly, 14, out planY_str, out remainY_str, out isOverY);
+
+                            bool isAnyPlanOverdue = isOverW || isOverM || isOverQ || isOverS || isOverY;
+                            if (isAnyPlanOverdue) eqHasAlert = true;
+
+                            spDetails.Add(new
+                            {
+                                MA_ID = sp.MA_ID,
+                                Serial_No = sp.Serial_No,
+                                Equipment_Name = sp.Equipment_Name,
+                                Equipment_No = sp.Equipment_No,
+                                Pinnumber = sp.Pinnumber,
+                                Product_name = sp.Product_name,
+                                PinUsage = usage,
+                                Lifetime = lifetime,
+                                PinStatus = pinStatus,
+                                Plan_Weekly = planW_str,
+                                RemainWeekly = remainW_str,
+                                IsOverWeekly = isOverW,
+                                Plan_Monthly = planM_str,
+                                RemainMonthly = remainM_str,
+                                IsOverMonthly = isOverM,
+                                Plan_Quarterly = planQ_str,
+                                RemainQuarterly = remainQ_str,
+                                IsOverQuarterly = isOverQ,
+                                Plan_Semi_annually = planS_str,
+                                RemainSemi = remainS_str,
+                                IsOverSemi = isOverS,
+                                Plan_Yearly = planY_str,
+                                RemainYearly = remainY_str,
+                                IsOverYearly = isOverY,
+                                HasAlert = (pinStatus == "Exceed") || isAnyPlanOverdue
+                            });
+                        }
+
+                        resultList.Add(new
+                        {
+                            MA_ID = eq.MA_ID,
+                            Serial_No = eq.Serial_No,
+                            Equipment_No = eq.Equipment_No,
+                            Equipment_Name = eq.Equipment_Name,
+                            Section = eq.Section,
+                            Customer_Name = eq.Customer_Name,
+                            Product_name = eq.Product_name,
+                            Location = eq.Location,
+                            SparepartCount = linkedSpareparts.Count,
+                            HasAlert = eqHasAlert,
+                            Spareparts = spDetails
+                        });
+                    }
+
+                    sw.Stop();
+                    var jsonResult = Json(new
+                    {
+                        success = true,
+                        data = resultList,
+                        totalEquipment = resultList.Count,
+                        executionTimeMs = sw.ElapsedMilliseconds
+                    }, JsonRequestBehavior.AllowGet);
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                    return jsonResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                sw.Stop();
+                return Json(new { success = false, word = "Error: " + ex.Message, executionTimeMs = sw.ElapsedMilliseconds });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Load_Sparepart_PinUsage(List<long> maIds)
+        {
+            try
+            {
+                if (maIds == null || maIds.Count == 0)
+                {
+                    return Json(new { success = true, data = new List<object>() });
+                }
+
+                using (var Entity = SettingAccountMAFixture())
+                {
+                    Entity.Configuration.ProxyCreationEnabled = false;
+
+                    // ดึงข้อมูล sparepart ตาม ID ที่ขอ
+                    var spareparts = Entity.MAPlans.AsNoTracking()
+                        .Where(x => maIds.Contains(x.MA_ID))
+                        .ToList();
+
+                    // ดึงวันที่เปลี่ยน Pin ล่าสุดเฉพาะ spareparts กลุ่มนี้
+                    Dictionary<long, DateTime> latestPinChangeDates = new Dictionary<long, DateTime>();
+                    try
+                    {
+                        string idList = string.Join(",", maIds);
+                        string pinSql = string.Format(@"
+                            SELECT Ranked.MA_ID, Ranked.Createdate
+                            FROM (
+                                SELECT MAPlan.MA_ID, FilesMA.Createdate,
+                                       ROW_NUMBER() OVER (PARTITION BY MAPlan.MA_ID ORDER BY FilesMA.Createdate DESC) AS rn
+                                FROM MAPlan
+                                JOIN FilesMA ON MAPlan.MA_ID = FilesMA.MA_ID
+                                JOIN MAChecklistdetail ON FilesMA.ID = MAChecklistdetail.FID
+                                WHERE MAPlan.StatusF = 1 AND MAChecklistdetail.Checklistdetail LIKE 'Change Pin%' AND MAChecklistdetail.Status = 'True'
+                                  AND MAPlan.MA_ID IN ({0})
+                            ) AS Ranked
+                            WHERE Ranked.rn = 1", idList);
+
+                        using (var cmd = Entity.Database.Connection.CreateCommand())
+                        {
+                            cmd.CommandText = pinSql;
+                            if (Entity.Database.Connection.State != ConnectionState.Open)
+                                Entity.Database.Connection.Open();
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    long mId = Convert.ToInt64(reader["MA_ID"]);
+                                    DateTime cDate = Convert.ToDateTime(reader["Createdate"]);
+                                    latestPinChangeDates[mId] = cDate;
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+
+                    // เชื่อมต่อ TestLogfiles เพื่อนับ Pin Usage ของ spareparts เหล่านี้เท่านั้น (เฉพาะเครื่องที่ถูกกดดู 1-4 รายการ)
+                    string testLogConnStr = "";
+                    try
+                    {
+                        using (var wcf = new WCF227Service.Service1Client())
+                        {
+                            testLogConnStr = wcf.ConnectTestLogfiles();
+                        }
+                    }
+                    catch { }
+
+                    var pinResults = new List<object>();
+
+                    if (!string.IsNullOrEmpty(testLogConnStr))
+                    {
+                        try
+                        {
+                            using (SqlConnection conTest = new SqlConnection(testLogConnStr))
+                            {
+                                conTest.Open();
+
+                                foreach (var sp in spareparts)
+                                {
+                                    int usageCount = 0;
+                                    int lifetime = 0;
+                                    int.TryParse(sp.Lifetime, out lifetime);
+
+                                    if (!string.IsNullOrEmpty(sp.Pinnumber))
+                                    {
+                                        DateTime startDate = latestPinChangeDates.ContainsKey(sp.MA_ID)
+                                            ? latestPinChangeDates[sp.MA_ID]
+                                            : (sp.Startdate.HasValue ? sp.Startdate.Value : DateTime.Today.AddYears(-1));
+
+                                        string[] products = (sp.Product_name ?? "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                                        string eqna = (!string.IsNullOrEmpty(sp.Referrence_No) ? sp.Referrence_No : (sp.Equipment_Name ?? "")).ToUpper();
+                                        string tableName = "Log_FCTserial";
+                                        if (eqna.Contains("FUN") || eqna.Contains("FCT")) tableName = "Log_FCTserial";
+                                        else if (eqna.Contains("FNT") || eqna.Contains("FINAL")) tableName = "Log_Finalserial";
+                                        else if (eqna.Contains("ICT"))
+                                        {
+                                            bool isBelimo = false;
+                                            for (int p = 0; p < products.Length; p++)
+                                            {
+                                                string pTrim = products[p].Trim();
+                                                if (pTrim.StartsWith("7.BE", StringComparison.OrdinalIgnoreCase) || pTrim.StartsWith("BE.", StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    isBelimo = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isBelimo || eqna.Contains("BE.") || eqna.Contains("7.BE"))
+                                            {
+                                                tableName = "Log_ICTBelimo";
+                                            }
+                                            else
+                                            {
+                                                tableName = "Log_ICTresult";
+                                            }
+                                        }
+                                        else if (eqna.Contains("HIPOT")) tableName = "Log_ICHipot";
+
+                                        if (products.Length > 0)
+                                        {
+                                            List<string> conds = new List<string>();
+                                            for (int p = 0; p < products.Length; p++)
+                                            {
+                                                conds.Add(string.Format("Drawing LIKE '{0}%'", products[p].Trim().Replace("'", "''")));
+                                            }
+                                            string combinedDrawing = string.Join(" OR ", conds);
+
+                                            string countSql = string.Format(@"
+                                                SELECT COUNT(*) AS count
+                                                FROM {0}
+                                                WHERE ({1}) AND (TestDate BETWEEN '{2:yyyy-MM-dd HH:mm:ss}' AND GETDATE())",
+                                                tableName, combinedDrawing, startDate);
+
+                                            try
+                                            {
+                                                using (SqlCommand cmdCount = new SqlCommand(countSql, conTest))
+                                                {
+                                                    cmdCount.CommandTimeout = 5;
+                                                    object res = cmdCount.ExecuteScalar();
+                                                    usageCount = res != null && res != DBNull.Value ? Convert.ToInt32(res) : 0;
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                usageCount = 0;
+                                            }
+                                        }
+                                    }
+
+                                    string pinStatus = "Normal";
+                                    if (lifetime > 0)
+                                    {
+                                        if (usageCount >= lifetime)
+                                        {
+                                            pinStatus = "Exceed";
+                                        }
+                                        else if (usageCount + 5000 >= lifetime)
+                                        {
+                                            pinStatus = "Warning";
+                                        }
+                                    }
+
+                                    pinResults.Add(new
+                                    {
+                                        MA_ID = sp.MA_ID,
+                                        PinUsage = usageCount,
+                                        Lifetime = lifetime,
+                                        PinStatus = pinStatus
+                                    });
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            foreach (var sp in spareparts)
+                            {
+                                int lifetime = 0;
+                                int.TryParse(sp.Lifetime, out lifetime);
+                                pinResults.Add(new
+                                {
+                                    MA_ID = sp.MA_ID,
+                                    PinUsage = 0,
+                                    Lifetime = lifetime,
+                                    PinStatus = "Normal"
+                                });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var sp in spareparts)
+                        {
+                            int lifetime = 0;
+                            int.TryParse(sp.Lifetime, out lifetime);
+                            pinResults.Add(new
+                            {
+                                MA_ID = sp.MA_ID,
+                                PinUsage = 0,
+                                Lifetime = lifetime,
+                                PinStatus = "Normal"
+                            });
+                        }
+                    }
+
+                    return Json(new { success = true, data = pinResults });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, word = "Error loading pin usage: " + ex.Message });
+            }
+        }
+
+        private void CalculatePlanDiff(DateTime? planDate, int nearThresholdDays, out string dateStr, out string remainStr, out bool isOverdue)
+        {
+            dateStr = "";
+            remainStr = "";
+            isOverdue = false;
+            if (!planDate.HasValue) return;
+
+            DateTime d = planDate.Value.Date;
+            DateTime today = DateTime.Today;
+            dateStr = d.ToString("dd/MM/yyyy");
+
+            if (today >= d)
+            {
+                isOverdue = true;
+                int diff = (int)(today - d).TotalDays;
+                remainStr = "- " + diff + " days";
+            }
+            else
+            {
+                int diff = (int)(d - today).TotalDays;
+                remainStr = diff + " days";
+            }
+        }
+
 
         //public ActionResult Load_Customer_By_ID(string ID)
         //{
@@ -1129,7 +1986,7 @@ namespace MAFixture_WebApplication.Controllers
                 return Json(new { success = false, word = "Error, " + E.Message });
             }
         }
-        public ActionResult Load_MAPlan(string Serial_No, string From, string To, string Customer, string Product_name, string Section, string Type_MC, string Type_MA, string Location, string Property, string Type_Tools = "")
+        public ActionResult Load_MAPlan(string Serial_No, string From, string To, string Customer, string Product_name, string Section, string Type_MC, string Type_MA, string Location, string Property, string Type_Tools = "", string Equipment_Name = "")
         {
             try
             {
@@ -1143,7 +2000,12 @@ namespace MAFixture_WebApplication.Controllers
                     // เพิ่มเงื่อนไขตาม type
                     if (!String.IsNullOrEmpty(Serial_No))
                     {
-                        query = query.Where(x => x.Serial_No.Contains(Serial_No));
+                        query = query.Where(x => (x.Serial_No != null && x.Serial_No.Contains(Serial_No)) ||
+                                                 (x.Referrence_No != null && x.Referrence_No.Contains(Serial_No)));
+                    }
+                    if (!String.IsNullOrEmpty(Equipment_Name))
+                    {
+                        query = query.Where(x => x.Equipment_Name.Contains(Equipment_Name));
                     }
                     if (!string.IsNullOrEmpty(From) && !string.IsNullOrEmpty(To))
                     {
@@ -1301,7 +2163,7 @@ namespace MAFixture_WebApplication.Controllers
                 return Json(new { success = false, word = "Error, " + E.Message });
             }
         }
-        public ActionResult Load_Obsolete()
+        public ActionResult Load_Obsolete(string Serial_No = "", string From = "", string To = "", string Customer = "", string Product_name = "", string Section = "", string Type_MC = "", string Type_MA = "", string Location = "", string Property = "", string Type_Tools = "", string Equipment_Name = "")
         {
             try
             {
@@ -1309,18 +2171,93 @@ namespace MAFixture_WebApplication.Controllers
                 {
                     Entity.Configuration.ProxyCreationEnabled = false; // Disable proxy creation for lazy loading
 
-                    // Retrieve the maplan data based on Serial_No
-                    var data = Entity.MAPlans.AsNoTracking().Where(x => x.StatusF == 2).ToList();
+                    var query = Entity.MAPlans.AsNoTracking().Where(x => x.StatusF == 2).AsQueryable();
+
+                    if (!String.IsNullOrEmpty(Serial_No))
+                    {
+                        query = query.Where(x => x.Serial_No.Contains(Serial_No));
+                    }
+                    if (!String.IsNullOrEmpty(Equipment_Name))
+                    {
+                        query = query.Where(x => x.Equipment_Name.Contains(Equipment_Name));
+                    }
+                    if (!string.IsNullOrEmpty(From) && !string.IsNullOrEmpty(To))
+                    {
+                        DateTime dateFrom = Convert.ToDateTime(From).Date;
+                        DateTime dateTo = Convert.ToDateTime(To).Date.AddDays(1);
+
+                        query = query.Where(x => x.LastMA_date >= dateFrom && x.LastMA_date < dateTo);
+                    }
+                    else if (!string.IsNullOrEmpty(From))
+                    {
+                        DateTime dateFrom = Convert.ToDateTime(From).Date;
+                        query = query.Where(x => x.LastMA_date >= dateFrom);
+                    }
+                    else if (!string.IsNullOrEmpty(To))
+                    {
+                        DateTime dateTo = Convert.ToDateTime(To).Date.AddDays(1);
+                        query = query.Where(x => x.LastMA_date < dateTo);
+                    }
+                    if (!String.IsNullOrEmpty(Customer))
+                    {
+                        query = query.Where(x => x.Customer_Name.Contains(Customer));
+                    }
+                    if (!String.IsNullOrEmpty(Product_name))
+                    {
+                        query = query.Where(x => x.Product_name.Contains(Product_name));
+                    }
+                    if (!String.IsNullOrEmpty(Section))
+                    {
+                        query = query.Where(x => x.Section.Equals(Section));
+                    }
+                    if (!String.IsNullOrEmpty(Type_MC))
+                    {
+                        if (Type_MC == "0")
+                        {
+                            query = query.Where(x => x.Type_MC == "Maintenance");
+                        }
+                        else if (Type_MC == "1")
+                        {
+                            query = query.Where(x => x.Type_MC == "Calibration");
+                        }
+                    }
+                    if (!String.IsNullOrEmpty(Type_MA))
+                    {
+                        if (Type_MA == "0")
+                        {
+                            query = query.Where(x => x.Type_MA == "Equipment/Machine");
+                        }
+                        else if (Type_MA == "1")
+                        {
+                            query = query.Where(x => x.Type_MA == "Sparepart");
+                        }
+                        else if (Type_MA == "2")
+                        {
+                            query = query.Where(x => x.Type_MA == "Tools");
+                        }
+                    }
+                    if (!String.IsNullOrEmpty(Type_Tools))
+                    {
+                        query = query.Where(x => x.Type_Tools == Type_Tools);
+                    }
+                    if (!String.IsNullOrEmpty(Location))
+                    {
+                        query = query.Where(x => x.Location.Contains(Location));
+                    }
+                    if (!String.IsNullOrEmpty(Property))
+                    {
+                        query = query.Where(x => x.Property.Contains(Property));
+                    }
+
+                    var data = query.ToList();
 
                     if (data == null)
                     {
                         return Json(new { success = false, word = "Could not load data." }, JsonRequestBehavior.AllowGet);
                     }
 
-
-                    var jsonResult = Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);
-                    jsonResult.MaxJsonLength = int.MaxValue;
-                    return jsonResult;
+                    string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, data = data });
+                    return Content(jsonStr, "application/json");
                 }
             }
             catch (Exception E)
@@ -1328,7 +2265,7 @@ namespace MAFixture_WebApplication.Controllers
                 return Json(new { success = false, word = "Error, " + E.Message });
             }
         }
-        public ActionResult Load_MAFixture_By_ID(string MA_ID)
+        public ActionResult Load_MAFixture_By_ID(string MA_ID, bool loadFiles = true)
         {
             try
             {
@@ -1395,12 +2332,15 @@ namespace MAFixture_WebApplication.Controllers
                         Dimension = data.Dimension,
                         Equipment_Picture = data.Equipment_Picture,
                         Type_Tools = data.Type_Tools,
+                        QTY = data.QTY,
                     };
 
                     mappedData.FilesMAs = new List<FilesMA>();
 
-                    //var filesMA = Entity.FilesMAs.Where(x => x.MA_ID == data.MA_ID).ToList();
-                    var filesMA = Entity.FilesMAs.AsNoTracking()
+                    // โหลด FilesMAs และประวัติเดิมเฉพาะเมื่อ loadFiles เป็น true
+                    if (loadFiles)
+                    {
+                        var filesMA = Entity.FilesMAs.AsNoTracking()
                         .Where(x => x.MA_ID == data.MA_ID)
                         .Select(x => new
                         {
@@ -1518,6 +2458,7 @@ namespace MAFixture_WebApplication.Controllers
                             mappedData.FilesMAs.Add(mappedFile);
                         }
                     }
+                }
 
                     var jsonResult = Json(new { success = true, data = mappedData }, JsonRequestBehavior.AllowGet);
                     jsonResult.MaxJsonLength = int.MaxValue;
@@ -1529,7 +2470,7 @@ namespace MAFixture_WebApplication.Controllers
                 return Json(new { success = false, word = "Error, " + E.Message });
             }
         }
-        public ActionResult Load_MAFixture_By_Serial(string Serial_No)
+        public ActionResult Load_MAFixture_By_Serial(string Serial_No, bool loadFiles = true)
         {
             try
             {
@@ -1547,7 +2488,7 @@ namespace MAFixture_WebApplication.Controllers
 
                     List<MAPlan> mappedDataList = new List<MAPlan>();
 
-                    if (data.Count > 1)
+                    if (!loadFiles || data.Count > 1)
                     {
                         foreach (var dataItem in data)
                         {
@@ -1595,7 +2536,9 @@ namespace MAFixture_WebApplication.Controllers
                                 Grade_Status = dataItem.Grade_Status,
                                 Dimension = dataItem.Dimension,
                                 Equipment_Picture = dataItem.Equipment_Picture,
+                                QTY = dataItem.QTY,
                             };
+                            mappedData.FilesMAs = new List<FilesMA>();
                             mappedDataList.Add(mappedData);
                         }
                     }
@@ -1647,6 +2590,7 @@ namespace MAFixture_WebApplication.Controllers
                                 Grade_Status = dataItem.Grade_Status,
                                 Dimension = dataItem.Dimension,
                                 Equipment_Picture = dataItem.Equipment_Picture,
+                                QTY = dataItem.QTY,
                             };
 
                             mappedData.FilesMAs = new List<FilesMA>();
@@ -1791,35 +2735,73 @@ namespace MAFixture_WebApplication.Controllers
             {
                 using (MAFixtureEntities Entity = SettingAccountMAFixture())
                 {
-                    // นับว่ามี machinename ที่เจอตาม input ไหม
-                    var value = Entity.Tbl_MasterMATester
-                                      .Count(x => (x.Machinename).Contains(MasterMA.Machinename));
+                    Entity.Configuration.ProxyCreationEnabled = false;
 
-                    IQueryable<Tbl_MasterMATester> query = Entity.Tbl_MasterMATester
+                    string targetMachine = (MasterMA.Machinename ?? "").Trim();
+                    string section = (MasterMA.Section ?? "").Trim();
+                    string category = (MasterMA.Category ?? "").Trim();
+                    string typeMA = (MasterMA.Type_MA ?? "").Trim();
+
+                    // 1. ดึง Master Checklist เฉพาะ Column ที่จำเป็นออกมาจากฐานข้อมูล
+                    var baseList = Entity.Tbl_MasterMATester.AsNoTracking()
                         .Where(x =>
-                            x.Category.Contains(MasterMA.Category) &&
-                            x.Section.Contains(MasterMA.Section) &&
-                            x.Type_MA == MasterMA.Type_MA &&
+                            x.Category.Contains(category) &&
+                            x.Section.Contains(section) &&
+                            x.Type_MA == typeMA &&
                             x.Status == "1"
-                        );
+                        )
+                        .Select(x => new
+                        {
+                            ID = x.ID,
+                            DetailEng = x.DetailEng,
+                            DetailThai = x.DetailThai,
+                            Category = x.Category,
+                            Section = x.Section,
+                            Machinename = x.Machinename,
+                            Type_MA = x.Type_MA
+                        })
+                        .ToList();
 
-                    if (value > 0)
+                    // 2. ฟังก์ชันตรวจสอบชื่อเครื่องแบบ Exact Token (รองรับชื่อเครื่องหลายตัวคั่นด้วย comma หรือ slash)
+                    Func<string, bool> isMatchMachine = delegate(string rawMachineNames)
                     {
-                        query = query.Where(x => (x.Machinename ?? "").Contains(MasterMA.Machinename));
-                    }
-                    else
-                    {
-                        query = query.Where(x => string.IsNullOrEmpty(x.Machinename));
-                    }
+                        if (string.IsNullOrEmpty(rawMachineNames) || string.IsNullOrEmpty(targetMachine))
+                        {
+                            return false;
+                        }
 
-                    var data = query.ToList();
+                        // ป้องกันกรณีคำว่า "M/C" โดนตัดด้วยเครื่องหมาย slash โดยแปลงเป็น "M-C" ชั่วคราว
+                        string tempStr = rawMachineNames.Replace("M/C", "M-C");
+                        char[] delimiters = new char[] { ',' };
+                        string[] parts = tempStr.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (!data.Any())
+                        for (int i = 0; i < parts.Length; i++)
+                        {
+                            string cleanName = parts[i].Replace("M-C", "M/C").Trim();
+                            // ตรวจสอบแบบตรงกันเป๊ะทั้งคำ (Exact Match, Case-Insensitive)
+                            if (string.Equals(cleanName, targetMachine, StringComparison.OrdinalIgnoreCase))
+                            {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    };
+
+                    // 3. ค้นหารายการ Checklist ที่ระบุชื่อเครื่องนี้โดยเฉพาะ
+                    var machineSpecificData = baseList.Where(x => isMatchMachine(x.Machinename)).ToList();
+                    int matchCount = machineSpecificData.Count;
+
+                    var resultData = matchCount > 0
+                        ? machineSpecificData
+                        : baseList.Where(x => string.IsNullOrEmpty(x.Machinename) || string.IsNullOrEmpty(x.Machinename.Trim())).ToList();
+
+                    if (!resultData.Any())
                     {
                         return Json(new { success = false, word = "Could not load data." }, JsonRequestBehavior.AllowGet);
                     }
 
-                    return Json(new { success = true, data = data, value = value }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, data = resultData, value = matchCount }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception E)
@@ -1838,18 +2820,63 @@ namespace MAFixture_WebApplication.Controllers
                     // Ensure ProxyCreationEnabled is disabled if needed
                     // Entity.Configuration.ProxyCreationEnabled = false;
 
+                    if (string.IsNullOrEmpty(Serial_No))
+                    {
+                        return Json(new { success = true, data = new List<object>() }, JsonRequestBehavior.AllowGet);
+                    }
+
                     var data = Entity.MAPlans
-                        .Where(m => m.Referrence_No == Serial_No)
+                        .Where(m => m.Referrence_No == Serial_No && m.StatusF == 1)
                         .Select(m => new
                         {
                             m.MA_ID,
-                            m.Serial_No
+                            m.Serial_No,
+                            m.Equipment_Name,
+                            m.Pinnumber,
+                            m.QTY
                         }) // ดึงเฉพาะฟิลด์ที่ต้องการ
                         .ToList();
-                    if (!data.Any())
+
+                    return Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception E)
+            {
+                return Json(new { success = false, word = "Error, " + E.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Load_Equipment_Reference(string Section, long? GE_ID)
+        {
+            try
+            {
+                using (MAFixtureEntities Entity = SettingAccountMAFixture())
+                {
+                    Entity.Configuration.ProxyCreationEnabled = false;
+
+                    var query = Entity.MAPlans.AsNoTracking()
+                        .Where(m => m.Type_MA == "Equipment/Machine" && m.StatusF == 1 && !string.IsNullOrEmpty(m.Serial_No));
+
+                    if (GE_ID.HasValue && GE_ID.Value > 0)
                     {
-                        return Json(new { success = false, word = "Could not load data." }, JsonRequestBehavior.AllowGet);
+                        query = query.Where(m => m.GE_ID == GE_ID.Value || m.Section == Section);
                     }
+                    else if (!string.IsNullOrEmpty(Section))
+                    {
+                        query = query.Where(m => m.Section == Section);
+                    }
+
+                    var data = query
+                        .Select(m => new
+                        {
+                            m.Serial_No,
+                            m.Equipment_No,
+                            m.Equipment_Name
+                        })
+                        .Distinct()
+                        .OrderBy(m => m.Serial_No)
+                        .ToList();
 
                     return Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);
                 }
@@ -2025,6 +3052,7 @@ namespace MAFixture_WebApplication.Controllers
                             Dimension = data.Dimension,
                             Equipment_Picture = data.Equipment_Picture,
                             Type_Tools = data.Type_Tools,
+                            QTY = data.QTY,
                             StatusF = 1
                         };
 
@@ -2093,6 +3121,7 @@ namespace MAFixture_WebApplication.Controllers
                             _MAPlan.Dimension = data.Dimension;
                             _MAPlan.Equipment_Picture = data.Equipment_Picture;
                             _MAPlan.Type_Tools = data.Type_Tools;
+                            _MAPlan.QTY = data.QTY;
 
                             // Edit: ลบรายการเดิมทั้งหมดของ MA_ID นี้ออก
                             var existingProducts = Entity.Tbl_ProductName.Where(x => x.MA_ID == _MAPlan.MA_ID).ToList();
@@ -2803,9 +3832,12 @@ namespace MAFixture_WebApplication.Controllers
                 using (MAFixtureEntities Entity = SettingAccountMAFixture())
                 {
                     Entity.Configuration.ProxyCreationEnabled = false;
-                    if (Entity.Tbl_Pindetail.Any(x => x.Pinnumber == data.Pinnumber))
+                    // เช็กว่ามี Pinnumber นี้ใน DB หรือไม่ โดยต้องไม่ใช่ ID ของตัวเอง
+                    bool isDuplicate = Entity.Tbl_Pindetail.Any(x => x.Pinnumber == data.Pinnumber && x.ID != data.ID);
+
+                    if (isDuplicate)
                     {
-                        return Json(new { success = false, word = "Duplicate Machinename" });
+                        return Json(new { success = false, word = "Duplicate Pin Number" });
                     }
                     if (data.ID > 0)
                     {
@@ -3391,7 +4423,7 @@ namespace MAFixture_WebApplication.Controllers
                         s.Section == masterTool.Section &&
                         s.Type == masterTool.Type);
 
-                    int maxLimit = summarizeTool != null && summarizeTool.Amount.HasValue ? summarizeTool.Amount.Value : 0;
+                    int summarizeAmount = summarizeTool != null && summarizeTool.Amount.HasValue ? summarizeTool.Amount.Value : 0;
                     int oldAmount = masterTool.Amount ?? 0;
                     int newAmount = oldAmount + Step;
 
@@ -3400,9 +4432,32 @@ namespace MAFixture_WebApplication.Controllers
                         return Json(new { success = false, word = "Amount cannot be less than 0." });
                     }
 
-                    if (newAmount > maxLimit)
+                    if (oldAmount == summarizeAmount)
                     {
-                        return Json(new { success = false, word = "Amount cannot exceed Summarize Amount (" + maxLimit + ")." });
+                        return Json(new { success = false, word = "Cannot adjust: Master Amount is already matched with Summarize Amount (" + oldAmount + ")." });
+                    }
+
+                    if (summarizeAmount > oldAmount)
+                    {
+                        if (newAmount < oldAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") > Master (" + oldAmount + "), amount cannot be decreased below current Master (" + oldAmount + ")." });
+                        }
+                        if (newAmount > summarizeAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") > Master (" + oldAmount + "), amount cannot exceed Summarize (" + summarizeAmount + ")." });
+                        }
+                    }
+                    else if (summarizeAmount < oldAmount)
+                    {
+                        if (newAmount < summarizeAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") < Master (" + oldAmount + "), amount cannot be decreased below Summarize (" + summarizeAmount + ")." });
+                        }
+                        if (newAmount > oldAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") < Master (" + oldAmount + "), amount cannot exceed current Master (" + oldAmount + ")." });
+                        }
                     }
 
                     string diffText = (newAmount >= oldAmount ? "+" : "") + (newAmount - oldAmount);
@@ -3410,14 +4465,14 @@ namespace MAFixture_WebApplication.Controllers
                     // สร้างข้อความบันทึกรายละเอียดครบถ้วนลงใน Update_Log (varchar(500))
                     string userComment = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
                     string detailedLog = string.Format(
-                        "Amount: {0} -> {1} ({2}) | Product: {3} | Section: {4} | Type: {5} | Summarize Max: {6}{7}",
+                        "Amount: {0} -> {1} ({2}) | Product: {3} | Section: {4} | Type: {5} | Summarize: {6}{7}",
                         oldAmount,
                         newAmount,
                         diffText,
                         masterTool.Product_name,
                         masterTool.Section,
                         masterTool.Type,
-                        maxLimit,
+                        summarizeAmount,
                         !string.IsNullOrEmpty(userComment) ? " | Comment: " + userComment : ""
                     );
                     if (detailedLog.Length > 500)
@@ -3461,7 +4516,7 @@ namespace MAFixture_WebApplication.Controllers
                         }
                         catch { }
 
-                        SendEmail(log, masterTool, oldAmount, maxLimit, userEmail);
+                        SendEmail(log, masterTool, oldAmount, summarizeAmount, userEmail);
                     }
                     catch (Exception ex)
                     {
@@ -3525,7 +4580,7 @@ namespace MAFixture_WebApplication.Controllers
                         s.Section == masterTool.Section &&
                         s.Type == masterTool.Type);
 
-                    int maxLimit = summarizeTool != null && summarizeTool.Amount.HasValue ? summarizeTool.Amount.Value : 0;
+                    int summarizeAmount = summarizeTool != null && summarizeTool.Amount.HasValue ? summarizeTool.Amount.Value : 0;
                     int oldAmount = masterTool.Amount ?? 0;
 
                     if (NewAmount < 0)
@@ -3533,9 +4588,32 @@ namespace MAFixture_WebApplication.Controllers
                         return Json(new { success = false, word = "Amount cannot be less than 0." });
                     }
 
-                    if (NewAmount > maxLimit)
+                    if (oldAmount == summarizeAmount)
                     {
-                        return Json(new { success = false, word = "Cannot save: Amount cannot exceed Summarize Amount (" + maxLimit + ")." });
+                        return Json(new { success = false, word = "Cannot adjust: Master Amount is already matched with Summarize Amount (" + oldAmount + ")." });
+                    }
+
+                    if (summarizeAmount > oldAmount)
+                    {
+                        if (NewAmount < oldAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") > Master (" + oldAmount + "), amount cannot be decreased below current Master (" + oldAmount + ")." });
+                        }
+                        if (NewAmount > summarizeAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") > Master (" + oldAmount + "), amount cannot exceed Summarize (" + summarizeAmount + ")." });
+                        }
+                    }
+                    else if (summarizeAmount < oldAmount)
+                    {
+                        if (NewAmount < summarizeAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") < Master (" + oldAmount + "), amount cannot be decreased below Summarize (" + summarizeAmount + ")." });
+                        }
+                        if (NewAmount > oldAmount)
+                        {
+                            return Json(new { success = false, word = "Cannot save: When Summarize (" + summarizeAmount + ") < Master (" + oldAmount + "), amount cannot exceed current Master (" + oldAmount + ")." });
+                        }
                     }
 
                     string diffText = (NewAmount >= oldAmount ? "+" : "") + (NewAmount - oldAmount);
@@ -3543,14 +4621,14 @@ namespace MAFixture_WebApplication.Controllers
                     // สร้างข้อความบันทึกรายละเอียดครบถ้วนลงใน Update_Log (varchar(500))
                     string userComment = !string.IsNullOrEmpty(Comment) ? Comment.Trim() : "";
                     string detailedLog = string.Format(
-                        "Amount: {0} -> {1} ({2}) | Product: {3} | Section: {4} | Type: {5} | Summarize Max: {6}{7}",
+                        "Amount: {0} -> {1} ({2}) | Product: {3} | Section: {4} | Type: {5} | Summarize: {6}{7}",
                         oldAmount,
                         NewAmount,
                         diffText,
                         masterTool.Product_name,
                         masterTool.Section,
                         masterTool.Type,
-                        maxLimit,
+                        summarizeAmount,
                         !string.IsNullOrEmpty(userComment) ? " | Comment: " + userComment : ""
                     );
                     if (detailedLog.Length > 500)
@@ -3594,7 +4672,7 @@ namespace MAFixture_WebApplication.Controllers
                         }
                         catch { }
 
-                        SendEmail(log, masterTool, oldAmount, maxLimit, userEmail);
+                        SendEmail(log, masterTool, oldAmount, summarizeAmount, userEmail);
                     }
                     catch (Exception ex)
                     {
@@ -4055,31 +5133,22 @@ namespace MAFixture_WebApplication.Controllers
                     // ดึงรายชื่ออีเมลของแผนก E - Industrial Engineering จาก Tbl_employee
                     try
                     {
-                        var employees = Entity.Tbl_employee
-                            .Where(x => (x.Depart == "E - Industrial Engineering" || x.Depart.Contains("Industrial")) && x.Status == "A")
-                            .ToList();
-
-                        foreach (var emp in employees)
+                        string[] emaillist = WCF227.Getemailall("MAFixture_Summarizetools");
+                        if (emaillist != null && emaillist.Length > 0 && !string.IsNullOrEmpty(emaillist[0]))
                         {
-                            if (!string.IsNullOrEmpty(emp.Email))
-                            {
-                                mailToList.Add(emp.Email.Trim());
-                            }
+                            mailToList.Add(emaillist[0]);
                         }
-                    }
-                    catch { }
+                        //var employees = Entity.Tbl_employee
+                        //    .Where(x => (x.Depart == "E - Industrial Engineering" || x.Depart.Contains("Industrial")) && x.Status == "A")
+                        //    .ToList();
 
-                    // ดึงรายชื่ออีเมลกลุ่มจาก WCF227 (ถ้ามี)
-                    try
-                    {
-                        string convertedMailTo = WCF227.Convertemailfromstring("E - Industrial Engineering");
-                        if (!string.IsNullOrEmpty(convertedMailTo))
-                        {
-                            var splitEmails = convertedMailTo.Split(new[] { ',', ';', '/' }, StringSplitOptions.RemoveEmptyEntries)
-                                .Select(x => x.Trim())
-                                .Where(x => !string.IsNullOrEmpty(x));
-                            mailToList.AddRange(splitEmails);
-                        }
+                        //foreach (var emp in employees)
+                        //{
+                        //    if (!string.IsNullOrEmpty(emp.Email))
+                        //    {
+                        //        mailToList.Add(emp.Email.Trim());
+                        //    }
+                        //}
                     }
                     catch { }
 

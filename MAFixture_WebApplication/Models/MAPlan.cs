@@ -63,6 +63,7 @@ namespace MAFixture_WebApplication.Models
         public string Type_Tools { get; set; }
         public string Modifyby { get; set; }
         public Nullable<System.DateTime> Modifydate { get; set; }
+        public Nullable<int> QTY { get; set; }
     
         public virtual Customer Customer1 { get; set; }
         public virtual ICollection<FilesMA> FilesMAs { get; set; }

@@ -6,6 +6,31 @@
 <hr />
 
 <style>
+    .panel-spareparts {
+        border-color: #d9d9d9;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .panel-spareparts .panel-heading {
+        background-color: #fafafa;
+        border-bottom: 1px solid #e8e8e8;
+        padding: 8px 12px;
+    }
+    .spareparts-table {
+        margin-bottom: 0;
+        font-size: 11px;
+    }
+    .spareparts-table th {
+        background-color: #f7f9fa;
+        color: #555;
+        font-weight: 600;
+        text-align: center;
+        padding: 5px 4px !important;
+        vertical-align: middle !important;
+    }
+    .spareparts-table td {
+        padding: 5px 4px !important;
+        vertical-align: middle !important;
+    }
 </style>
 <div class="row">
     <div class="col-md-3">
@@ -34,6 +59,32 @@
                         No file selected
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Linked Spare Parts Panel (แสดงเฉพาะ Equipment) -->
+        <div class="panel panel-default panel-spareparts" id="panel-linked-spareparts" style="display: none; margin-top: 15px;">
+            <div class="panel-heading">
+                <b style="font-size: 13px;"><i class="fas fa-cogs" style="margin-right: 5px; color: #1890ff;"></i>Linked Spare Parts</b>
+                <span id="sparepart-badge" class="badge pull-right" style="background-color: #1890ff;">0</span>
+            </div>
+            <div class="panel-body" style="padding: 5px; max-height: 280px; overflow-y: auto;">
+                <div id="sparepart-empty-msg" class="text-muted text-center" style="font-size: 12px; padding: 15px 5px;">
+                    No linked spare parts
+                </div>
+                <table class="table table-bordered table-condensed table-hover spareparts-table" id="table-linked-spareparts" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th style="width: 28%;">Serial No</th>
+                            <th>Name</th>
+                            <th style="width: 15%;">Pin</th>
+                            <th style="width: 15%;">QTY</th>
+                            <th style="width: 12%;">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sparepart-list-body">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -148,29 +199,21 @@
         <div class="col-custom">
             <div class="row">
                 <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
-                    <div>Reference no :</div>
-                    <small class="text-muted" style="color:red;">(Serial Of Fixture)</small>
-                </div>
-                <div class="col-md-4 col-sm-4 col-12 mb-3">
-                    <input class="form-control" list="Referrence_No_List" name="Referrence_No" id="Referrence_No">
-                    <datalist id="Referrence_No_List"></datalist>
-                </div>
-                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
                     <div>Responsible name :</div>
                 </div>
                 <div class="col-md-4 col-sm-4 col-12 mb-3">
                     <input type="text" class="form-control" id="Responsible_Name" name="Responsible_Name" placeholder="Refference name" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
                 </div>
-            </div>
-        </div>
-        <div class="col-custom">
-            <div class="row">
                 <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
                     <div>Manufacture :</div>
                 </div>
                 <div class="col-md-4 col-sm-4 col-12 mb-3">
                     <input type="text" class="form-control" id="Manufacture" name="Manufacture" placeholder="Manufacture" /> @*readonly onmouseover="this.removeAttribute('readonly')"*@
                 </div>
+            </div>
+        </div>
+        <div class="col-custom">
+            <div class="row">
                 <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
                     <div>Property :</div>
                 </div>
@@ -189,13 +232,35 @@
             </div>
         </div>
 
-        <div class="col-custom">
+        <div class="col-custom Sparepartvisible" style="display: none;">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>Reference no :</div>
+                    <small class="text-muted" style="color:red;">(Serial Of Fixture)</small>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <select class="form-control" name="Referrence_No" id="Referrence_No" style="width: 100%;">
+                        <option value="">-- Select Reference Equipment --</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
+                    <div>QTY :</div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-12 mb-3">
+                    <input type="number" class="form-control" id="QTY" name="QTY" placeholder="QTY" min="1" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-custom Sparepartvisible" style="display: none;">
             <div class="row">
                 <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
                     <div>Pin No. :</div>
                 </div>
                 <div class="col-md-4 col-sm-4 col-12 mb-3">
-                    <select class="ant-select" name="Pinnumber" id="Pinnumber"></select>
+                    <select class="form-control" name="Pinnumber" id="Pinnumber" style="width: 100%;">
+                        <option value="">-- Select Pin No. --</option>
+                    </select>
                 </div>
                 <div class="col-md-2 col-sm-2 col-12 mb-3" style="padding-top: 10px;">
                     <div>Lifetime :</div>
@@ -460,6 +525,16 @@
             width: '100%',
             minimumInputLength: 3
         });
+        $('#Referrence_No').select2({
+            width: '100%',
+            placeholder: '-- Select Reference Equipment --',
+            allowClear: true
+        });
+        $('#Pinnumber').select2({
+            width: '100%',
+            placeholder: '-- Select Pin No. --',
+            allowClear: true
+        });
         $('input[name="Type_MA"]').trigger("change");
 
     });
@@ -469,6 +544,11 @@
         if (Customer && Customer != "N/A") {
             LoadDrawingByCustomer(Customer);
         }
+    });
+    $('#Department').change(function () {
+        var geId = $(this).val();
+        var section = $(this).find('option:selected').text();
+        LoadReferenceEquipment(geId, section, '');
     });
     $('input[name="Type_MA"]').change(function () {
         console.log("Test");
@@ -486,6 +566,28 @@
             $("#req_Description").hide();
         }
 
+        if (value === "Sparepart") {
+            $(".Sparepartvisible").show();
+            $('#Referrence_No').select2({
+                width: '100%',
+                placeholder: '-- Select Reference Equipment --',
+                allowClear: true
+            });
+            $('#Pinnumber').select2({
+                width: '100%',
+                placeholder: '-- Select Pin No. --',
+                allowClear: true
+            });
+        } else {
+            $(".Sparepartvisible").hide();
+        }
+
+        // แสดง Linked Spare Parts เฉพาะกรณีเป็น Equipment/Machine ในโหมดแก้ไข
+        if (value === "Equipment/Machine" && "@ViewData["MA_ID"]" != "") {
+            $("#panel-linked-spareparts").show();
+        } else {
+            $("#panel-linked-spareparts").hide();
+        }
     });
 
     $('input[name="Type_tools"]').change(function () {
@@ -531,11 +633,18 @@
     document.getElementById('Serial_No').addEventListener('change', function (event) {
         event.preventDefault();
         checkDuplicates({ serialNo: event.target.value, Equipment_No: "", maId: "@ViewData["MA_ID"]" });
+        if ("@ViewData["MA_ID"]" != "") {
+            LoadLinkedSpareparts(event.target.value);
+        }
     });
 
-    document.getElementById('Pinnumber').addEventListener('change', function (event) {
-        event.preventDefault();
-        getInformationFromDatabase(event.target.value)
+    $('#Pinnumber').on('change', function () {
+        var pId = $(this).val();
+        if (pId) {
+            getInformationFromDatabase(pId);
+        } else {
+            document.getElementById("Lifetime").value = "";
+        }
     });
 
     function LoadDrawingByCustomer(Customer) {
@@ -647,7 +756,7 @@
     }
     function onLoad() {
         var url = '@Url.Action("Load_MAFixture_By_ID", "Global")';
-        var dataJson = JSON.stringify({ MA_ID: "@ViewData["MA_ID"]" })
+        var dataJson = JSON.stringify({ MA_ID: "@ViewData["MA_ID"]", loadFiles: false })
 
         $.ajax({
             type: 'POST',
@@ -697,7 +806,7 @@
                         document.getElementById("Equipment_No").value = response.data.Equipment_No;
                         document.getElementById("Model").value = response.data.Model;
                         document.getElementById("Serial_No").value = response.data.Serial_No;
-                        document.getElementById("Referrence_No").value = response.data.Referrence_No;
+                        LoadReferenceEquipment(response.data.GE_ID, response.data.Section, response.data.Referrence_No);
                         document.getElementById("Responsible_Name").value = response.data.Responsible_Name;
                         document.getElementById("Manufacture").value = response.data.Manufacture;
                         document.getElementById("Product_name").value = response.data.Product_name;
@@ -710,10 +819,13 @@
                         document.getElementById("Semiannually").value = formatDate(response.data.Plan_Semi_annually, 1);
                         document.getElementById("Yearly").value = formatDate(response.data.Plan_Yearly, 1);
                         document.getElementById("Manually").value = formatDate(response.data.Plan_Manually, 1);
-                        document.getElementById("Pinnumber").value = response.data.P_ID ? response.data.P_ID : "1";
-                        getInformationFromDatabase(response.data.P_ID)
-                        //document.getElementById("Lifetime").value = response.data.Lifetime;
-                        document.getElementById("Location").value = response.data.Location
+                        var pIdVal = response.data.P_ID ? response.data.P_ID : "";
+                        $('#Pinnumber').val(pIdVal).trigger('change');
+                        if (pIdVal) {
+                            getInformationFromDatabase(pIdVal);
+                        }
+                        document.getElementById("Location").value = response.data.Location;
+                        document.getElementById("QTY").value = (response.data.QTY !== null && response.data.QTY !== undefined) ? response.data.QTY : "";
 
                         document.getElementById("GPVProcess").value = response.data.GPVProcess ? response.data.GPVProcess : "";
                         document.getElementById("ProcessSide").value =  response.data.GPVProcess ? response.data.ProcessSide : "" ;
@@ -742,6 +854,11 @@
                         }
                         $('input[name="Type_MA"]').trigger("change");
                         Equipment_Picture = fileName;
+
+                        // โหลด Sparepart ที่ผูกกับ Equipment นี้ตาม Serial_No
+                        if (response.data.Serial_No) {
+                            LoadLinkedSpareparts(response.data.Serial_No);
+                        }
                     }
                 }
             },
@@ -751,8 +868,134 @@
         });
     }
 
+    function LoadLinkedSpareparts(serialNo) {
+        if (!serialNo) {
+            $("#panel-linked-spareparts").hide();
+            return;
+        }
+
+        var currentType = $('input[name="Type_MA"]:checked').val();
+        if (currentType !== "Equipment/Machine") {
+            $("#panel-linked-spareparts").hide();
+            return;
+        }
+
+        var url = '@Url.Action("Load_Sparepart_by_EquipmentName", "Global")';
+        var editUrl = '@Url.Action("NewEquipment", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ Serial_No: serialNo }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                var panel = $("#panel-linked-spareparts");
+                var emptyMsg = $("#sparepart-empty-msg");
+                var table = $("#table-linked-spareparts");
+                var tbody = $("#sparepart-list-body");
+                var badge = $("#sparepart-badge");
+
+                tbody.empty();
+
+                if (response.success && response.data && response.data.length > 0) {
+                    badge.text(response.data.length);
+                    emptyMsg.hide();
+                    table.show();
+
+                    for (var i = 0; i < response.data.length; i++) {
+                        var item = response.data[i];
+                        var serial = item.Serial_No ? item.Serial_No : "-";
+                        var name = item.Equipment_Name ? item.Equipment_Name : "-";
+                        var pin = item.Pinnumber ? item.Pinnumber : "-";
+                        var qty = (item.QTY !== null && item.QTY !== undefined) ? item.QTY : "-";
+                        var link = editUrl + "/" + item.MA_ID;
+
+                        var rowHtml = "<tr>" +
+                            '<td style="word-break: break-all;" title="' + serial + '">' + serial + "</td>" +
+                            '<td style="word-break: break-all;" title="' + name + '">' + name + "</td>" +
+                            '<td style="text-align: center;">' + pin + "</td>" +
+                            '<td style="text-align: center;">' + qty + "</td>" +
+                            '<td style="text-align: center;">' +
+                                '<a href="' + link + '" target="_blank" class="btn btn-xs btn-default" style="padding: 1px 5px;" title="View/Edit Spare Part in new tab">' +
+                                    '<i class="fas fa-external-link-alt" style="color: #1890ff;"></i>' +
+                                "</a>" +
+                            "</td>" +
+                        "</tr>";
+
+                        tbody.append(rowHtml);
+                    }
+                } else {
+                    badge.text("0");
+                    table.hide();
+                    emptyMsg.show();
+                }
+
+                if ($('input[name="Type_MA"]:checked').val() === "Equipment/Machine") {
+                    panel.show();
+                }
+            },
+            error: function () {
+                $("#panel-linked-spareparts").hide();
+            }
+        });
+    }
+
+    function LoadReferenceEquipment(geId, section, selectedValue) {
+        var url = '@Url.Action("Load_Equipment_Reference", "Global")';
+        var dataJson = JSON.stringify({ GE_ID: geId, Section: section });
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: dataJson,
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                var refSelect = $('#Referrence_No');
+                refSelect.empty();
+                refSelect.append('<option value="">-- Select Reference Equipment --</option>');
+
+                var hasSelected = false;
+                if (response.success && response.data) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        var item = response.data[i];
+                        var displayText = item.Serial_No;
+
+                        var isSelected = (selectedValue && selectedValue === item.Serial_No);
+                        if (isSelected) {
+                            hasSelected = true;
+                        }
+
+                        var option = new Option(displayText, item.Serial_No, isSelected, isSelected);
+                        refSelect.append(option);
+                    }
+                }
+
+                // กรณีแก้ไขข้อมูลแล้วมี selectedValue เดิมอยู่ แต่ไม่อยู่ในรายการที่ดึงมา ให้คงค่าเดิมไว้
+                if (selectedValue && !hasSelected && selectedValue !== "") {
+                    var extraOption = new Option(selectedValue, selectedValue, true, true);
+                    refSelect.append(extraOption);
+                }
+
+                refSelect.val(selectedValue ? selectedValue : "").trigger('change');
+            },
+            error: function () {
+                var refSelect = $('#Referrence_No');
+                refSelect.empty();
+                refSelect.append('<option value="">-- Select Reference Equipment --</option>');
+                if (selectedValue) {
+                    refSelect.append(new Option(selectedValue, selectedValue, true, true));
+                    refSelect.val(selectedValue).trigger('change');
+                }
+            }
+        });
+    }
+
     function loadAllLists() {
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_NewEquipment_Lists", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -776,17 +1019,11 @@
                     });
                     document.getElementById("Department").innerHTML = departmentHtml;
 
-                    var pinnumberHtml = '';
+                    var pinnumberHtml = '<option value="">-- Select Pin No. --</option>';
                     lists.Pinnumber.forEach(function (item) {
                         pinnumberHtml += '<option value="' + item.ID + '">' + item.Pinnumber + '</option>';
                     });
-                    document.getElementById("Pinnumber").innerHTML = pinnumberHtml;
-
-                    var serialHtml = '';
-                    lists.Serial.forEach(function (item) {
-                        serialHtml += '<option value="' + item + '"></option>';
-                    });
-                    document.getElementById("Referrence_No_List").innerHTML = serialHtml;
+                    $('#Pinnumber').html(pinnumberHtml);
 
                     var drawingHtml = '<option value="" disabled="disabled" selected="selected">N/A</option>';
                     lists.Drawing.forEach(function (item) {
@@ -796,6 +1033,12 @@
 
                     if ("@ViewData["MA_ID"]") {
                         onLoad();
+                    } else {
+                        // โหมด Add: โหลด Reference Equipment ของ Department เริ่มต้น
+                        var initialGeId = $('#Department').val();
+                        var initialSection = $('#Department option:selected').text();
+                        LoadReferenceEquipment(initialGeId, initialSection, '');
+                        $('#Pinnumber').val('').trigger('change');
                     }
                 }
             },
@@ -876,6 +1119,22 @@
                 Dimension = "";
                 Type_tools = "";
             }
+
+            var referrenceNo = document.getElementById("Referrence_No").value;
+            var pId = $('#Pinnumber').val() ? $('#Pinnumber').val() : null;
+            var pinnumberText = ($('#Pinnumber').val() && $('#Pinnumber option:selected').length > 0) ? $('#Pinnumber option:selected').text() : "";
+            var lifetime = document.getElementById("Lifetime").value;
+            var qtyVal = document.getElementById("QTY").value;
+            var qty = (qtyVal !== "" && !isNaN(qtyVal)) ? parseInt(qtyVal, 10) : null;
+
+            if (Type_MA !== "Sparepart") {
+                referrenceNo = null;
+                pId = 1;
+                pinnumberText = "N/A";
+                lifetime = "-";
+                qty = null;
+            }
+
             var form;
             var replace = $("#Equipment_Name_old").val();
             if (editData.MA_ID > 0) {
@@ -890,7 +1149,7 @@
                     Model: document.getElementById("Model").value,
                     Serial_No: document.getElementById("Serial_No").value,
                     Property: document.querySelector('input[name="Property"]:checked').value,
-                    Referrence_No: document.getElementById("Referrence_No").value,
+                    Referrence_No: referrenceNo,
                     Responsible_Name: document.getElementById("Responsible_Name").value,
                     Manufacture: document.getElementById("Manufacture").value,
                     Description: document.getElementById("Description").value,
@@ -909,9 +1168,9 @@
                     Plan_Semi_annually: document.getElementById("Semiannually").value,
                     Plan_Yearly: document.getElementById("Yearly").value,
                     Plan_Manually: document.getElementById("Manually").value,
-                    P_ID: pinnumber.value,
-                    Pinnumber: pinnumber.options[pinnumber.selectedIndex].text,
-                    Lifetime: document.getElementById("Lifetime").value,
+                    P_ID: pId,
+                    Pinnumber: pinnumberText,
+                    Lifetime: lifetime,
                     Location: document.getElementById("Location").value,
 
                     GPVProcess: GPVProcess,
@@ -921,7 +1180,8 @@
                     Grade_Status: Grade_Status,
                     Dimension: Dimension,
                     Equipment_Picture: Equipment_Picture,
-                    Type_Tools: Type_tools
+                    Type_Tools: Type_tools,
+                    QTY: qty
 
                 };
 
@@ -934,7 +1194,7 @@
                     Model: document.getElementById("Model").value,
                     Serial_No: document.getElementById("Serial_No").value,
                     Property: document.querySelector('input[name="Property"]:checked').value,
-                    Referrence_No: document.getElementById("Referrence_No").value,
+                    Referrence_No: referrenceNo,
                     Responsible_Name: document.getElementById("Responsible_Name").value,
                     Manufacture: document.getElementById("Manufacture").value,
                     Description: document.getElementById("Description").value,
@@ -955,10 +1215,10 @@
                     Plan_Semi_annually: planning[4].checked ? Dateformat(addDays(dateTimeNow, 182)) : '',
                     Plan_Yearly: planning[5].checked ? Dateformat(addDays(dateTimeNow, 365)) : '',
                     Plan_Manually: planning[6].checked ? dateTimeNow : '',
-                    P_ID: pinnumber.value,
-                    Pinnumber: pinnumber.options[pinnumber.selectedIndex].text,
+                    P_ID: pId,
+                    Pinnumber: pinnumberText,
 
-                    Lifetime: document.getElementById("Lifetime").value,
+                    Lifetime: lifetime,
                     Location: document.getElementById("Location").value,
                     GPVProcess: GPVProcess,
                     ProcessSide: ProcessSide,
@@ -968,6 +1228,7 @@
                     Dimension: Dimension,
                     Equipment_Picture: Equipment_Picture,
                     Type_Tools: Type_tools,
+                    QTY: qty,
                     StatusF: '1'
                 };
             }

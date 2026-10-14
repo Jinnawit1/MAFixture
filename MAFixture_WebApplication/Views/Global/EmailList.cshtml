@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Email List";
 }
 
@@ -52,7 +52,7 @@
         var dataSet = [];
         var dataFull = [];
 
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_Email_List", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -63,7 +63,7 @@
             success: function (response) {
                 if (response.success) {
                     if (response.data) {
-                        var emailList = response.data.Department;
+                        var emailList = response.data.Department || response.data;
                         $(emailList).each(function (index, item) {
                             var newItem = [];
                             newItem.push(index + 1);

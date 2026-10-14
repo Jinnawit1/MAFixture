@@ -1,101 +1,92 @@
-﻿
+
 @{
     ViewBag.Title = "Report Nearly";
 }
 
-<h2>Report Nearly</h2>
-<div class="col-custom">
-    <div class="row">
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label>Serial No :</label>
-                <input type="text" class="form-control" id="Serial_No">
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label>LastMA Date From:</label>
-                <input type="date" class="form-control" id="From">
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label for="search-date-to">LastMA Date To:</label>
-                <input type="date" class="form-control" id="To">
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label for="search-request-by">Customer :</label>
-                <input type="text" class="form-control" id="Customer">
-            </div>
+<h3>Report Nearly</h3>
+<hr />
+
+<div class="filter-card">
+    <div class="filter-card-header">
+        <div>
+            <i class="fas fa-filter" style="color: #1890ff; margin-right: 6px;"></i> Search Filters
         </div>
     </div>
-</div>
-<div class="col-custom">
-    <div class="row">
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label for="search-date-from">Product Name :</label>
-                <input type="text" class="form-control" id="Product_name">
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label for="search-date-to">Section :</label>
-                <select type="text" class="form-control" id="Section">
-                    <option value="" selected>All</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label for="search-request-by">Type MC:</label>
-                <select type="text" class="form-control" id="Type_MC">
-                    <option value="" selected>All</option>
-                    <option value="0">Maintenance</option>
-                    <option value="1">Calibration</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-12 mb-3">
-            <div class="form-group">
-                <label for="search-name">Type MA:</label>
-                <select type="text" class="form-control" id="Type_MA">
-                    <option value="" selected>All</option>
-                    <option value="0">Equipment/Machine</option>
-                    <option value="1">Sparepart</option>
-                    <option value="2">Tools</option>
-                </select>
-            </div>
-        </div>
-        @*<div class="col-md-3 col-sm-3 col-12 mb-3">
+    <div class="filter-card-body">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                 <div class="form-group">
-                    <label for="search-name">Location:</label>
-                    <input type="text" class="form-control" id="Location" />
+                    <label for="Serial_No">Serial No :</label>
+                    <input type="text" class="form-control" id="Serial_No" placeholder="Enter Serial No">
                 </div>
             </div>
-            <div class="col-md-3 col-sm-3 col-12 mb-3">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                 <div class="form-group">
-                    <label for="search-name">Property:</label>
-                    <select class="form-control" id="Property">
+                    <label for="From">LastMA Date From :</label>
+                    <input type="date" class="form-control" id="From">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="To">LastMA Date To :</label>
+                    <input type="date" class="form-control" id="To">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Customer">Customer :</label>
+                    <input type="text" class="form-control" id="Customer" placeholder="Enter Customer">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Product_name">Product Name :</label>
+                    <input type="text" class="form-control" id="Product_name" placeholder="Enter Product Name">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Section">Section :</label>
+                    <select class="form-control" id="Section">
                         <option value="" selected>All</option>
-                        <option value="GPV">GPV</option>
-                        <option value="Customer">Customer</option>
                     </select>
                 </div>
-            </div>*@
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Type_MC">Type MC :</label>
+                    <select class="form-control" id="Type_MC">
+                        <option value="" selected>All</option>
+                        <option value="0">Maintenance</option>
+                        <option value="1">Calibration</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Type_MA">Type MA :</label>
+                    <select class="form-control" id="Type_MA">
+                        <option value="" selected>All</option>
+                        <option value="0">Equipment/Machine</option>
+                        <option value="1">Sparepart</option>
+                        <option value="2">Tools</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
-    <div style="margin-left:15px;">
-        <button class="btn btn-primary" id="search-button" onclick="OnLoad()">Search</button>
-
+    <div class="filter-card-footer">
+        <button type="button" class="btn-filter-reset" onclick="OnReset()"><i class="fas fa-undo"></i> Reset</button>
+        <button type="button" class="btn-filter-search" id="search-button" onclick="OnLoad()"><i class="fas fa-search"></i> Search</button>
     </div>
 </div>
 
 <div class="col-custom">
     <div class="row">
         <div class="col-12 mb-3" style="padding: 3px 0px;">
-            <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+            <div id="TableForm" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
                 @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
                 <table id="TableMAPlan" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
             </div>
@@ -106,10 +97,28 @@
 <script>
     $(document).ready(function () {
         LoadAll();
+
+        $('.filter-card input').keypress(function (e) {
+            if (e.which === 13) {
+                OnLoad();
+            }
+        });
     });
 
+    function OnReset() {
+        $('#Serial_No').val('');
+        $('#From').val('');
+        $('#To').val('');
+        $('#Customer').val('');
+        $('#Product_name').val('');
+        $('#Section').val('');
+        $('#Type_MC').val('');
+        $('#Type_MA').val('');
+        OnLoad();
+    }
+
     function LoadAll() {
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_Common_Filters", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -210,9 +219,8 @@
                         iDisplayLength: 100,
                         data: dataSet,
                         dom: 'lBfrtip',
-                        fixedHeader: true,
-                        autoWidth: true,
-                        scrollX: true,
+                        autoWidth: false,
+                        scrollX: false,
                         buttons: [
                             {
                                 extend: 'excel',
@@ -247,8 +255,9 @@
                             {
                                 title: "View",
                                 orderable: false,
+                                className: "text-center",
                                 render: function (data, type, row) {
-                                    return '<div href="#" onclick="OnDetail(\'' + data + '\')" style="width: 100%; text-align: center; color: #1890ff; font-size: 22px;"><i style="cursor: pointer;" class="fas fa-search"></i></div>';
+                                    return '<button type="button" class="table-action-btn btn-view" title="View MA History" onclick="OnDetail(\'' + data + '\')"><i class="fas fa-search"></i></button>';
                                 }
                             },
                             { title: "Serial No" },
@@ -268,9 +277,7 @@
                                 title: "Plan Daily",
                                 orderable: false,
                                 render: function (data) {
-                                    let timestamp = new Date(data).getTime();
-                                    
-                                    return timestamp && timestamp < now ? '<div style="color: red;">' + data + '</div>' : data;
+                                    return highlightDate(data, 1);
                                 }
                             },
                             {

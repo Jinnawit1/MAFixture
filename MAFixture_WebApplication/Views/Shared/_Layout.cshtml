@@ -1,4 +1,4 @@
-﻿@using System.Web.Optimization
+@using System.Web.Optimization
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,57 +45,97 @@
             cursor: wait;
         }
 
+        /* ==========================================================================
+           Modern Top Navbar (Clean Light Theme)
+           ========================================================================== */
         .navbar {
-            position: fixed;
+            position: sticky;
             top: 0;
-            z-index: 50;
+            left: 0;
+            width: 100%;
+            min-width: 100%;
+            height: 60px;
+            z-index: 1030;
             display: flex;
             align-items: center;
-            padding: 10px 20px;
-            background-color: #f0f2f5;
-            color: #001529;
-            transition: top 0.3s ease; /* Smooth transition when top changes */
+            padding: 0 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            transition: top 0.3s ease;
         }
 
         .navbar-logo {
-            font-weight: bold;
-            color: #001529;
             display: flex;
             align-items: center;
+            padding-right: 14px;
+            margin-right: 12px;
+            border-right: 1px solid #e2e8f0;
+            height: 38px;
+            flex-shrink: 0;
+        }
+
+        .navbar-logo img {
+            height: 36px;
+            width: auto;
+            object-fit: contain;
+            display: block;
         }
 
         .navbar-links {
             display: flex;
+            align-items: center;
             list-style-type: none;
-            margin-left: 20px;
+            margin: 0;
+            padding: 0;
+            gap: 2px;
         }
 
-            .navbar-links li {
-                margin: 0 10px;
-                padding-top: 10px;
-            }
-
-            .navbar-links a {
-                color: #001529;
-                text-decoration: none;
-                font-size: 14px;
-                padding: 10px;
-                transition: color 0.3s;
-            }
-
-                .navbar-links a:hover {
-                    color: #1890ff;
-                }
-
-        .navbar-actions {
-            display: flex;
-            gap: 10px;
-            margin-left: auto;
-        }
-
-        /* Style for the dropdown */
-        .navbar-links .dropdown {
+        .navbar-links > li {
             position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-links > li > a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            border-radius: 6px;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .navbar-links > li > a:hover {
+            color: #1890ff;
+            background-color: #f1f5f9;
+            text-decoration: none;
+        }
+
+        /* Active Navigation Item */
+        .navbar-links > li > a.active,
+        .navbar-links > li.dropdown.active > a.dropdown-toggle {
+            color: #1890ff !important;
+            background-color: #e6f4ff !important;
+            font-weight: 600;
+        }
+
+        /* Dropdown Arrow / Chevron */
+        .navbar-links .dropdown-toggle .nav-chevron {
+            font-size: 10px;
+            margin-left: 3px;
+            transition: transform 0.2s ease;
+            color: #94a3b8;
+        }
+
+        .navbar-links .dropdown:hover .dropdown-toggle .nav-chevron {
+            transform: rotate(180deg);
+            color: #1890ff;
         }
 
         /* Style the dropdown menu */
@@ -104,13 +144,15 @@
             position: absolute;
             top: 100%;
             left: 0;
-            min-width: 160px;
+            min-width: 190px;
             list-style: none;
-            background-color: #fff;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            padding: 5px 0;
-            margin: 0;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            z-index: 1050;
+            padding: 5px;
+            margin-top: 4px;
         }
 
         /* Show the dropdown menu on hover */
@@ -120,24 +162,101 @@
 
         /* Style for the dropdown items */
         .navbar-links .dropdown-menu li {
-            padding: 8px 16px;
+            padding: 0;
+            margin: 0;
         }
 
-            /* Hover effect for dropdown items */
-            .navbar-links .dropdown-menu li:hover {
-                background-color: #f1f1f1;
-            }
+        .navbar-links .dropdown-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #334155;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.15s ease;
+        }
 
-            .navbar-links .dropdown-menu li a:hover {
-                background-color: transparent; /* Remove the background */
-                color: #333; /* Optional: customize text color on hover */
-            }
+        .navbar-links .dropdown-menu li a:hover {
+            background-color: #f1f5f9;
+            color: #1890ff;
+            padding-left: 17px;
+            text-decoration: none;
+        }
 
-            /* Optional: Remove focus effect if needed (for accessibility) */
-            .navbar-links .dropdown-menu li a:focus {
-                outline: none; /* Remove focus outline */
-                background-color: transparent; /* Remove background color on focus */
-            }
+        .navbar-links .dropdown-menu li a.active {
+            background-color: #e6f4ff;
+            color: #1890ff;
+            font-weight: 600;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .navbar-user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 12px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .navbar-user-chip i {
+            font-size: 15px;
+            color: #1890ff;
+        }
+
+        .btn-nav-signin {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #ffffff !important;
+            background-color: #1890ff;
+            border: 1px solid #1890ff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav-signin:hover {
+            background-color: #40a9ff;
+            border-color: #40a9ff;
+        }
+
+        .btn-nav-signout {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #64748b !important;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav-signout:hover {
+            color: #ef4444 !important;
+            background-color: #fef2f2;
+            border-color: #fca5a5;
+        }
 
         .btn {
             padding: 7px 14px;
@@ -175,7 +294,7 @@
             }
 
         .content {
-            margin-top: 70px;
+            margin-top: 15px;
             min-height: calc(100vh - 140px);
             padding: 0px 20px;
             font-size: 14px;
@@ -184,15 +303,19 @@
         .alert {
             display: none;
             align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            border-radius: 4px;
-            margin: 10px 0;
-            transition: all 0.3s ease;
+            justify-content: flex-start;
+            padding: 12px 18px;
+            border-radius: 6px;
             position: fixed;
-            top: 5px;
-            right: 10px;
-            z-index: 1000;
+            top: 70px;
+            right: 20px;
+            z-index: 100000;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            min-width: 280px;
+            max-width: 480px;
+            word-wrap: break-word;
+            gap: 10px;
+            transition: all 0.25s ease-in-out;
         }
 
         .alert-success {
@@ -207,125 +330,550 @@
             color: #f5222d;
         }
 
-        .show {
-            display: flex;
+        .alert.show {
+            display: flex !important;
         }
 
         .alert span {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        .alert i {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        /* ==========================================================================
+           Modern Corporate DataTables Styling
+           ========================================================================== */
+        table.dataTable {
+            width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ffffff;
+            margin-top: 10px !important;
+            margin-bottom: 16px !important;
+        }
+
+        table.dataTable thead {
+            background-color: #f8fafc;
         }
 
         table.dataTable thead th {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
+            padding: 10px 12px !important;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #334155;
+            border-top: none !important;
+            border-bottom: 2px solid #cbd5e1 !important;
+            border-left: none !important;
+            border-right: 1px solid #f1f5f9 !important;
+            white-space: nowrap;
+            vertical-align: middle;
         }
 
+        table.dataTable thead th:last-child {
+            border-right: none !important;
+        }
 
-        table.dataTable {
+        /* Prevent duplicate header in DataTables scroll body if scrollX/scrollY is used */
+        .dataTables_scrollBody table.dataTable thead th,
+        .dataTables_scrollBody table.dataTable thead td {
+            padding: 0 !important;
+            border: none !important;
+            height: 0 !important;
+            line-height: 0 !important;
+            margin: 0 !important;
+            color: transparent !important;
+        }
+
+        .dataTables_scrollBody table.dataTable thead tr {
+            height: 0 !important;
+        }
+
+        .dataTables_scrollBody table.dataTable {
             margin-top: 0 !important;
         }
 
-            table.dataTable tbody td, table.dataTable > thead > tr > th {
-                padding: 5px 5px;
-            }
+        table.dataTable tbody td {
+            padding: 8px 12px !important;
+            font-size: 13px;
+            color: #1e293b;
+            border-top: none !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            border-left: none !important;
+            border-right: 1px solid #f8fafc !important;
+            vertical-align: middle;
+            transition: background-color 0.15s ease;
+        }
+
+        table.dataTable tbody tr:hover {
+            background-color: #f8fafc !important;
+        }
+
+        table.dataTable tbody tr.shown {
+            background-color: #eff6ff !important;
+        }
+
+        table.dataTable tbody tr.shown-child {
+            background-color: #f8fafc !important;
+        }
+
+        .dataTables_wrapper {
+            padding: 4px 0;
+        }
 
         .dataTables_length {
-            margin-left: 10px;
-        }
-
-            .dataTables_length label {
-                font-weight: bold;
-                margin-right: 5px;
-            }
-
-            .dataTables_length select {
-                border-radius: 6px;
-                padding: 5px;
-                background-color: whitesmoke;
-                border: 1px solid #ccc;
-                cursor: pointer;
-            }
-
-        table tr {
-            vertical-align: top;
-        }
-
-        table thead {
-            background-color: whitesmoke;
-        }
-
-        .dt-buttons {
-            margin: 0px !important;
-            display: flex;
-            justify-content: flex-start;
-        }
-
-            .dt-buttons .dt-button {
-                min-width: 60px;
-                background-color: #1890ff;
-                color: white;
-                padding: 8px 12px;
-                font-size: 12px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-                .dt-buttons .dt-button:hover {
-                    background-color: #40a9ff !important;
-                    color: black;
-                    font-size: 12px;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    padding: 8px 12px;
-                    border: none !important;
-                }
-
-        .dataTables_filter {
-            margin: 10px 0;
-            display: flex;
+            margin-bottom: 10px;
+            display: inline-flex;
             align-items: center;
         }
 
-            .dataTables_filter input[type="search"] {
-                border: 1px solid #ccc;
-                border-radius: 6px;
-                background-color: whitesmoke;
-                padding: 8px;
-                margin-left: 10px;
-                width: 250px;
-                transition: border-color 0.3s;
-            }
-
-                .dataTables_filter input[type="search"]:focus {
-                    outline: none;
-                }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            padding: 5px 10px;
-            margin: 0 5px;
-            border-radius: 6px;
-            background-color: whitesmoke !important;
-            font-weight: normal;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
+        .dataTables_length label {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0;
         }
 
-            .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-                background-color: lightgray !important;
-                color: white;
-                cursor: pointer;
+        .dataTables_length select {
+            height: 32px;
+            border-radius: 6px;
+            padding: 4px 8px;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .dataTables_length select:focus {
+            border-color: #1890ff;
+        }
+
+        .dataTables_filter {
+            margin-bottom: 10px;
+            float: right;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dataTables_filter label {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0;
+        }
+
+        .dataTables_filter input[type="search"] {
+            height: 32px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background-color: #ffffff;
+            padding: 4px 10px;
+            width: 220px;
+            font-size: 12.5px;
+            color: #1e293b;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .dataTables_filter input[type="search"]:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.15);
+        }
+
+        .dt-buttons {
+            margin-bottom: 10px !important;
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .dt-buttons .dt-button {
+            height: 32px;
+            padding: 0 14px;
+            font-size: 12.5px;
+            font-weight: 500;
+            border-radius: 6px;
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #15803d !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dt-buttons .dt-button:hover {
+            background-color: #f0fdf4 !important;
+            border-color: #86efac !important;
+            color: #166534 !important;
+        }
+
+        .dataTables_info {
+            font-size: 12.5px;
+            color: #64748b;
+            padding-top: 8px;
+            display: inline-block;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            padding-top: 8px;
+            float: right;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 4px 11px !important;
+            font-size: 12.5px !important;
+            font-weight: 500 !important;
+            border-radius: 6px !important;
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #475569 !important;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin: 0 1px !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #f1f5f9 !important;
+            border-color: #94a3b8 !important;
+            color: #1e293b !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #1890ff !important;
+            border-color: #1890ff !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+            background: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #cbd5e1 !important;
+            cursor: not-allowed !important;
+        }
+
+        /* ==========================================================================
+           Modern Date & Status Pill Badges
+           ========================================================================== */
+        .badge-date-overdue {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            font-weight: 600;
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+            white-space: nowrap;
+        }
+
+        .badge-date-overdue i {
+            font-size: 10.5px;
+        }
+
+        .badge-date-nearly {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            font-weight: 600;
+            background-color: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fcd34d;
+            white-space: nowrap;
+        }
+
+        .badge-date-nearly i {
+            font-size: 10.5px;
+        }
+
+        .badge-date-normal {
+            display: inline-block;
+            font-size: 12.5px;
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        .badge-category {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11.5px;
+            font-weight: 500;
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        /* ==========================================================================
+           Table Action Buttons (Unified UI)
+           ========================================================================== */
+        .table-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none !important;
+            line-height: 1.4;
+        }
+
+        .table-action-btn.btn-edit {
+            color: #0284c7;
+            background-color: #e0f2fe;
+            border-color: #bae6fd;
+        }
+
+        .table-action-btn.btn-edit:hover {
+            color: #0369a1;
+            background-color: #bae6fd;
+            border-color: #7dd3fc;
+        }
+
+        .table-action-btn.btn-delete {
+            color: #dc2626;
+            background-color: #fee2e2;
+            border-color: #fca5a5;
+        }
+
+        .table-action-btn.btn-delete:hover {
+            color: #b91c1c;
+            background-color: #fca5a5;
+            border-color: #f87171;
+        }
+
+        .table-action-btn.btn-obsolete {
+            color: #4f46e5;
+            background-color: #e0e7ff;
+            border-color: #c7d2fe;
+        }
+
+        .table-action-btn.btn-obsolete:hover {
+            color: #3730a3;
+            background-color: #c7d2fe;
+            border-color: #a5b4fc;
+        }
+
+        .table-action-btn.btn-recover {
+            color: #16a34a;
+            background-color: #dcfce7;
+            border-color: #bbf7d0;
+        }
+
+        .table-action-btn.btn-recover:hover {
+            color: #15803d;
+            background-color: #bbf7d0;
+            border-color: #86efac;
+        }
+
+        .table-action-btn.btn-view {
+            color: #1890ff;
+            background-color: #e6f4ff;
+            border-color: #bae0ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .table-action-btn.btn-view:hover {
+            color: #096dd9;
+            background-color: #bae0ff;
+        }
+
+        /* ==========================================================================
+           Tablet & Touch Screen Responsiveness Enhancements
+           ========================================================================== */
+        /* Table and form container */
+        #TableForm,
+        .table-responsive-custom {
+            width: 100%;
+        }
+
+        /* Slim Scrollbar for DataTables on Touch Screens */
+        .dataTables_wrapper::-webkit-scrollbar,
+        #TableForm::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .dataTables_wrapper::-webkit-scrollbar-thumb,
+        #TableForm::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dataTables_wrapper::-webkit-scrollbar-track,
+        #TableForm::-webkit-scrollbar-track {
+            background-color: #f8fafc;
+        }
+
+        /* Dropdown touch active support */
+        .navbar-links .dropdown.show > .dropdown-menu,
+        .navbar-links .dropdown.open > .dropdown-menu,
+        .navbar-links .dropdown-menu.show,
+        .navbar-links .dropdown-menu.open {
+            display: block !important;
+        }
+
+        .navbar-links .dropdown.show .dropdown-toggle .nav-chevron,
+        .navbar-links .dropdown.open .dropdown-toggle .nav-chevron,
+        .navbar-links .dropdown:hover .dropdown-toggle .nav-chevron {
+            transform: rotate(180deg);
+            color: #1890ff;
+        }
+
+        /* Tablet Breakpoint (Landscape & Portrait: max-width: 1200px) */
+        @@media (max-width: 1200px) {
+            .navbar {
+                padding: 0 12px;
+                height: 56px;
             }
 
-            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-                color: gray;
-                background-color: lightgray;
-                border-color: lightgray;
-                cursor: not-allowed;
+            .navbar-logo {
+                padding-right: 10px;
+                margin-right: 8px;
+                height: 32px;
             }
+
+            .navbar-logo img {
+                height: 30px;
+            }
+
+            /* Allow dropdown menus to overflow and pop down without being clipped on Tablet */
+            .navbar-links {
+                overflow: visible !important;
+                white-space: nowrap;
+                padding: 4px 0;
+            }
+
+            .navbar-links > li > a {
+                padding: 6px 9px;
+                font-size: 12px;
+            }
+
+            .navbar-actions {
+                margin-left: 8px;
+                gap: 6px;
+            }
+
+            .navbar-user-chip {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+
+            .btn-nav-signin,
+            .btn-nav-signout {
+                padding: 5px 10px;
+                font-size: 11.5px;
+            }
+        }
+
+        @@media (max-width: 992px) {
+            .navbar {
+                padding: 0 8px;
+            }
+
+            .navbar-links > li > a {
+                padding: 5px 6px;
+                font-size: 11px;
+                gap: 3px;
+            }
+
+            .navbar-user-chip {
+                max-width: 120px;
+            }
+
+            .navbar-user-chip #signin-name {
+                max-width: 80px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        /* Tablet & Mobile Touch Targets (max-width: 1024px) */
+        @@media (max-width: 1024px) {
+            .content {
+                margin-top: 66px;
+                padding: 0 12px;
+            }
+
+            /* Slightly larger touch targets for buttons on tablet */
+            .table-action-btn {
+                padding: 6px 12px !important;
+                font-size: 12.5px !important;
+                min-height: 32px !important;
+            }
+
+            .table-action-btn.btn-view {
+                min-width: 32px !important;
+                min-height: 32px !important;
+                padding: 6px 10px !important;
+                font-size: 13px !important;
+            }
+
+            /* Touch comfortable table row padding */
+            table.dataTable tbody td {
+                padding: 9px 10px !important;
+            }
+
+            /* Responsive filter inputs */
+            .filter-card-header {
+                padding: 10px 14px;
+            }
+
+            .filter-card-body {
+                padding: 14px 14px 4px 14px;
+            }
+
+            .filter-card-footer {
+                padding: 10px 14px;
+            }
+
+            .filter-card .form-control {
+                height: 38px !important;
+                font-size: 13px !important;
+            }
+
+            .btn-filter-search,
+            .btn-filter-reset {
+                height: 38px !important;
+                padding: 0 18px !important;
+            }
+        }
 
         .form-control {
             border-radius: 6px;
@@ -602,62 +1150,186 @@
             min-width: 300px !important;
             max-width: 300px !important;
         }
+
+        /* ==========================================================================
+           Filter Card Component (Unified Search & Filter Bar)
+           ========================================================================== */
+        .filter-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .filter-card-header {
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-card-body {
+            padding: 18px 20px 6px 20px;
+        }
+
+        .filter-card .form-group {
+            margin-bottom: 14px;
+        }
+
+        .filter-card .form-group label {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .filter-card .form-control {
+            height: 36px;
+            font-size: 13px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            padding: 6px 12px;
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .filter-card .form-control:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.15);
+            outline: none;
+        }
+
+        .filter-card-footer {
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .filter-card-footer > * + * {
+            margin-left: 8px;
+        }
+
+        .btn-filter-search {
+            height: 36px;
+            padding: 0 20px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            background-color: #1890ff;
+            border: 1px solid #1890ff;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-filter-search:hover {
+            background-color: #096dd9;
+            border-color: #096dd9;
+            color: #ffffff;
+        }
+
+        .btn-filter-reset {
+            height: 36px;
+            padding: 0 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-filter-reset:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            color: #334155;
+        }
     </style>
 </head>
 <body>
     <!-- Success Alert (Initially Hidden) -->
     <div id="alert-success" class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
         <span id="alert-success-text"></span>
     </div>
 
     <!-- Error Alert (Initially Hidden) -->
     <div id="alert-error" class="alert alert-error">
+        <i class="fas fa-times-circle"></i>
         <span id="alert-error-text"></span>
     </div>
 
     <!-- Navbar (Top Menu) -->
     <nav class="navbar">
-        <div class="navbar-logo"><img src="~/Images/GPV_Logo.png" alt="GPV_Logo" class="img-rounded" style="width: 95px; height: 45px; padding: 10px;"></div>
+        <div class="navbar-logo">
+            <a href="@Url.Action("Index", "Global")" title="MA Fixture Home" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="~/Images/GPV_Logo.png" alt="GPV Logo" />
+            </a>
+        </div>
         <ul class="navbar-links">
-            <li><a href="@Url.Action("Index", "Global")">Home</a></li>
-            <li><a href="@Url.Action("MaintenanceHistory", "Global")" id="MaintenanceHistory">MA History</a></li>
+            <li><a href="@Url.Action("Index", "Global")"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="@Url.Action("MaintenanceHistory", "Global")" id="MaintenanceHistory"><i class="fas fa-history"></i> MA History</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fixture<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-tools"></i> Fixture <i class="fas fa-chevron-down nav-chevron"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="@Url.Action("NewEquipment", "Global")">New Equipment</a></li>
                     <li><a href="@Url.Action("FixtureMaintenance", "Global")">Fixture Maintenance</a></li>
                     <li><a href="@Url.Action("ObsoleteFixture", "Global")">Obsolete Fixture</a></li>
-                    <!-- Add more submenu items as needed -->
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Manage Lists<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-tasks"></i> Manage Lists <i class="fas fa-chevron-down nav-chevron"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="@Url.Action("Customer", "Global")">Customer</a></li>
                     <li><a href="@Url.Action("EmailList", "Global")">Email List</a></li>
                     <li><a href="@Url.Action("MasterMAList", "Global")">MasterMA List</a></li>
                     <li><a href="@Url.Action("MasterToolsList", "Global")">MasterTools List</a></li>
                     <li><a href="@Url.Action("PinList", "Global")">PIN List</a></li>
-                    @*<li><a href="@Url.Action("MachineList", "Global")">Machine List</a></li>*@
-                    <!-- Add more submenu items as needed -->
                 </ul>
             </li>
-            <li><a href="@Url.Action("Instruction", "Global")">Instruction Video</a></li>
+            <li><a href="@Url.Action("Instruction", "Global")"><i class="fas fa-video"></i> Instruction Video</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-chart-line"></i> Report <i class="fas fa-chevron-down nav-chevron"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="@Url.Action("Report_Analysis", "Global")">Report Analysis</a></li>
                     <li><a href="@Url.Action("Report_Overdue", "Global")">Report Overdue</a></li>
                     <li><a href="@Url.Action("Report_Nearly", "Global")">Report Nearly</a></li>
+                    <li><a href="@Url.Action("Report_Sparepart", "Global")">Report Sparepart</a></li>
                 </ul>
             </li>
-            <li><a href="@Url.Action("THT_Location", "Global")">THT Location</a></li>
-            <li><a href="@Url.Action("Summary_THT_Pallet", "Global")">Summary Tools</a></li>
-
+            <li><a href="@Url.Action("THT_Location", "Global")"><i class="fas fa-map-marker-alt"></i> THT Location</a></li>
+            <li><a href="@Url.Action("Summary_THT_Pallet", "Global")"><i class="fas fa-boxes"></i> Summary Tools</a></li>
         </ul>
         <div class="navbar-actions">
-            <div id="signin-name" style="display: flex; align-items: center; font-size: 12px;"></div>
-            <button class="btn btn-filled" id="signin-text" onclick="delCookie()">Sign In</button>
+            <div id="user-profile-badge" class="navbar-user-chip" style="display: none;">
+                <i class="fas fa-user-circle"></i>
+                <span id="signin-name"></span>
+            </div>
+            <button class="btn-nav-signin" id="signin-text" onclick="handleAuthButtonClick()">
+                <i class="fas fa-sign-in-alt"></i> <span>Sign In</span>
+            </button>
         </div>
     </nav>
 
@@ -759,12 +1431,49 @@
         // เรียก CheckCookieLoad() เฉพาะถ้าไม่ใช่ Report_Analysis
         if (path.includes("Report_Analysis") || path.includes("THT_Location") || path.includes("Summary_THT_Pallet")) {
             $("#signin-text").hide();
+            $("#user-profile-badge").hide();
         }
         else {
             CheckCookieLoad();
             $("#signin-text").show();
         }
-        
+
+        // Highlight active navbar menu based on current route
+        setActiveNavbarMenu();
+
+        // Touch screen & click support for navbar dropdowns on Tablet & Mobile
+        $('.navbar-links .dropdown > a').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var $parent = $(this).closest('.dropdown');
+            var isOpen = $parent.hasClass('show') || $parent.hasClass('open');
+
+            // Close all open dropdowns
+            $('.navbar-links .dropdown').removeClass('show open');
+            $('.navbar-links .dropdown-menu').removeClass('show open');
+            $('.dropdown-backdrop').remove();
+
+            // Toggle current dropdown
+            if (!isOpen) {
+                $parent.addClass('show open');
+                $parent.find('> .dropdown-menu').addClass('show open');
+            }
+        });
+
+        // Close dropdown when tapping anywhere outside
+        $(document).on('click touchstart', function (e) {
+            if (!$(e.target).closest('.navbar-links .dropdown').length) {
+                $('.navbar-links .dropdown').removeClass('show open');
+                $('.navbar-links .dropdown-menu').removeClass('show open');
+                $('.dropdown-backdrop').remove();
+            }
+        });
+
+        // Prevent dropdown from closing prematurely when clicking inside the dropdown menu (except links)
+        $('.navbar-links .dropdown-menu').on('click touchstart', function (e) {
+            e.stopPropagation();
+        });
     });
     $('#logout').click(function () { delCookie(); });
 
@@ -847,6 +1556,15 @@
         });
     }
 
+    function handleAuthButtonClick() {
+        var $btn = $("#signin-text");
+        if ($btn.hasClass("btn-nav-signout")) {
+            delCookie();
+        } else {
+            $("#myModalLogIn").modal("show");
+        }
+    }
+
     function delCookie() {
         interuptAjax = $.ajax({
             type: "POST", data: JSON.stringify(), url: "@Url.Action("DelCookie", "Global")", async: true,
@@ -871,13 +1589,23 @@
             dataType: "json",
             async: false,
             success: function (response) {
-                const text = document.getElementById("signin-text");
+                var $btn = $("#signin-text");
+                var $badge = $("#user-profile-badge");
+                var $name = $("#signin-name");
+
                 if (response.success) {
-                    document.getElementById("signin-name").innerText = response.data;
-                    text.textContent = "Sign out";
+                    $name.text(response.data);
+                    $badge.css('display', 'inline-flex');
+                    $btn.removeClass("btn-nav-signin")
+                        .addClass("btn-nav-signout")
+                        .html('<i class="fas fa-sign-out-alt"></i> <span>Sign Out</span>');
                 }
                 else {
-                    text.textContent = "Sign in";
+                    $name.text("");
+                    $badge.hide();
+                    $btn.removeClass("btn-nav-signout")
+                        .addClass("btn-nav-signin")
+                        .html('<i class="fas fa-sign-in-alt"></i> <span>Sign In</span>');
 
                     $("#myModalLogIn").modal("show");
                 }
@@ -886,6 +1614,41 @@
                 showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
             }
         });
+    }
+
+    function setActiveNavbarMenu() {
+        var currentPath = window.location.pathname.toLowerCase();
+        var bestMatch = null;
+        var maxMatchLength = 0;
+
+        $('.navbar-links a').removeClass('active');
+        $('.navbar-links .dropdown').removeClass('active');
+
+        $('.navbar-links a').each(function () {
+            var href = $(this).attr('href');
+            if (href && href !== '#' && href.indexOf('javascript') === -1) {
+                var linkPath = href.toLowerCase().split('?')[0];
+                if (linkPath.length > 1 && (currentPath === linkPath || currentPath.indexOf(linkPath) !== -1)) {
+                    if (linkPath.length > maxMatchLength) {
+                        bestMatch = $(this);
+                        maxMatchLength = linkPath.length;
+                    }
+                }
+            }
+        });
+
+        if (bestMatch) {
+            bestMatch.addClass('active');
+            var parentDropdown = bestMatch.closest('.dropdown');
+            if (parentDropdown.length > 0) {
+                parentDropdown.addClass('active');
+                parentDropdown.find('> a.dropdown-toggle').addClass('active');
+            }
+        } else {
+            if (currentPath === '/' || currentPath.indexOf('/index') !== -1 || (currentPath.indexOf('/global') !== -1 && currentPath.indexOf('history') === -1 && currentPath.indexOf('equipment') === -1 && currentPath.indexOf('maintenance') === -1 && currentPath.indexOf('obsolete') === -1 && currentPath.indexOf('report') === -1 && currentPath.indexOf('location') === -1 && currentPath.indexOf('pallet') === -1 && currentPath.indexOf('list') === -1 && currentPath.indexOf('customer') === -1)) {
+                $('.navbar-links a[href*="Index"]').addClass('active');
+            }
+        }
     }
 
     function confirm(message, onConfirm, onCancel) {
@@ -914,23 +1677,43 @@
         };
     }
 
+    var alertTimer = null;
+
     function showAlert(type, message, callback) {
-        var alert = document.getElementById('alert-' + type);
-        var alertText = document.getElementById('alert-' + type + '-text');
+        // หากไม่ใช่ success ให้แปลงเป็น error ทั้งหมดตามที่กำหนด
+        if (type !== "success") {
+            type = "error";
+        }
 
-        alertText.innerText = message;
-        alert.style.display = 'flex';
-        alert.classList.add('show');
+        var text = message;
+        if (text === null || text === undefined || text === "") {
+            text = (type === "success") ? "Operation completed successfully." : "An error occurred. Please try again.";
+        }
 
-        // Hide alert after 2 seconds
-        setTimeout(function () {
-            if (callback && typeof callback === 'function') {
-                callback();
-            }
+        // ซ่อน Alert ทุกตัวที่ค้างอยู่
+        $(".alert").removeClass("show").hide();
 
-            alert.classList.remove('show');
-            alert.style.display = 'none';
-        }, 3000);
+        // ล้าง Timer เดิม ป้องกันปัญหาซ้อนทับกัน
+        if (alertTimer) {
+            clearTimeout(alertTimer);
+            alertTimer = null;
+        }
+
+        var $alert = $("#alert-" + type);
+        var $alertText = $("#alert-" + type + "-text");
+
+        if ($alert.length > 0) {
+            $alertText.text(text);
+            $alert.css("display", "flex").addClass("show");
+
+            alertTimer = setTimeout(function () {
+                $alert.removeClass("show").hide();
+                alertTimer = null;
+                if (callback && typeof callback === "function") {
+                    callback();
+                }
+            }, 3500);
+        }
     }
     function Dateformat(date) {
         return date.getFullYear() + '-' +
@@ -1069,33 +1852,44 @@
     function highlightDate(data, daysRange) {
         if (!data) return "";
 
-        let now = new Date();
-        let date = new Date(data);
-        if (isNaN(date.getTime())) return data; // ถ้าไม่ใช่วันที่ ให้คืนค่าปกติ
-
-        // วันที่ limit (ช่วงวันข้างหน้า)
-        let limitDate = new Date();
-        limitDate.setDate(now.getDate() + daysRange);
-
-        // คำนวณจำนวนวันที่เหลือจากวันนี้
-        let diffTime = date - now; // หน่วย: มิลลิวินาที
-        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // แปลงเป็นวัน (ปัดขึ้น)
-
-        let dayText = "";
-        if (diffDays > 0) {
-            dayText = '<small style="color: gray;">('+diffDays+' day)</small>';
+        // ป้องกัน timezone offset และความคลาดเคลื่อนของเวลา ด้วยการเทียบวันแบบ local midnight
+        var parts = data.split(' ')[0].split('-');
+        var year, month, day;
+        if (parts.length === 3) {
+            year = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10) - 1;
+            day = parseInt(parts[2], 10);
+        } else {
+            var d = new Date(data);
+            if (isNaN(d.getTime())) return data;
+            year = d.getFullYear();
+            month = d.getMonth();
+            day = d.getDate();
         }
 
-        // เงื่อนไข
-        if (date < now) {
-            // ถ้าเก่ากว่าวันนี้
-            return '<div style="color: red;">' + data + '</div>';
-        } else if (date >= now && date <= limitDate) {
-            // ถ้าอยู่ในช่วงวันข้างหน้า
-            return '<div style="color: orange; font-weight: bold;">' + data + ' ' + dayText + '</div>';
+        var date = new Date(year, month, day);
+        if (isNaN(date.getTime())) return data;
+
+        var now = new Date();
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        var limitDate = new Date(today);
+        limitDate.setDate(today.getDate() + (daysRange || 0));
+
+        var diffTime = date - today;
+        var diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+        if (date < today) {
+            // เลยกำหนด (Overdue)
+            var overdueText = Math.abs(diffDays) === 1 ? '1 day ago' : Math.abs(diffDays) + ' days ago';
+            return '<span class="badge-date-overdue" title="Overdue (' + overdueText + ')"><i class="fas fa-exclamation-circle"></i> ' + data + '</span>';
+        } else if (daysRange && date >= today && date <= limitDate) {
+            // ใกล้ถึงกำหนด (Nearly Due)
+            var dayLabel = diffDays === 0 ? 'Today' : (diffDays === 1 ? '1 day left' : diffDays + ' days left');
+            return '<span class="badge-date-nearly" title="Due in ' + diffDays + ' days"><i class="fas fa-clock"></i> ' + data + ' <small>(' + dayLabel + ')</small></span>';
         } else {
-            // ปกติ
-            return data;
+            // แผนกำหนดการปกติ
+            return '<span class="badge-date-normal">' + data + '</span>';
         }
     }
 

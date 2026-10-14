@@ -131,6 +131,7 @@
           <Property Name="Type_Tools" Type="varchar" MaxLength="50" />
           <Property Name="Modifyby" Type="varchar" MaxLength="10" />
           <Property Name="Modifydate" Type="datetime" />
+          <Property Name="QTY" Type="int" />
         </EntityType>
         <EntityType Name="Tbl_KPIoverdue">
           <Key>
@@ -476,6 +477,7 @@
           <NavigationProperty Name="Tbl_ProductName" Relationship="MAFixtureModel.FK_tbl_ProductName_MAPlan" FromRole="MAPlan" ToRole="Tbl_ProductName" />
           <Property Name="Modifyby" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Modifydate" Type="DateTime" Precision="3" />
+          <Property Name="QTY" Type="Int32" />
         </EntityType>
         <EntityType Name="Tbl_MasterMATester">
           <Key>
@@ -819,6 +821,7 @@
           <EntitySetMapping Name="MAPlans">
             <EntityTypeMapping TypeName="MAFixtureModel.MAPlan">
               <MappingFragment StoreEntitySet="MAPlan">
+                <ScalarProperty Name="QTY" ColumnName="QTY" />
                 <ScalarProperty Name="Modifydate" ColumnName="Modifydate" />
                 <ScalarProperty Name="Modifyby" ColumnName="Modifyby" />
                 <ScalarProperty Name="Type_Tools" ColumnName="Type_Tools" />

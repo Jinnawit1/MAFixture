@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Obsolete Fixture";
 }
 
@@ -25,10 +25,124 @@
 <h3>Obsolete Fixture</h3>
 <hr />
 
+<div class="filter-card">
+    <div class="filter-card-header">
+        <div>
+            <i class="fas fa-filter" style="color: #1890ff; margin-right: 6px;"></i> Search Filters
+        </div>
+    </div>
+    <div class="filter-card-body">
+        <div class="row">
+            <!-- Row 1 -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Serial_No">Serial No :</label>
+                    <input type="text" class="form-control" id="Serial_No" placeholder="Enter Serial No">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Equipment_Name">Equipment Name :</label>
+                    <input type="text" class="form-control" id="Equipment_Name" placeholder="Enter Equipment Name">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="From">LastMA Date From :</label>
+                    <input type="date" class="form-control" id="From">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="To">LastMA Date To :</label>
+                    <input type="date" class="form-control" id="To">
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Customer">Customer :</label>
+                    <input type="text" class="form-control" id="Customer" placeholder="Enter Customer">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Product_name">Product Name :</label>
+                    <input type="text" class="form-control" id="Product_name" placeholder="Enter Product Name">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Section">Section :</label>
+                    <select class="form-control" id="Section">
+                        <option value="" selected>All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Type_MC">Type MC :</label>
+                    <select class="form-control" id="Type_MC">
+                        <option value="" selected>All</option>
+                        <option value="0">Maintenance</option>
+                        <option value="1">Calibration</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Type_MA">Type MA :</label>
+                    <select class="form-control" id="Type_MA">
+                        <option value="" selected>All</option>
+                        <option value="0">Equipment/Machine</option>
+                        <option value="1">Sparepart</option>
+                        <option value="2">Tools</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Type_Tools">Type Tools :</label>
+                    <select class="form-control" id="Type_Tools">
+                        <option value="" selected>All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Location">Location :</label>
+                    <input type="text" class="form-control" id="Location" placeholder="Enter Location">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Property">Property :</label>
+                    <select class="form-control" id="Property">
+                        <option value="" selected>All</option>
+                        <option value="GPV">GPV</option>
+                        <option value="Customer">Customer</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="filter-card-footer">
+        <button type="button" class="btn-filter-search" id="search-button" onclick="OnLoad()">
+            <i class="fas fa-search"></i> Search
+        </button>
+        <button type="button" class="btn-filter-reset" id="reset-button" onclick="OnReset()">
+            <i class="fas fa-undo"></i> Reset
+        </button>
+    </div>
+</div>
+
 <div class="col-custom">
     <div class="row">
         <div class="col-12 mb-3" style="padding: 3px 0px;">
-            <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+            <div id="TableForm" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
                 @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
                 <table id="TableMAPlan" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 13px !important;"></table>
             </div>
@@ -38,13 +152,16 @@
 
 <script>
     $(document).ready(function () {
-        OnLoad()
+        LoadAll();
+        $('.filter-card input').keypress(function (e) {
+            if (e.which === 13) {
+                OnLoad();
+            }
+        });
     });
 
-    function OnLoad() {
-        var dataSet = [];
-        var dataFull = [];
-        var url = '@Url.Action("Load_Obsolete", "Global")';
+    function LoadAll() {
+        var url = '@Url.Action("Load_Common_Filters", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -53,22 +170,89 @@
             dataType: "json",
             async: true,
             success: function (response) {
-                if (response.success) {
-                    if (response.data) {
-                        var maPlan = response.data
-                        var url = '@Url.Action("Load_All_Lists", "Global")';
+                if (response.success && response.data) {
+                    if (response.data.Department) {
+                        $.each(response.data.Department, function (index, item) {
+                            if (item && item.Section) {
+                                $('#Section').append('<option value="' + item.Section + '">' + item.Section + '</option>');
+                            }
+                        });
+                    }
 
-                        $.ajax({
-                            type: 'POST',
-                            url: url,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            async: true,
-                            success: function (response) {
-                                if (response.success) {
-                                    if (response.data) {
-                                        var customer = response.data.Customer;
-                                        $(maPlan).each(function (index, item) {
+                    if (response.data.ToolTypes) {
+                        $.each(response.data.ToolTypes, function (index, item) {
+                            if (item) {
+                                $('#Type_Tools').append('<option value="' + item + '">' + item + '</option>');
+                            }
+                        });
+                    }
+
+                    OnLoad();
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
+            }
+        });
+    }
+
+    function OnReset() {
+        $('#Serial_No').val('');
+        $('#Equipment_Name').val('');
+        $('#From').val('');
+        $('#To').val('');
+        $('#Customer').val('');
+        $('#Product_name').val('');
+        $('#Section').val('');
+        $('#Type_MC').val('');
+        $('#Type_MA').val('');
+        $('#Type_Tools').val('');
+        $('#Location').val('');
+        $('#Property').val('');
+        OnLoad();
+    }
+
+    function OnLoad() {
+        var Serial_No = $('#Serial_No').val();
+        var Equipment_Name = $('#Equipment_Name').val();
+        var From = $('#From').val();
+        var To = $('#To').val();
+        var Customer = $('#Customer').val();
+        var Product_name = $('#Product_name').val();
+        var Section = $('#Section').val();
+        var Type_MC = $('#Type_MC').val();
+        var Type_MA = $('#Type_MA').val();
+        var Type_Tools = $('#Type_Tools').val();
+        var Location = $('#Location').val();
+        var Property = $('#Property').val();
+        var dataSet = [];
+        var dataFull = [];
+        var url = '@Url.Action("Load_Obsolete", "Global")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                Serial_No: Serial_No,
+                Equipment_Name: Equipment_Name,
+                From: From,
+                To: To,
+                Customer: Customer,
+                Product_name: Product_name,
+                Section: Section,
+                Type_MC: Type_MC,
+                Type_MA: Type_MA,
+                Type_Tools: Type_Tools,
+                Location: Location,
+                Property: Property
+            }),
+            dataType: "json",
+            async: true,
+            success: function (response) {
+                if (response.success && response.data) {
+                    var maPlan = response.data;
+                    $(maPlan).each(function (index, item) {
                                             var newItem = [];
                                             newItem.push(index + 1);
                                             newItem.push(item.MA_ID || '');
@@ -78,9 +262,6 @@
                                             newItem.push(item.Product_name || '');
                                             newItem.push(item.Type_MC || '');
                                             newItem.push(item.Section || '');
-                                            //customer.forEach(function (customerItem, index) {
-                                            //    if (item.Customer == customerItem.ID) newItem.push(customerItem.Cust_name);
-                                            //});
                                             newItem.push(item.Customer_Name || '');
                                             newItem.push(formatDate(item.LastMA_date, "2"));
 
@@ -139,8 +320,9 @@
                                                 {
                                                     title: "View",
                                                     orderable: false,
+                                                    className: "text-center",
                                                     render: function (data, type, row) {
-                                                        return '<div href="#" onclick="OnDetail(\'' + data + '\')" style="width: 100%; text-align: center; color: #1890ff !important; font-size: 22px;"><i style="cursor: pointer;" class="fas fa-search"></i></div>';
+                                                        return '<button type="button" class="table-action-btn btn-view" title="View MA History" onclick="OnDetail(\'' + data + '\')"><i class="fas fa-search"></i></button>';
                                                     },
                                                 },
                                                 { title: "Serial No" },
@@ -184,17 +366,9 @@
                                                 $(row).find('td:first').addClass('expandable');
                                             }
                                         });
-                                    }
-                                } else {
-                                    showAlert('error', response.word, function () { });
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
-                            }
-                        });
+                    } else {
+                        showAlert('error', response.word || 'Error loading data', function () { });
                     }
-                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 showAlert('error', 'An error occurred. Please try again later. Details: ' + textStatus + ', ' + errorThrown, function () { });
@@ -203,8 +377,8 @@
     }
 
     function formatDetails(data) {
-        return '<div style="display: flex; column-gap: 5px;">' +
-                '<div class="action" style="background-color: #79D7BE;" onclick="OnRecover(\'' + data.MA_ID + '\')">Recover <i class="fas fa-trash-restore"></i></div>' +
+        return '<div style="display: flex; gap: 8px; align-items: center; padding: 6px 4px;">' +
+                '<button type="button" class="table-action-btn btn-recover" onclick="OnRecover(\'' + data.MA_ID + '\')"><i class="fas fa-trash-restore"></i> Recover</button>' +
             '</div>';
     }
 

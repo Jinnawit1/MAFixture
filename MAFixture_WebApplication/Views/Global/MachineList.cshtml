@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "MachineList";
 }
@@ -32,7 +32,7 @@
         var dataSet = [];
         var dataFull = [];
 
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_Machine_List", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -44,7 +44,7 @@
             success: function (response) {
                 if (response.success) {
                     if (response.data) {
-                        var MachineList = response.data.Machine;
+                        var MachineList = response.data.Machine || response.data;
                         $(MachineList).each(function (index, item) {
                             var newItem = [];
                             newItem.push(index + 1);

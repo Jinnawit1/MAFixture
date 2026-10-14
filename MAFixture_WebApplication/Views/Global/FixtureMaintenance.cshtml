@@ -516,7 +516,7 @@
         console.log(imageB);
         data = {};
         var url = '@Url.Action("Load_MAFixture_By_ID", "Global")';
-        var dataJson = JSON.stringify({ MA_ID: MA_ID })
+        var dataJson = JSON.stringify({ MA_ID: MA_ID, loadFiles: false })
 
         $.ajax({
             type: 'POST',
@@ -557,7 +557,7 @@
         console.log(imageB);
         data = {};
         var url = '@Url.Action("Load_MAFixture_By_Serial", "Global")';
-        var dataJson = JSON.stringify({ Serial_No: Serial_No })
+        var dataJson = JSON.stringify({ Serial_No: Serial_No, loadFiles: false })
 
         $.ajax({
             type: 'POST',

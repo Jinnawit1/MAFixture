@@ -4,52 +4,128 @@
 }
 
 <style>
-    .table-click-link {
-        color: #007bff;
-        text-decoration: underline;
+    /* Status-Aware Badges for Summary Metrics */
+    .summary-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 12.5px;
         font-weight: 600;
-        cursor: pointer;
-        display: inline-block;
-        padding: 2px 4px;
+        text-decoration: none !important;
+        transition: all 0.2s ease-in-out;
+        min-width: 68px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        line-height: 1.4;
     }
-    .table-click-link:hover {
-        color: #0056b3;
-        text-decoration: underline;
-        background-color: #f0f7ff;
-        border-radius: 3px;
+    .summary-badge:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+        text-decoration: none !important;
+    }
+
+    /* Normal / Match: Soft Green */
+    .badge-status-match {
+        background-color: #f6ffed;
+        color: #389e0d;
+        border: 1px solid #b7eb8f;
+    }
+    .badge-status-match:hover {
+        background-color: #d9f7be;
+        color: #237804;
+        border-color: #95de64;
+    }
+
+    /* Shortage / Under: Soft Warning Orange */
+    .badge-status-warning {
+        background-color: #fffbe6;
+        color: #d46b08;
+        border: 1px solid #ffe58f;
+    }
+    .badge-status-warning:hover {
+        background-color: #fff1b8;
+        color: #ad4e00;
+        border-color: #ffd666;
+    }
+
+    /* Excess / Over: Soft Danger Red */
+    .badge-status-danger {
+        background-color: #fff2f0;
+        color: #cf1322;
+        border: 1px solid #ffa39e;
+    }
+    .badge-status-danger:hover {
+        background-color: #ffccc7;
+        color: #a8071a;
+        border-color: #ff7875;
+    }
+
+    /* Master Reference: Soft Corporate Blue */
+    .badge-master {
+        background-color: #e6f4ff;
+        color: #0958d9;
+        border: 1px solid #91caff;
+    }
+    .badge-master:hover {
+        background-color: #bae0ff;
+        color: #003eb3;
+        border-color: #69b1ff;
+    }
+
+    /* Cycle Time: Soft Slate Neutral */
+    .badge-cycletime {
+        background-color: #f8fafc;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+        min-width: 74px;
+    }
+    .badge-cycletime:hover {
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-color: #94a3b8;
     }
 </style>
 
-<h2>Summary Tools</h2>
+<h3>Summary Tools</h3>
+<hr />
 
-
-<div class="row">
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div class="form-group">
-            <label for="Product_name">Product Name :</label>
-            <input type="text" class="form-control" id="Product_name" placeholder="Search Product name..." onkeydown="if (event.keyCode === 13) { OnLoad(); }">
+<div class="filter-card">
+    <div class="filter-card-header">
+        <div>
+            <i class="fas fa-filter" style="color: #1890ff; margin-right: 6px;"></i> Search Filters
         </div>
     </div>
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div class="form-group">
-            <label for="Section">Section :</label>
-            <select class="form-control" id="Section" onchange="OnLoad()">
-                <option value="" selected>All</option>
-            </select>
+    <div class="filter-card-body">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Product_name">Product Name :</label>
+                    <input type="text" class="form-control" id="Product_name" placeholder="Search Product name..." onkeydown="if (event.keyCode === 13) { OnLoad(); }">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Section">Section :</label>
+                    <select class="form-control" id="Section" onchange="OnLoad()">
+                        <option value="" selected>All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Type">Type :</label>
+                    <select class="form-control" id="Type" onchange="OnLoad()">
+                        <option value="" selected>All</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div class="form-group">
-            <label for="Type">Type :</label>
-            <select class="form-control" id="Type" onchange="OnLoad()">
-                <option value="" selected>All</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3 col-sm-6 col-12 mb-3">
-        <div style="margin-top:25px">
-            <button class="btn btn-primary" id="search-button" onclick="OnLoad()">Search</button>
-        </div>
+    <div class="filter-card-footer">
+        <button type="button" class="btn-filter-reset" onclick="OnReset()"><i class="fas fa-undo"></i> Reset</button>
+        <button type="button" class="btn-filter-search" id="search-button" onclick="OnLoad()"><i class="fas fa-search"></i> Search</button>
     </div>
 </div>
 
@@ -57,7 +133,7 @@
 
 <div class="row">
     <div class="col-12 mb-3" style="padding: 3px 0px;">
-        <div id="TableForm" class="form-inline" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
+        <div id="TableForm" style="padding-top: 20px; width: 100%; font-size: 12px !important;">
             @*<table id="TableSP" class="table table-bordered table-hover" style="width: 100%; border-collapse: collapse !important; font-size: 11px !important; table-layout: fixed; "></table>*@
             <table id="TableMAPlan" class="table table-bordered table-hover" style="width: 100% !important; border-collapse: collapse !important; font-size: 13px !important;"></table>
         </div>
@@ -69,6 +145,13 @@
     $(document).ready(function () {
         LoadAll();
     });
+
+    function OnReset() {
+        $('#Product_name').val('');
+        $('#Section').val('');
+        $('#Type').val('');
+        OnLoad();
+    }
     function getUrlParameter(name) {
         var regex = new RegExp('[?&]' + name + '=([^&#]*)', 'i');
         var results = regex.exec(window.location.search);
@@ -76,7 +159,7 @@
     }
 
     function LoadAll() {
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_Common_Filters", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -215,13 +298,32 @@
                             {
                                 title: "Summarize Amount",
                                 width: "15%",
+                                className: "text-center",
                                 render: function (data, type, row) {
                                     if (type === 'display') {
                                         var pName = encodeURIComponent(row[1] || '');
                                         var pSection = encodeURIComponent(row[2] || '');
                                         var url = '@Url.Action("Index", "Global")' + '?Product_name=' + pName + '&Section=' + pSection + '&Type_MA=2';
-                                        var text = (data !== null && data !== undefined ? data : 0);
-                                        return '<a href="' + url + '" target="_blank" class="table-click-link" title="Open in Home">' + text + '</a>';
+                                        var sumVal = (data !== null && data !== undefined) ? parseInt(data, 10) : 0;
+                                        if (isNaN(sumVal)) { sumVal = 0; }
+                                        var mstVal = (row[5] !== null && row[5] !== undefined) ? parseInt(row[5], 10) : 0;
+                                        if (isNaN(mstVal)) { mstVal = 0; }
+
+                                        var badgeClass = 'badge-status-match';
+                                        var iconHtml = '<i class="fas fa-check-circle" style="font-size: 11px;"></i> ';
+                                        var tooltip = 'Normal (Matches Master: ' + mstVal + ')';
+
+                                        if (sumVal < mstVal) {
+                                            badgeClass = 'badge-status-warning';
+                                            iconHtml = '<i class="fas fa-exclamation-triangle" style="font-size: 11px;"></i> ';
+                                            tooltip = 'Shortage: ' + sumVal + ' / ' + mstVal + ' (Missing ' + (mstVal - sumVal) + ')';
+                                        } else if (sumVal > mstVal) {
+                                            badgeClass = 'badge-status-danger';
+                                            iconHtml = '<i class="fas fa-exclamation-circle" style="font-size: 11px;"></i> ';
+                                            tooltip = 'Excess: ' + sumVal + ' / ' + mstVal + ' (Over ' + (sumVal - mstVal) + ')';
+                                        }
+
+                                        return '<a href="' + url + '" target="_blank" class="summary-badge ' + badgeClass + '" title="' + tooltip + '">' + iconHtml + sumVal + '</a>';
                                     }
                                     return data;
                                 }
@@ -229,14 +331,15 @@
                             {
                                 title: "Master Amount",
                                 width: "15%",
+                                className: "text-center",
                                 render: function (data, type, row) {
                                     if (type === 'display') {
                                         var pName = encodeURIComponent(row[1] || '');
                                         var pSection = encodeURIComponent(row[2] || '');
                                         var pType = encodeURIComponent(row[3] || '');
                                         var url = '@Url.Action("MasterToolsList", "Global")' + '?Product_name=' + pName + '&Section=' + pSection + '&Type=' + pType;
-                                        var text = (data !== null && data !== undefined ? data : 0);
-                                        return '<a href="' + url + '" target="_blank" class="table-click-link" title="Open in Master Tools List">' + text + '</a>';
+                                        var text = (data !== null && data !== undefined) ? data : 0;
+                                        return '<a href="' + url + '" target="_blank" class="summary-badge badge-master" title="Open in Master Tools List"><i class="fas fa-database" style="font-size: 11px; opacity: 0.85;"></i> ' + text + '</a>';
                                     }
                                     return data;
                                 }
@@ -244,14 +347,17 @@
                             {
                                 title: "Cycle Time (s)",
                                 width: "10%",
+                                className: "text-center",
                                 render: function (data, type, row) {
                                     if (type === 'display') {
                                         var pName = encodeURIComponent(row[1] || '');
                                         var pSection = encodeURIComponent(row[2] || '');
                                         var pType = encodeURIComponent(row[3] || '');
                                         var url = '@Url.Action("MasterToolsList", "Global")' + '?Product_name=' + pName + '&Section=' + pSection + '&Type=' + pType;
-                                        var text = (data !== null && data !== undefined && data !== '') ? data : '-';
-                                        return '<a href="' + url + '" target="_blank" class="table-click-link" title="Open in Master Tools List">' + text + '</a>';
+                                        var hasVal = (data !== null && data !== undefined && data !== '' && data !== '-');
+                                        var displayText = hasVal ? (data + ' s') : '-';
+                                        var iconHtml = hasVal ? '<i class="far fa-clock" style="font-size: 11px; color: #64748b;"></i> ' : '';
+                                        return '<a href="' + url + '" target="_blank" class="summary-badge badge-cycletime" title="Open in Master Tools List">' + iconHtml + displayText + '</a>';
                                     }
                                     return data;
                                 }
@@ -261,12 +367,6 @@
                         destroy: true,
                         rowCallback: function (row, data) {
                             $(row).find('td:first').addClass('expandable');
-                            var sumAmt = parseInt(data[4], 10);
-                            var mstAmt = parseInt(data[5], 10);
-                            if (!isNaN(sumAmt) && !isNaN(mstAmt) && sumAmt !== mstAmt) {
-                                $(row).find('td:eq(4) a').css({ 'font-weight': 'bold', 'color': '#d9534f' });
-                                $(row).find('td:eq(5) a').css({ 'font-weight': 'bold', 'color': '#0275d8' });
-                            }
                         }
                     });
                 }

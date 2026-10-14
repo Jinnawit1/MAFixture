@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Customer";
 }
 
@@ -52,7 +52,7 @@
         var dataSet = [];
         var dataFull = [];
 
-        var url = '@Url.Action("Load_All_Lists", "Global")';
+        var url = '@Url.Action("Load_Customer_List", "Global")';
 
         $.ajax({
             type: 'POST',
@@ -63,7 +63,7 @@
             success: function (response) {
                 if (response.success) {
                     if (response.data) {
-                        var customer = response.data.Customer;
+                        var customer = response.data.Customer || response.data;
                         $(customer).each(function (index, item) {
                             console.log(item);
                             var newItem = [];
